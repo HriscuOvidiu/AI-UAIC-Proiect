@@ -1,0 +1,25 @@
+(5 bonus) Framework pentru jocul de șah.
+    - Framework-ul dispune de o listă de reguli pentru jocul de șah (nu doar reale),
+    utilizatorul selectează care din ele dorește să fie active.
+
+    Regulile pot preciza: lista pieselor valide și numărul lor, mutare validă a unei piese,
+    condiții de capturare a unei piese, condiții de încheiere a partidei.
+
+    - Calculatorul poate folosi o strategie simplă, de exemplu MINIMAX pe două nivele.
+    Framework-ul trebuie să poată rula partide între două strategii contribuite de utilizatori sau
+    între o strategie a utilizatorului și cea implicită. Strategiile definite de utilizator trebuie
+    să respecte un format descris de framework.
+    Strategiile utilizatorilor trebuie să utilizeze regulile active în sesiunea curentă a framework-ului.
+
+    - Framework-ul dispune de o interfață grafică minimală ce afișează configurația tablei și
+    permite selectarea/rularea unor strategii.
+
+
+https://simple.wikipedia.org/wiki/Chess
+
+https://en.wikipedia.org/wiki/List_of_chess_variants
+
+REGULI:
+1. Normal Chess
+2. Endgame chess
+3. Weak!
