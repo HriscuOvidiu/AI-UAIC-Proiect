@@ -85,6 +85,10 @@ p{
     flex-direction: row;
     flex-wrap: wrap;
 }
+.row{
+    display: flex;
+    flex-direction: row;
+}
 
 .row:nth-child(odd)>.cell:nth-child(odd) {background: #2C3539}
 .row:nth-child(odd)>.cell:nth-child(even) {background: #6B6B5D}
