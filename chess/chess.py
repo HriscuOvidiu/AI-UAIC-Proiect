@@ -180,7 +180,7 @@ class Cell:
         return self._chess_piece
 
     def _is_empty(self):
-        return True if self._chess_piece else False
+        return False if self._chess_piece else True
 
     def __repr__(self):
         return self.chess_piece.symbol if self.chess_piece else " "
@@ -224,6 +224,9 @@ class ChessBoard:
             board.append(line)
 
         return board
+
+    def get_cell_by(self, line, col):
+        return board[line][col] ###try!!
 
     def reset(self):
         pass
