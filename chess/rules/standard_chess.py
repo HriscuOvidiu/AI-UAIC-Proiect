@@ -1,6 +1,8 @@
+from chess.board.Cell import Cell
+from chess.game.ChessGame import ChessGame
 
 
-def standard_pawn(start_cell: Cell, chess: Chess):
+def standard_pawn(start_cell: Cell, chess: ChessGame):
     if start_cell.chess_piece.color() == "black":
         # if start_cell on starting position
         # chess._board.get_cell_by(start_cell.position().line(), start_cell.position().column()).chess_piece._get_valid_moves.append(chess._board.get_cell_by(start_cell.position().line() + 2, start_cell.position().column()))
@@ -25,7 +27,7 @@ def standard_pawn(start_cell: Cell, chess: Chess):
                 chess._board.get_cell_by(start_cell.position().line(), start_cell.position().column()).chess_piece._get_valid_moves.append(chess._board.get_cell_by(start_cell.position().line() - 1, start_cell.position().column() - 1))
 
 
-def standard_rook(start_cell: Cell, chess: Chess):
+def standard_rook(start_cell: Cell, chess: ChessGame):
     for i in range(chess._config.get_board_lines()):
         if i == start_cell.position().line():
             continue

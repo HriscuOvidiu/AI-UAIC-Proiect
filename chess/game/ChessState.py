@@ -17,3 +17,6 @@ class ChessState:
 
     def is_final_state(self):
         pass
+
+    def get_rendered_board(self):
+        return self.board.get_rendered_board()

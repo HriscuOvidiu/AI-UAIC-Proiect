@@ -22,9 +22,6 @@ class Config:
     def get_board_columns(self):
         return self.config_dict["board"]["columns"]
 
-    def get_pawn_valid_moves_func(self):
-        pass
-
     # TODO: moves !!!
     def get_white_pieces(self):
         pieces = self.config_dict["pieces"]

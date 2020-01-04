@@ -41,7 +41,8 @@ class ChessBoard:
 
         return board
 
-    def get_cell_by(self, line, column):
+    def __getitem__(self, tup):
+        line, column = tup
         return self.board[line][column]
 
     def reset(self):
