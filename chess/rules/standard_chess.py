@@ -1,4 +1,3 @@
-from chess import Cell
 
 
 def standard_pawn(start_cell: Cell, board):

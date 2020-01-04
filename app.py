@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from flask_cors import CORS
-from chess import chess
+from chess import main
 
 app = Flask(__name__)
 CORS(app)
@@ -18,7 +18,7 @@ def index():
 @app.route('/game')
 def game():
 
-    state = chess.get_board()
+    state = main.get_board()
     print(state)
     for row in state:
         for index, cell in enumerate(row):
