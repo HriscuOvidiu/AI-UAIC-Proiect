@@ -46,7 +46,7 @@ class ChessBoard:
         return self.board[line][column]
 
     def reset(self):
-        pass
+        self._init()
 
     def move(self, start_position, end_position):
         pass
