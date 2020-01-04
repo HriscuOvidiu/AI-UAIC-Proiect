@@ -1,5 +1,208 @@
+p{
+    margin:0px;
+    padding:0px;
+}
 .page-container{
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.title-container{
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title{
+    padding-top: 0;
+    margin:0;
+    margin-top: 10px;
+    font-weight: 100;
+    font-size: 36px;
+    font-style: normal; 
+    font-variant: small-caps;
+}
+
+.content-container{
+
+    padding-top: 0;
+
+    height: 640px;
+    background-color: #222222;
+    box-shadow: 8px 8px 10px rgba(0, 0, 0, 0.35), -8px -8px 10px rgba(39, 40, 48, 0.8);
+    
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.guideline-container{
+    width: 100%;
+    height: 100%;
+    margin-top: 20px;
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+}
+.right-container{
+    display: flex;
+    flex-direction: column;
+    width:980px;
+}
+.left-guidelines{
+    width: 20px;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-around;
+    margin-left: 10px;
+    height: 640px;
+}
+.bottom-guidelines{
+    display: flex;
+    flex-direction: row;
+    height: 20px;
+    width: 640px;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+.helper{
+    color:#7D7D7D;
+    text-transform: uppercase;
+}
+.board-container{
+    padding:0;
+    margin:0;
+    height: 100%;
+    width: 640px;
+    
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.row:nth-child(odd)>.cell:nth-child(odd) {background: #2C3539}
+.row:nth-child(odd)>.cell:nth-child(even) {background: #6B6B5D}
+
+.row:nth-child(even)>.cell:nth-child(even) {background: #2C3539}
+.row:nth-child(even)>.cell:nth-child(odd) {background: #6B6B5D}
+
+.cell{
+    margin:0;
+    padding:0;
+    height: 80px;
+    width: 80px;
+    border-radius: 2px;
+
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+
+.available-cell{
+    margin:0;
+    padding:0;
+    height: 80px;
+    width: 80px;
+    border-radius: 2px;
+
+    display:flex;
+    justify-content: center;
+    align-items: center;    
+    
+    background: radial-gradient(circle, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 100%);    
+
+}
+
+.logs-container{
+    height: 100%;
+    width:340px;
+    display: flex;
+    flex-direction: column;
+}
+.logs-title-container{
+    height:60px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+}
+.logs-title{
+    margin-left: 20px;
+    font-size: 32px;
+}
+.logs-content-container{
+    height: 580px;
+    background-color: #222222;
+    box-shadow:inset 6px 6px 6px rgba(0, 0, 0, 0.25),inset -6px -6px 6px rgba(39, 40, 48, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 10px;
+}
+
+.log-row{
+    color:#7D7D7D;
+    margin:5px 10px;
+    font-size: 14px;
+}
+
+.status-display{
+    margin-top:20px;
+    width: 60%;
+    height: 80px;
+    background-color: #222222;
+    box-shadow: 10px 8px 8px rgba(0, 0, 0, 0.35), -8px -8px 10px rgba(39, 40, 48, 0.8);
+    display: flex;
+    flex-direction: row;
+    border-radius: 10px;
+}
+.player-one-display{
+    height: 100%;
+    width: 50%;
+
+    display:flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    padding-left: 30px;
+    border-radius: 10px;
+}
+.player-two-display{
+    height: 100%;
+    width: 50%;
+
+    display:flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+
+    padding-right: 30px;
+    border-radius: 10px;
+}
+.player-text{
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.player-one-moves{
+    background: rgb(1,184,96);
+    background: linear-gradient(90deg, rgba(1,184,96,1) 0%, rgba(0,0,0,0) 100%);
+}
+.player-two-moves{
+    background: rgb(1,184,96);
+    background: linear-gradient(270deg, rgba(1,184,96,1) 0%, rgba(0,0,0,0) 100%);
+}
+.chess-piece-image{
+    z-index: 9;
+    width: 50px;
+    height: 50px;
 }

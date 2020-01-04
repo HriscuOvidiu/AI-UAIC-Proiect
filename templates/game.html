@@ -10,32 +10,137 @@
     <div class="title-container">
         <p class="title">chess.ai</p>
     </div>
-    <div class="content-container noselect">
-        <div class="topic-choice-container">
-            <p class="topic-choice-title">Game</p>
-            <div class="choices">
-                <div class="choice selected">Classic chess</div>
-                <div class="choice">Weak!</div>
-                <div class="choice">Endgame chess</div>
-            </div>
+
+    <div class="status-display">
+        <div class="player-one-display">
+            <p class="player-text">Player</p>
+            <p class="player-color">Whites</p>
         </div>
-        <div class="topic-choice-container">
-            <p class="topic-choice-title">Players</p>
-            <div class="choices">
-                <div class="choice selected">Player vs Computer</div>
-                <div class="choice">Computer vs Computer</div>
-            </div>
-        </div>
-        <div class="topic-choice-container">
-            <p class="topic-choice-title">Computer Strategy</p>
-            <div class="choices">
-                <div class="choice selected">Minimax</div>
-                <div class="choice">Reinforcement</div>
-            </div>
+        <div class="player-two-display player-two-moves">
+            <p class="player-text">Computer</p>
+            <p class="player-color">Blacks</p>
         </div>
     </div>
-    <div class="play-button" id="play-button">
-        <i class="fas fa-play fa-lg"></i>
+
+    <div class="guideline-container noselect">
+        <div class="left-guidelines">
+            <p class="helper">1</p>
+            <p class="helper">2</p>
+            <p class="helper">3</p>
+            <p class="helper">4</p>
+            <p class="helper">5</p>
+            <p class="helper">6</p>
+            <p class="helper">7</p>
+            <p class="helper">8</p>
+        </div>
+        <div class="right-container">
+            <div class="content-container">
+                <div class="board-container">
+                    <div class="row" id="row1">
+                        <div class="cell" id="cell01">
+                            <img class="chess-piece-image"
+                                src="{{url_for('static', filename='assets/pawn-black.png')}}">
+                        </div>
+                        <div class="cell" id="cell02"></div>
+                        <div class="cell" id="cell03"></div>
+                        <div class="cell" id="cell04"></div>
+                        <div class="cell" id="cell05"></div>
+                        <div class="cell" id="cell06"></div>
+                        <div class="cell" id="cell07"></div>
+                        <div class="cell" id="cell08"></div>
+                    </div>
+                    <div class="row" id="row2">
+                        <div class="cell" id="cell01"></div>
+                        <div class="cell" id="cell02"></div>
+                        <div class="cell" id="cell03"></div>
+                        <div class="cell" id="cell04"></div>
+                        <div class="cell" id="cell05"></div>
+                        <div class="cell" id="cell06"></div>
+                        <div class="cell" id="cell07"></div>
+                        <div class="cell" id="cell08"></div>
+                    </div>
+                    <div class="row" id="row3">
+                        <div class="cell" id="cell01"></div>
+                        <div class="cell" id="cell02"></div>
+                        <div class="cell" id="cell03"></div>
+                        <div class="cell" id="cell04"></div>
+                        <div class="cell" id="cell05"></div>
+                        <div class="cell" id="cell06"></div>
+                        <div class="cell" id="cell07"></div>
+                        <div class="cell" id="cell08"></div>
+                    </div>
+                    <div class="row" id="row4">
+                        <div class="cell" id="cell01"></div>
+                        <div class="cell" id="cell02"></div>
+                        <div class="cell" id="cell03"></div>
+                        <div class="cell" id="cell04"></div>
+                        <div class="cell" id="cell05"></div>
+                        <div class="cell" id="cell06"></div>
+                        <div class="cell" id="cell07"></div>
+                        <div class="cell" id="cell08"></div>
+                    </div>
+                    <div class="row" id="row5">
+                        <div class="cell" id="cell01"></div>
+                        <div class="cell" id="cell02"></div>
+                        <div class="cell" id="cell03"></div>
+                        <div class="cell" id="cell04"></div>
+                        <div class="cell" id="cell05"></div>
+                        <div class="cell" id="cell06"></div>
+                        <div class="cell" id="cell07"></div>
+                        <div class="cell" id="cell08"></div>
+                    </div>
+                    <div class="row" id="row6">
+                        <div class="cell" id="cell01"></div>
+                        <div class="cell" id="cell02"></div>
+                        <div class="cell" id="cell03"></div>
+                        <div class="cell" id="cell04"></div>
+                        <div class="cell" id="cell05"></div>
+                        <div class="cell" id="cell06"></div>
+                        <div class="cell" id="cell07"></div>
+                        <div class="cell" id="cell08"></div>
+                    </div>
+                    <div class="row" id="row7">
+                        <div class="cell" id="cell01"></div>
+                        <div class="cell" id="cell02"></div>
+                        <div class="cell" id="cell03"></div>
+                        <div class="cell" id="cell04"></div>
+                        <div class="cell" id="cell05"></div>
+                        <div class="cell" id="cell06"></div>
+                        <div class="cell" id="cell07"></div>
+                        <div class="cell" id="cell08"></div>
+                    </div>
+                    <div class="row" id="row8">
+                        <div class="cell" id="cell01"></div>
+                        <div class="cell" id="cell02"></div>
+                        <div class="cell" id="cell03"></div>
+                        <div class="cell" id="cell04"></div>
+                        <div class="cell" id="cell05"></div>
+                        <div class="cell" id="cell06"></div>
+                        <div class="cell" id="cell07"></div>
+                        <div class="cell" id="cell08"></div>
+                    </div>
+                </div>
+                <div class="logs-container">
+                    <div class="logs-title-container">
+                        <p class="logs-title">Logs</p>
+                    </div>
+                    <div class="logs-content-container">
+                        <p class="log-row">[23:58:11]: Player moves pawn from H2 to H3</p>
+                        <p class="log-row">[23:58:14]: Computer moves horse from G8 to F6</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-guidelines">
+                <p class="helper">a</p>
+                <p class="helper">b</p>
+                <p class="helper">c</p>
+                <p class="helper">d</p>
+                <p class="helper">e</p>
+                <p class="helper">f</p>
+                <p class="helper">g</p>
+                <p class="helper">h</p>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
