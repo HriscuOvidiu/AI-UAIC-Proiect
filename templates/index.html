@@ -4,6 +4,7 @@
 <title>New Game</title>
 <link rel="stylesheet" href="{{url_for('static', filename='css/starting_screen.css')}}">
 <script src="https://kit.fontawesome.com/7a3a21cffd.js" crossorigin="anonymous"></script>
+<script src="{{url_for('static', filename='js/index.js')}}"></script>
 {% endblock %}
 
 {% block body %}
@@ -35,7 +36,7 @@
             </div>
         </div>
     </div>
-    <div class="play-button" id="play-button">
+    <div class="play-button" id="play-button" onclick="runGame()">
         <i class="fas fa-play fa-lg"></i>
     </div>
 </div>
