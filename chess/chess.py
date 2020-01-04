@@ -4,22 +4,22 @@ import json
 
 class ChessPiece(metaclass=ABCMeta):
 
-    symbols = {"wPawn":     "♙",
-               "bPawn":     "♟",
-               "wRook":     "♖",
-               "bRook":     "♜",
-               "wKnight":   "♘",
-               "bKnight":   "♞",
-               "wBishop":   "♗",
-               "bBishop":   "♝",
-               "wKing":     "♕",
-               "bKing":     "♚",
-               "wQueen":    "♕",
-               "bQueen":    "♛"}
+    symbols = {"wPawn":     "pawn-white",
+               "bPawn":     "pawn-black",
+               "wRook":     "rook-white",
+               "bRook":     "rook-black",
+               "wKnight":   "knight-white",
+               "bKnight":   "knight-black",
+               "wBishop":   "bishop-white",
+               "bBishop":   "bishop-black",
+               "wKing":     "king-white",
+               "bKing":     "king-black",
+               "wQueen":    "queen-white",
+               "bQueen":    "queen-black"}
 
     def __init__(self, name, color, get_valid_moves=None):
         self._name = name
-        self._symbol = ChessPiece.symbols[color + name]
+        self._alias = ChessPiece.symbols[color + name]
         self._color = color
         self._get_valid_moves = get_valid_moves
 
@@ -28,8 +28,8 @@ class ChessPiece(metaclass=ABCMeta):
         return self._name
 
     @property
-    def symbol(self):
-        return self._symbol
+    def alias(self):
+        return self._alias
 
     @property
     def color(self):
@@ -44,7 +44,7 @@ class ChessPiece(metaclass=ABCMeta):
         self._get_valid_moves = func
 
     def __repr__(self):
-        return f"name: {self.name}, symbol: {self.symbol}, color: {self.color}"
+        return f"name: {self.name}, alias: {self.alias}, color: {self.color}"
 
 
 class Pawn(ChessPiece):
@@ -66,7 +66,7 @@ class Rook(ChessPiece):
 
 
 class Knight(ChessPiece):
-    
+
     def __init__(self, color, moves):
         super(Knight, self).__init__(self.__class__.__name__, color, moves)
 
@@ -103,14 +103,9 @@ class Queen(ChessPiece):
 
 class Player(metaclass=ABCMeta):
 
-    def __init__(self, name, color, pieces):
-        self._name = name
+    def __init__(self, color, pieces):
         self._color = color
         self._pieces = pieces
-
-    @property
-    def name(self):
-        return self._name
 
     @property
     def color(self):
@@ -121,13 +116,13 @@ class Player(metaclass=ABCMeta):
         return self._pieces
 
     def __repr__(self):
-        return f"name: {self.name}, color: {self.color}, pieces: {self.pieces}"
+        return f"color: {self.color}, pieces: {self.pieces}"
 
 
 class WhitePlayer(Player):
 
-    def __init__(self, name, white_pieces):
-        super(WhitePlayer, self).__init__(name, "w", white_pieces)
+    def __init__(self, white_pieces):
+        super(WhitePlayer, self).__init__("w", white_pieces)
 
     def __repr__(self):
         return f"{self.__class__.__name__}({super(WhitePlayer, self).__repr__()})"
@@ -135,8 +130,8 @@ class WhitePlayer(Player):
 
 class BlackPlayer(Player):
 
-    def __init__(self, name, black_pieces):
-        super(BlackPlayer, self).__init__(name, "b", black_pieces)
+    def __init__(self, black_pieces):
+        super(BlackPlayer, self).__init__("b", black_pieces)
 
     def __repr__(self):
         return f"{self.__class__.__name__}({super(BlackPlayer, self).__repr__()})"
@@ -182,8 +177,11 @@ class Cell:
     def _is_empty(self):
         return False if self._chess_piece else True
 
+    def get_symbol(self):
+        return self.chess_piece.alias if self.chess_piece else ""
+
     def __repr__(self):
-        return self.chess_piece.symbol if self.chess_piece else " "
+        return f"{self.__class__.__name__}(position: {self.position}, chess_piece: {self.chess_piece})"
 
 
 class ChessBoard:
@@ -204,8 +202,8 @@ class ChessBoard:
         lines = self._config.get_board_lines()
         columns = self._config.get_board_columns()
 
-        blacks = self.config.get_black_pieces()
         whites = self.config.get_white_pieces()
+        blacks = self.config.get_black_pieces()
 
         board = []
         for i in range(lines):
@@ -225,8 +223,8 @@ class ChessBoard:
 
         return board
 
-    def get_cell_by(self, line, col):
-        return board[line][col] ###try!!
+    def get_cell_by(self, line, column):
+        return self.board[line][column]
 
     def reset(self):
         pass
@@ -234,16 +232,10 @@ class ChessBoard:
     def move(self, start_position, end_position):
         pass
 
-    def __repr__(self):
-        board_str = ""
-
-        for i in range(self._config.get_board_lines()):
-            substr = ""
-            for j in range(self._config.get_board_columns()):
-                substr += self.board[i][j].chess_piece.symbol if self.board[i][j].chess_piece else " "
-            board_str += substr + "\n"
-
-        return board_str
+    def get_rendered_board(self):
+        lines = self.config.get_board_lines()
+        columns = self.config.get_board_columns()
+        return [[self.board[i][j].get_symbol() for j in range(columns)] for i in range(lines)]
 
 
 # TODO Singleton
@@ -282,30 +274,38 @@ class Config:
     def get_board_columns(self):
         return self.config["board"]["columns"]
 
+    def get_pawn_valid_moves_func(self):
+        pass
+
     # TODO: moves !!!
     def get_white_pieces(self):
-        whites = self.config["pieces"]["white"]
-        pieces = {}
+        pieces = self.config["pieces"]
+        pieces_dict = {}
 
-        for type_str in whites:
-            chess_piece = ChessPieceFactory.get_type(type_str)
-            for position in whites[type_str]["positions"]:
-                pieces[tuple(position)] = chess_piece("w", moves=None)
+        for piece_type in pieces:
+            chess_piece = ChessPieceFactory.get_type(piece_type)
 
-        return pieces
+            piece_valid_moves = pieces[piece_type]["valid_moves"]
+            for position in pieces[piece_type]["white"]:
+                pieces_dict[tuple(position)] = chess_piece(
+                    "w", piece_valid_moves)
+
+        return pieces_dict
 
     # TODO: moves !!!
     def get_black_pieces(self):
-        blacks = self.config["pieces"]["black"]
+        pieces = self.config["pieces"]
+        pieces_dict = {}
 
-        pieces = {}
+        for piece_type in pieces:
+            chess_piece = ChessPieceFactory.get_type(piece_type)
 
-        for type_str in blacks:
-            chess_piece = ChessPieceFactory.get_type(type_str)
-            for position in blacks[type_str]["positions"]:
-                pieces[tuple(position)] = chess_piece("b", moves=None)
+            piece_valid_moves = pieces[piece_type]["valid_moves"]
+            for position in pieces[piece_type]["black"]:
+                pieces_dict[tuple(position)] = chess_piece(
+                    "b", piece_valid_moves)
 
-        return pieces
+        return pieces_dict
 
     def get_capturing_condition(self):
         pass
@@ -314,16 +314,35 @@ class Config:
         pass
 
 
-# TODO: ChessGame + ChessState !!!
+class ChessState:
 
-class Chess:
+    def __init__(self, starting_player, chess_board):
+        self._current_player = starting_player
+        self._board = chess_board
 
-    def __init__(self, white_player_name, black_player_name, configuration_path):
-        self._config = Config(configuration_path)
-        self._white = WhitePlayer(white_player_name, None)
-        self._black = BlackPlayer(black_player_name, None)
-        self._current_player = self._white
-        self._board = ChessBoard(self._config)
+    @property
+    def current_player(self):
+        return self._current_player
+
+    @property
+    def board(self):
+        return self._board
+
+    def is_valid(self):
+        pass
+
+    def is_final_state(self):
+        pass
+
+
+class ChessGame:
+
+    def __init__(self, configuration):
+        self._config = configuration
+        self._white = WhitePlayer(None)
+        self._black = BlackPlayer(None)
+        self._init_state = ChessState(self._white, ChessBoard(self._config))
+        self._current_state = self._init_state
 
     @property
     def config(self):
@@ -338,16 +357,15 @@ class Chess:
         return self._black
 
     @property
-    def current_player(self):
-        return self._current_player
+    def init_state(self):
+        return self._init_state
 
     @property
-    def board(self):
-        return self._board
+    def current_state(self):
+        return self._current_state
 
     def reset_game(self):
-        self._current_player = self._white
-        self._board.reset()
+        self._current_state = self._init_state
 
     @staticmethod
     def get_valid_cells(start_cell: Cell):
@@ -358,12 +376,17 @@ class Chess:
         pass
 
     def has_finished(self):
-        pass
+        return self.current_state.is_final_state()
 
     def render(self):
-        print(self._board)
+        return self.current_state.board.get_rendered_board()
+
+
+def get_board():
+    chess_config = Config("./static/configs/standard_chess_cfg.json")
+    chess = ChessGame(chess_config)
+    return chess.render()
 
 
 if __name__ == '__main__':
-    chess = Chess("Andrei", "AI", "standard_chess_cfg.json")
-    chess.render()
+    print(get_board())

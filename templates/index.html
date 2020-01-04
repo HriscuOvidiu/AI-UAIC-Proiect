@@ -4,6 +4,7 @@
 <title>New Game</title>
 <link rel="stylesheet" href="{{url_for('static', filename='css/starting_screen.css')}}">
 <script src="https://kit.fontawesome.com/7a3a21cffd.js" crossorigin="anonymous"></script>
+<script src="{{url_for('static', filename='js/index.js')}}"></script>
 {% endblock %}
 
 {% block body %}
@@ -15,27 +16,27 @@
         <div class="topic-choice-container">
             <p class="topic-choice-title">Game</p>
             <div class="choices">
-                <div class="choice selected">Classic chess</div>
-                <div class="choice">Weak!</div>
-                <div class="choice">Endgame chess</div>
+                <div class="choice rule">Classic chess</div>
+                <div class="choice rule">Weak!</div>
+                <div class="choice rule">Endgame chess</div>
             </div>
         </div>
         <div class="topic-choice-container">
             <p class="topic-choice-title">Players</p>
             <div class="choices">
-                <div class="choice selected">Player vs Computer</div>
-                <div class="choice">Computer vs Computer</div>
+                <div class="choice game-type">Player vs Computer</div>
+                <div class="choice game-type">Computer vs Computer</div>
             </div>
         </div>
         <div class="topic-choice-container">
             <p class="topic-choice-title">Computer Strategy</p>
             <div class="choices">
-                <div class="choice selected">Minimax</div>
-                <div class="choice">Reinforcement</div>
+                <div class="choice ai-type">Minimax</div>
+                <div class="choice ai-type">Reinforcement</div>
             </div>
         </div>
     </div>
-    <div class="play-button" id="play-button">
+    <div class="play-button" id="play-button" onclick="runGame()">
         <i class="fas fa-play fa-lg"></i>
     </div>
 </div>

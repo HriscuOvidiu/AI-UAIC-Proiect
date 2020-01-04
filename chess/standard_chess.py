@@ -57,3 +57,8 @@ def standard_capturing():
 def standard_game_over(board):
     pass
 
+
+# TODO: complete
+func_dict = {"pawn": standard_pawn,
+             "rook": standard_rook}
+
