@@ -66,7 +66,7 @@ class Rook(ChessPiece):
 
 
 class Knight(ChessPiece):
-    
+
     def __init__(self, color, moves):
         super(Knight, self).__init__(self.__class__.__name__, color, moves)
 
@@ -287,7 +287,8 @@ class Config:
 
             piece_valid_moves = pieces[piece_type]["valid_moves"]
             for position in pieces[piece_type]["white"]:
-                pieces_dict[tuple(position)] = chess_piece("w", piece_valid_moves)
+                pieces_dict[tuple(position)] = chess_piece(
+                    "w", piece_valid_moves)
 
         return pieces_dict
 
@@ -301,7 +302,8 @@ class Config:
 
             piece_valid_moves = pieces[piece_type]["valid_moves"]
             for position in pieces[piece_type]["black"]:
-                pieces_dict[tuple(position)] = chess_piece("b", piece_valid_moves)
+                pieces_dict[tuple(position)] = chess_piece(
+                    "b", piece_valid_moves)
 
         return pieces_dict
 
@@ -380,7 +382,11 @@ class ChessGame:
         return self.current_state.board.get_rendered_board()
 
 
-if __name__ == '__main__':
-    chess_config = Config("standard_chess_cfg.json")
+def get_board():
+    chess_config = Config("./static/configs/standard_chess_cfg.json")
     chess = ChessGame(chess_config)
-    print(chess.render())
+    return chess.render()
+
+
+if __name__ == '__main__':
+    print(get_board())
