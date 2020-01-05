@@ -42,6 +42,7 @@ class ChessGame:
 
         try:
             chess_piece = cell.chess_piece
+            print(chess_piece)
             return chess_piece.get_valid_moves(cell, self)
         except:
             print("No ChessPiece found on current cell!")

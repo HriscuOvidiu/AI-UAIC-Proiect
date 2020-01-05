@@ -42,7 +42,7 @@ def standard_pawn(start_cell: Cell, chess: ChessGame):
         add_move_by_location(valid_moves, chess, start_cell.position.line + (2 * color), start_cell.position.column)
     if pawn_can_move(start_cell, chess, color):
         add_move_by_location(valid_moves, chess, start_cell.position.line + color, start_cell.position.column)
-    valid_moves.extend(pawn_can_capture(start_cell, chess, color))
+    valid_moves += pawn_can_capture(start_cell, chess, color)
     return valid_moves
 
 
@@ -85,16 +85,16 @@ def get_king_moves(start_cell, chess):
 
 def get_king_captures(start_cell, chess):
     king_captures = []
-    king_captures.extend(pawn_can_capture(start_cell, chess, 1))
-    king_captures.extend(pawn_can_capture(start_cell, chess, -1))
+    king_captures += pawn_can_capture(start_cell, chess, 1)
+    king_captures += pawn_can_capture(start_cell, chess, -1)
     return king_captures
     
 
 def standard_king(start_cell: Cell, chess: ChessGame):
     valid_moves = []
 
-    valid_moves.extend(get_king_moves(start_cell, chess))
-    valid_moves.extend(get_king_captures(start_cell, chess))
+    valid_moves += get_king_moves(start_cell, chess)
+    valid_moves += get_king_captures(start_cell, chess)
 
     return valid_moves
 

@@ -43,4 +43,4 @@ class ChessPiece(metaclass=ABCMeta):
         self._get_valid_moves = func
 
     def __repr__(self):
-        return f"name: {self.name}, alias: {self.alias}, color: {self.color}"
+        return f"name: {self.name}, alias: {self.alias}, color: {self.color}, get_valid_moves: {self.get_valid_moves}"
