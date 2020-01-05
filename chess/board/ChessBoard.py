@@ -41,9 +41,8 @@ class ChessBoard:
 
         return board
 
-    def __getitem__(self, tup):
-        line, column = tup
-        return self.board[line][column]
+    def __getitem__(self, x):
+        return self.board[x]
 
     def reset(self):
         self._init()

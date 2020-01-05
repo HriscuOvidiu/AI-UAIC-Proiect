@@ -57,10 +57,10 @@ function makeCellUnavailable(id) {
 }
 
 function isPlayerTurn() {
-
     if (!$('.player-one-display').first().hasClass('player-one-moves')) {
         return false;
     }
+
     if ($('.player-text').first().html() != 'Player') {
         return false;
     }
@@ -89,7 +89,6 @@ async function userPressed(row, column) {
 
     }
     else {
-
         var moving = false;
         currentlyAvailableCells.forEach((value, index, array) => {
             if (`#cell${row}${column}` == value) {
@@ -101,6 +100,7 @@ async function userPressed(row, column) {
             //TO-DO: implement dynamically moving a piece
             console.log('Moving');
         }
+
         else {
             currentlyAvailableCells.forEach((value, index, array) => {
                 makeCellUnavailable(value);
@@ -110,7 +110,6 @@ async function userPressed(row, column) {
             currentlySelectedPiece = "";
             validMovesShowing = false;
         }
-
     }
 
 }
