@@ -6,11 +6,13 @@ import json
 app = Flask(__name__)
 CORS(app)
 
+config = None
+chess_game = None
+
 ##
 # Front-end routes
 ##
 
-config = None
 
 @app.route('/')
 def index():
@@ -18,7 +20,8 @@ def index():
 
 @app.route('/game', methods=['GET', 'POST'])
 def game():
-    state = main.get_board(config)
+    chess_game = main.get_chess_game(config)
+    state = chess_game.render()
     
     for row in state:
         for index, cell in enumerate(row):

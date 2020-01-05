@@ -31,8 +31,11 @@ class Config:
 
             # TODO: moves !!!
             piece_valid_moves = pieces[piece_type]["valid_moves"]
-            for position in pieces[piece_type]["white"]:
-                pieces_dict[tuple(position)] = chess_piece("w", piece_valid_moves)
+            try:
+                for position in pieces[piece_type]["white"]:
+                    pieces_dict[tuple(position)] = chess_piece("w", piece_valid_moves)
+            except Exception:
+                print(f"White piece not found for {piece_type}")
 
         return pieces_dict
 
@@ -45,8 +48,11 @@ class Config:
 
             # TODO: moves !!!
             piece_valid_moves = pieces[piece_type]["valid_moves"]
-            for position in pieces[piece_type]["black"]:
-                pieces_dict[tuple(position)] = chess_piece("b", piece_valid_moves)
+            try:
+                for position in pieces[piece_type]["black"]:
+                    pieces_dict[tuple(position)] = chess_piece("b", piece_valid_moves)
+            except Exception:
+                print(f"Black piece not found for {piece_type}")
 
         return pieces_dict
 

@@ -8,7 +8,6 @@
     },
     "rook": {
       "white": [[7, 0], [7, 7]],
-      "black": [],
       "valid_moves": "standard_rook"
     },
     "knight": {
@@ -18,17 +17,15 @@
     },
     "bishop": {
       "white": [[7, 2], [7, 5]],
-      "black": [],
       "valid_moves": "standard_bishop"
     },
     "king": {
       "white": [[7, 3]],
-      "black": [[0, 3]],
+      "black": [[0, 4]],
       "valid_moves": "standard_king"
     },
     "queen": {
       "white": [[7, 4]],
-      "black": [],
       "valid_moves": "standard_queen"
     }
   },

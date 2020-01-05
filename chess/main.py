@@ -29,12 +29,8 @@ def get_setup(setup_dict):
 
     return rule, game_type, white_player, black_player
 
-def get_board(setup_dict):
+def get_chess_game(setup_dict):
     setup = get_setup(setup_dict)
     chess_config = Config(setup[0])
     chess = ChessGame(chess_config)
-    return chess.render()
-
-
-if __name__ == '__main__':
-    print(get_board())
+    return chess
