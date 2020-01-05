@@ -25,7 +25,7 @@ def game():
     chess_game = main.get_chess_game(config)
 
     # TEST valid positions
-    print(chess_game.get_valid_positions(1, 0))
+    print(chess_game.get_valid_positions(0, 3))
     # TEST
 
     state = chess_game.render()

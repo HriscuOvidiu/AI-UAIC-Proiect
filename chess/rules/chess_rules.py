@@ -17,16 +17,18 @@ def different_color(cell1, cell2):
 
 
 def pawn_can_move(cell, chess, color, double = False):
-    if double:
-        color *= 2     
-    if chess.current_state.board[cell.position.line + color][cell.position.column]._is_empty():
-            return True
+    if 0 <= cell.position.line + color <= chess._configuration.get_board_lines():
+        if double:
+            color *= 2     
+        if chess.current_state.board[cell.position.line + color][cell.position.column]._is_empty():
+                return True
     return False
 
 
 def pawn_capture_empty(cell, chess, color, direction):
-    return chess.current_state.board[cell.position.line + color][cell.position.column + direction]._is_empty()
-
+    if 0 <= cell.position.line + color <= chess._configuration.get_board_lines() and 0 <= cell.position.column + direction <= chess._configuration.get_board_columns():
+        return chess.current_state.board[cell.position.line + color][cell.position.column + direction]._is_empty()
+    return True
 
 def pawn_can_capture(cell, chess, color):
     capture_list = []
@@ -70,9 +72,10 @@ def standard_rook(start_cell: Cell, chess: ChessGame):
             add_move_by_location(valid_moves, chess, start_cell.position.line, j)
     return valid_moves
 
-def can_move_column(cell, chess, direction):  
-    if chess.current_state.board[cell.position.line][cell.position.column + direction]._is_empty():
-            return True
+def can_move_column(cell, chess, direction):
+    if 0 <= cell.position.column + direction <= chess._configuration.get_board_columns():
+        if chess.current_state.board[cell.position.line][cell.position.column + direction]._is_empty():
+                return True
     return False
 
 def get_king_moves(start_cell, chess):
@@ -91,16 +94,16 @@ def get_king_moves(start_cell, chess):
 
 def get_king_captures(start_cell, chess):
     king_captures = []
-    king_captures += pawn_can_capture(start_cell, chess, 1)
-    king_captures += pawn_can_capture(start_cell, chess, -1)
+    king_captures.extend(pawn_can_capture(start_cell, chess, 1))
+    #king_captures.extend(pawn_can_capture(start_cell, chess, -1))
     return king_captures
     
 
 def standard_king(start_cell: Cell, chess: ChessGame):
     valid_moves = []
 
-    valid_moves += get_king_moves(start_cell, chess)
-    valid_moves += get_king_captures(start_cell, chess)
+    valid_moves.extend(get_king_moves(start_cell, chess))
+    valid_moves.extend(get_king_captures(start_cell, chess))
 
     return valid_moves
 
