@@ -50,3 +50,39 @@ class ChessGame:
 
     def render(self):
         return self.current_state.get_rendered_board()
+
+    @current_state.setter
+    def current_state(self, value):
+        self._current_state = value
+
+    def minimax(self, state, depth):
+        if not depth or state.is_final_state():
+            return state
+        max_eval = -float("inf")
+        max_state = None
+        for possible_move in state.get_next_moves():
+            next_move = self.minimax(possible_move, depth)
+            move_eval = next_move.get_eval()
+            if move_eval > max_eval:
+                max_eval = move_eval
+                max_state = possible_move
+        return max_state
+
+    def minimax_pruning(self, state, depth, alpha, beta):
+        if not depth or state.is_final_state():
+            return state
+        max_eval = -float("inf")
+        max_state = None
+        for possible_move in state.get_next_moves():
+            next_move = self.minimax_pruning(possible_move, depth, -beta, -alpha)
+            move_eval = next_move.get_eval()
+            alpha = max(alpha, max_eval)
+            if move_eval > max_eval:
+                max_eval = move_eval
+                max_state = possible_move
+            if alpha >= beta:
+                break
+        return max_state
+
+    def minimax_root(self, depth):
+        self.current_state = self.minimax_pruning(self.current_state, depth, -float("inf"), float("inf"))
