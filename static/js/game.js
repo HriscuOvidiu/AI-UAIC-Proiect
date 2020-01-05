@@ -7,6 +7,8 @@ function showAvailableMoves(position) {
 
 var validMovesShowing = false;
 var currentlyAvailableCells = []
+var currentlySelectedPiece;
+
 function getValidMoves(row, column) {
     return [[0, 3], [5, 5]];
 }
@@ -33,24 +35,14 @@ function doesOwnPiece(row, column) {
     return false;
 }
 
-function userPressed(row, column) {
-    if (validMovesShowing == false) {
-        if (doesOwnPiece(row, column)) {
-            validMoves = getValidMoves(row, column);
-            validMoves.forEach(element => {
-                let row = element[0];
-                let column = element[1];
-                let id = `#cell${row}${column}`;
-                makeCellAvailable(id);
-            });
-        }
-
-    }
-}
 
 function makeCellAvailable(id) {
     $(id).removeClass("cell").addClass("available-cell");
     currentlyAvailableCells.push(id);
+}
+
+function makeCellUnavailable(id) {
+    $(id).removeClass("available-cell").addClass("cell");
 }
 
 function isPlayerTurn() {
@@ -65,6 +57,52 @@ function isPlayerTurn() {
     return true;
 }
 
+
+function userPressed(row, column) {
+    if (validMovesShowing == false) {
+        if (doesOwnPiece(row, column)) {
+            validMoves = getValidMoves(row, column);
+            currentlySelectedPiece = `#cell${row}${column}`;
+            validMoves.push([row, column])
+            validMoves.forEach(element => {
+                let row = element[0];
+                let column = element[1];
+                let id = `#cell${row}${column}`;
+                makeCellAvailable(id);
+            });
+            currentlyAvailableCells.pop();
+            validMoves.pop();
+            validMovesShowing = true;
+
+        }
+
+    }
+    else {
+
+        var moving = false;
+        currentlyAvailableCells.forEach((value, index, array) => {
+            if (`#cell${row}${column}` == value) {
+                moving = true
+            }
+        })
+
+        if (moving == true) {
+            //TO-DO: implement dynamically moving a piece
+            console.log('Moving');
+        }
+        else {
+            currentlyAvailableCells.forEach((value, index, array) => {
+                makeCellUnavailable(value);
+            })
+            currentlyAvailableCells = []
+            $(currentlySelectedPiece).removeClass("available-cell").addClass("cell");
+            currentlySelectedPiece = "";
+            validMovesShowing = false;
+        }
+
+    }
+
+}
 
 $(document).ready(() => {
     if (isPlayerTurn()) {
