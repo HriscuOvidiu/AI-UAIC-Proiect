@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from flask_cors import CORS
 from chess import main
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -38,7 +39,10 @@ def game():
 @app.route('/api/availableMoves', methods=['GET', 'POST'])
 def availableMoves():
     print(request.get_json())
-    return "<h1>Hello</h1>"
+    rows = [2, 3, 4]
+    columns = [2, 3, 4]
+    moves = {"rows": rows, "columns": columns}
+    return json.dumps(moves)
 
 @app.route('/api/sendConfiguration', methods=['GET', 'POST'])
 def sendConfiguration():
