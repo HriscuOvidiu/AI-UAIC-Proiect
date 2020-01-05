@@ -11,6 +11,8 @@ def add_move_by_location(move_list, chess, line, column):
 
 
 def different_color(cell1, cell2):
+    if cell1.chess_piece == None or cell2.chess_piece == None:
+        return True
     return cell1.chess_piece.color != cell2.chess_piece.color
 
 
@@ -37,7 +39,7 @@ def pawn_can_capture(cell, chess, color):
 
 def standard_pawn(start_cell: Cell, chess: ChessGame):
     valid_moves = []
-    color = 1 if start_cell.chess_piece.color == "black" else -1
+    color = 1 if start_cell.chess_piece.color == "b" else -1
     if on_starting_position() and pawn_can_move(start_cell, chess, color, True):
         add_move_by_location(valid_moves, chess, start_cell.position.line + (2 * color), start_cell.position.column)
     if pawn_can_move(start_cell, chess, color):
@@ -48,20 +50,24 @@ def standard_pawn(start_cell: Cell, chess: ChessGame):
 
 def standard_rook(start_cell: Cell, chess: ChessGame):
     valid_moves = []
-    for i in range(chess._config.get_board_lines()):
+    for i in range(chess._configuration.get_board_lines()):
         if i == start_cell.position.line:
             continue
-        if chess.current_state.board[i][start_cell.position.column]._is_empty() == False and different_color(start_cell, chess.current_state.board[i][start_cell.position.column]):
+        if chess.current_state.board[i][start_cell.position.column]._is_empty() == False:
+            if different_color(start_cell, chess.current_state.board[i][start_cell.position.column]):
+                add_move_by_location(valid_moves, chess, i, start_cell.position.column)
+                continue
+        else:
             add_move_by_location(valid_moves, chess, i, start_cell.position.column)
-            continue
-        add_move_by_location(valid_moves, chess, i, start_cell.position.column)
-    for j in range(chess._config.get_board_columns()):
+    for j in range(chess._configuration.get_board_columns()):
         if j == start_cell.position.column:
             continue
-        if chess.current_state.board[start_cell.position.line][j]._is_empty() == False and different_color(start_cell, chess.current_state.board[start_cell.position.line][j]):
+        if chess.current_state.board[start_cell.position.line][j]._is_empty() == False:
+            if different_color(start_cell, chess.current_state.board[start_cell.position.line][j]):
+                add_move_by_location(valid_moves, chess, start_cell.position.line, j)
+                continue
+        else:
             add_move_by_location(valid_moves, chess, start_cell.position.line, j)
-            continue
-        add_move_by_location(valid_moves, chess, start_cell.position.line, j)
     return valid_moves
 
 def can_move_column(cell, chess, direction):  

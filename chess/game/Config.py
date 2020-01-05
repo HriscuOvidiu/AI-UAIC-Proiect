@@ -68,7 +68,7 @@ class Config:
                     pieces_dict[tuple(position)] = chess_piece("b", valid_moves_func)
             except Exception:
                 print(f"Black piece not found for {piece_type}")
-
+        print(pieces_dict)
         return pieces_dict
 
     def get_capturing_condition(self):

@@ -25,7 +25,7 @@ def game():
     chess_game = main.get_chess_game(config)
 
     # TEST valid positions
-    print(chess_game.get_valid_positions(6, 4))
+    print(chess_game.get_valid_positions(1, 0))
     # TEST
 
     state = chess_game.render()
@@ -65,4 +65,4 @@ def move():
     pass
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='127.0.0.1', debug=True)

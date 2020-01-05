@@ -13,7 +13,7 @@ class Cell:
         return self._chess_piece
 
     def _is_empty(self):
-        return True if self._chess_piece else False
+        return True if self._chess_piece is None else False
 
     def get_symbol(self):
         return self.chess_piece.alias if self.chess_piece else ""
