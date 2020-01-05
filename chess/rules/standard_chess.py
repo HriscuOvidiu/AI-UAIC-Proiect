@@ -56,8 +56,53 @@ def standard_rook(start_cell: Cell, chess: ChessGame):
         add_move_by_location(valid_moves, start_cell.position.line, j)
     return valid_moves
 
-# Continue...
+def can_move_column(cell, chess, direction):  
+    if chess.current_state.board[start_cell.position.line][start_cell.position.column + direction]._is_empty():
+            return True
+    return False
 
+def get_king_moves(start_cell, chess):
+    king_moves = []
+
+    if pawn_can_move(start_cell, chess, 1):
+        add_move_by_location(king_moves, start_cell.position.line + 1, start_cell.position.column)
+    if pawn_can_move(start_cell, chess, -1):
+        add_move_by_location(king_moves, start_cell.position.line - 1, start_cell.position.column)
+    if can_move_column(start_cell, chess, 1):
+        add_move_by_location(king_moves, start_cell.position.line, start_cell.position.column + 1)
+    if can_move_column(start_cell, chess, -1):
+        add_move_by_location(king_moves, start_cell.position.line, start_cell.position.column - 1)
+
+    return king_moves
+
+def get_king_captures(start_cell, chess):
+    king_captures = []
+    king_captures.extend(pawn_can_capture(cell, chess, 1))
+    king_captures.extend(pawn_can_capture(cell, chess, -1))
+    return king_captures
+    
+
+def standard_king(start_cell: Cell, chess: ChessGame):
+    valid_moves = []
+
+    valid_moves.extend(get_king_moves(start_cell, chess))
+    valid_moves.extend(get_king_captures(start_chell, chess))
+
+    return valid_moves
+
+def standard_bishop(start_cell: Cell, chess: ChessGame):
+    valid_moves = []
+    directions = [[1,1],[-1,1],[-1,-1],[1,-1]]
+    for direction in directions:
+        i = start_cell.position.line
+        j = start_cell.position.column
+        for counter in range(0,8):
+            i += direction[0]
+            j += direction[1]
+            if chess.current_state.board[i][j]._is_empty() or different_color(start_cell, chess.current_state.board[i][j]):
+                add_move_by_location(valid_moves, i, j)
+
+    return valid_moves
 
 def standard_capturing():
     pass
@@ -69,5 +114,6 @@ def standard_game_over(board):
 
 # TODO: complete
 func_dict = {"pawn": standard_pawn,
-             "rook": standard_rook}
+             "rook": standard_rook,
+             "king": standard_king}
 
