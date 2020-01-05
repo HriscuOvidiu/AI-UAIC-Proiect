@@ -9,8 +9,19 @@ var validMovesShowing = false;
 var currentlyAvailableCells = []
 var currentlySelectedPiece;
 
-function getValidMoves(row, column) {
-    return [[0, 3], [5, 5]];
+async function getValidMoves(row, column) {
+    var rows, columns;
+    var cells = []
+
+    data = await request('/api/availableMoves', 'POST', { 'row': row, 'column': column });
+    jdata = JSON.parse(data);
+    rows = jdata.rows;
+    columns = jdata.columns;
+
+    rows.forEach((value, index, array) => {
+        cells.push([value, columns[index]]);
+    })
+    return cells;
 }
 
 function getPlayerColor() {
@@ -58,10 +69,10 @@ function isPlayerTurn() {
 }
 
 
-function userPressed(row, column) {
+async function userPressed(row, column) {
     if (validMovesShowing == false) {
         if (doesOwnPiece(row, column)) {
-            validMoves = getValidMoves(row, column);
+            validMoves = await getValidMoves(row, column);
             currentlySelectedPiece = `#cell${row}${column}`;
             validMoves.push([row, column])
             validMoves.forEach(element => {
