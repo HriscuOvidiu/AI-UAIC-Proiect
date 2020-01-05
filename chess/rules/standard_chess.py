@@ -1,14 +1,18 @@
 from chess.board.Cell import Cell
 from chess.game.ChessGame import ChessGame
 
+
 def on_starting_position():
     pass
+
 
 def add_move_by_location(move_list, line, column):
     move_list.append(chess._board.get_cell_by(line, column).position)
 
+
 def different_color(cell1, cell2):
     return cell1.chess_piece.color != cell2.chess_piece.color
+
 
 def pawn_can_move(cell, chess, color, double = False):
     if double:
@@ -17,8 +21,10 @@ def pawn_can_move(cell, chess, color, double = False):
             return True
     return False
 
+
 def pawn_capture_empty(cell, chess, color, direction):
     return chess._board.get_cell_by(start_cell.position.line + color, start_cell.position.column + direction)._is_empty()
+
 
 def pawn_can_capture(cell, chess, color):
     capture_list = []
@@ -27,6 +33,7 @@ def pawn_can_capture(cell, chess, color):
     if pawn_capture_empty(cell, chess, color, -1) is False and different_color(cell, chess._board.get_cell_by(start_cell.position.line + color, start_cell.position.column - 1)):
         capture_list.append(chess._board.get_cell_by(start_cell.position.line + color, start_cell.position.column - 1).position)
     return capture_list
+
 
 def standard_pawn(start_cell: Cell, chess: Chess):
     valid_moves = []
@@ -37,6 +44,7 @@ def standard_pawn(start_cell: Cell, chess: Chess):
         add_move_by_location(valid_moves, start_cell.position.line + color, start_cell.position.column)
     valid_moves.extend(pawn_can_capture(start_cell, chess, color))
     return valid_moves
+
 
 def standard_rook(start_cell: Cell, chess: ChessGame):
     valid_moves = []
