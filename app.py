@@ -9,14 +9,16 @@ CORS(app)
 # Front-end routes
 ##
 
+config = None
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
 @app.route('/game', methods=['GET', 'POST'])
 def game():
-    state = main.get_board()
-    print(state)
+    state = main.get_board(config)
+    
     for row in state:
         for index, cell in enumerate(row):
             if cell != "":
@@ -40,7 +42,8 @@ def availableMoves():
 
 @app.route('/api/sendConfiguration', methods=['GET', 'POST'])
 def sendConfiguration():
-    print(request.get_json())
+    global config
+    config = request.get_json()
     return ""
 
 @app.route('/api/move', methods=['POST'])
