@@ -35,7 +35,7 @@ def pawn_can_capture(cell, chess, color):
     return capture_list
 
 
-def standard_pawn(start_cell: Cell, chess: Chess):
+def standard_pawn(start_cell: Cell, chess: ChessGame):
     valid_moves = []
     color = 1 if start_cell.chess_piece.color == "black" else -1
     if on_starting_position() and pawn_can_move(start_cell, chess, color, True):
@@ -94,7 +94,7 @@ def standard_king(start_cell: Cell, chess: ChessGame):
     valid_moves = []
 
     valid_moves.extend(get_king_moves(start_cell, chess))
-    valid_moves.extend(get_king_captures(start_chell, chess))
+    valid_moves.extend(get_king_captures(start_cell, chess))
 
     return valid_moves
 
@@ -121,8 +121,8 @@ def standard_game_over(board):
 
 
 # TODO: complete
-func_dict = {"pawn": standard_pawn,
-             "rook": standard_rook,
-             "king": standard_king,
-             "bishop": standard_bishop}
+rules_func_dict = { "standard_pawn": standard_pawn,
+                    "standard_rook": standard_rook,
+                    "standard_king": standard_king,
+                    "standard_bishop": standard_bishop}
 

@@ -20,6 +20,8 @@ def index():
 
 @app.route('/game', methods=['GET', 'POST'])
 def game():
+    global chess_game
+    
     chess_game = main.get_chess_game(config)
     state = chess_game.render()
     

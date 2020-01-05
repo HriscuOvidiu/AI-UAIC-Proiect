@@ -33,7 +33,7 @@ class ChessState:
         # https://www.chessprogramming.org/Simplified_Evaluation_Function
 
         score = 0
-        board = self._board.board()
+        board = self.board.board
         to_move = 1 if not self.is_current_player_white() else -1
         symbols = {"wPawn": -100,
                    "bPawn": 100,

@@ -1,5 +1,6 @@
 import json
 
+from chess.rules.chess_rules import rules_func_dict
 from chess.pieces.ChessPieceFactory import ChessPieceFactory
 
 
@@ -31,10 +32,17 @@ class Config:
 
             # TODO: moves !!!
             piece_valid_moves = pieces[piece_type]["valid_moves"]
+
+            try:
+                valid_moves_func = rules_func_dict[piece_valid_moves]
+            except:
+                valid_moves_func = None
+                print(f"No available 'valid_move_func' for {piece_type}")
+
             try:
                 for position in pieces[piece_type]["white"]:
-                    pieces_dict[tuple(position)] = chess_piece("w", piece_valid_moves)
-            except Exception:
+                    pieces_dict[tuple(position)] = chess_piece("w", valid_moves_func)
+            except:
                 print(f"White piece not found for {piece_type}")
 
         return pieces_dict
@@ -48,16 +56,25 @@ class Config:
 
             # TODO: moves !!!
             piece_valid_moves = pieces[piece_type]["valid_moves"]
+
+            try:
+                valid_moves_func = rules_func_dict[piece_valid_moves]
+            except:
+                valid_moves_func = None
+                print(f"No available 'valid_move_func' for {piece_type}")
+
             try:
                 for position in pieces[piece_type]["black"]:
-                    pieces_dict[tuple(position)] = chess_piece("b", piece_valid_moves)
+                    pieces_dict[tuple(position)] = chess_piece("b", valid_moves_func)
             except Exception:
                 print(f"Black piece not found for {piece_type}")
 
         return pieces_dict
 
     def get_capturing_condition(self):
-        pass
+        func_name = self.config_dict['capturing_condition']
+        return rules_func_dict[func_name]
 
     def get_end_condition(self):
-        pass
+        func_name = self.config_dict['game_over']
+        return rules_func_dict[func_name]
