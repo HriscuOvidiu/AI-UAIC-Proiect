@@ -7,7 +7,7 @@ def on_starting_position():
 
 
 def add_move_by_location(move_list, line, column):
-    move_list.append(chess._board.get_cell_by(line, column).position)
+    move_list.append(chess.current_state.board[line][column].position)
 
 
 def different_color(cell1, cell2):
@@ -17,21 +17,21 @@ def different_color(cell1, cell2):
 def pawn_can_move(cell, chess, color, double = False):
     if double:
         color *= 2     
-    if chess._board.get_cell_by(start_cell.position.line + color, start_cell.position.column)._is_empty():
+    if chess.current_state.board[start_cell.position.line + color][start_cell.position.column]._is_empty():
             return True
     return False
 
 
 def pawn_capture_empty(cell, chess, color, direction):
-    return chess._board.get_cell_by(start_cell.position.line + color, start_cell.position.column + direction)._is_empty()
+    return chess.current_state.board[start_cell.position.line + color][start_cell.position.column + direction]._is_empty()
 
 
 def pawn_can_capture(cell, chess, color):
     capture_list = []
-    if pawn_capture_empty(cell, chess, color, 1) is False and different_color(cell, chess._board.get_cell_by(start_cell.position.line + color, start_cell.position.column + 1)):
-        capture_list.append(chess._board.get_cell_by(start_cell.position.line + color, start_cell.position.column + 1).position)
-    if pawn_capture_empty(cell, chess, color, -1) is False and different_color(cell, chess._board.get_cell_by(start_cell.position.line + color, start_cell.position.column - 1)):
-        capture_list.append(chess._board.get_cell_by(start_cell.position.line + color, start_cell.position.column - 1).position)
+    if pawn_capture_empty(cell, chess, color, 1) is False and different_color(cell, chess.current_state.board[start_cell.position.line + color][start_cell.position.column + 1]):
+        capture_list.append(chess.current_state.board[start_cell.position.line + color][start_cell.position.column + 1].position)
+    if pawn_capture_empty(cell, chess, color, -1) is False and different_color(cell, chess.current_state.board[start_cell.position.line + color][start_cell.position.column - 1]):
+        capture_list.append(chess.current_state.board[start_cell.position.line + color][start_cell.position.column - 1].position)
     return capture_list
 
 
@@ -51,14 +51,14 @@ def standard_rook(start_cell: Cell, chess: ChessGame):
     for i in range(chess._config.get_board_lines()):
         if i == start_cell.position.line:
             continue
-        if chess._board.get_cell_by(i, start_cell.position.column)._is_empty() == False and different_color(start_cell, chess._board.get_cell_by(i, start_cell.position.column)):
+        if chess.current_state.board[i][start_cell.position.column]._is_empty() == False and different_color(start_cell, chess.current_state.board[i][start_cell.position.column]):
             add_move_by_location(valid_moves, i, start_cell.position.column)
             continue
         add_move_by_location(valid_moves, i, start_cell.position.column)
     for j in range(chess._config.get_board_columns()):
         if j == start_cell.position.column:
             continue
-        if chess._board.get_cell_by(start_cell.position.line, j)._is_empty() == False and different_color(start_cell, chess._board.get_cell_by(start_cell.position.line, j)):
+        if chess.current_state.board[start_cell.position.line][j]._is_empty() == False and different_color(start_cell, chess.current_state.board[start_cell.position.line][j]):
             add_move_by_location(valid_moves, start_cell.position.line, j)
             continue
         add_move_by_location(valid_moves, start_cell.position.line, j)
