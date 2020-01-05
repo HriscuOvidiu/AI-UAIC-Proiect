@@ -123,5 +123,6 @@ def standard_game_over(board):
 # TODO: complete
 func_dict = {"pawn": standard_pawn,
              "rook": standard_rook,
-             "king": standard_king}
+             "king": standard_king,
+             "bishop": standard_bishop}
 
