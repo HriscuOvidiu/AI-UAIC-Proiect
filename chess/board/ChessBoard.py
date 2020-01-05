@@ -41,11 +41,12 @@ class ChessBoard:
 
         return board
 
-    def get_cell_by(self, line, column):
+    def __getitem__(self, tup):
+        line, column = tup
         return self.board[line][column]
 
     def reset(self):
-        pass
+        self._init()
 
     def move(self, start_position, end_position):
         pass

@@ -49,4 +49,4 @@ class ChessGame:
         return self.current_state.is_final_state()
 
     def render(self):
-        return self.current_state.board.get_rendered_board()
+        return self.current_state.get_rendered_board()

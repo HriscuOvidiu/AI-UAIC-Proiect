@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 def on_starting_position():
     pass
+=======
+from chess.board.Cell import Cell
+from chess.game.ChessGame import ChessGame
+>>>>>>> 71343055bbf584ed46b1d961ca3bfd3e3d921e8c
 
 def add_move_by_location(move_list, line, column):
     move_list.append(chess._board.get_cell_by(line, column).position)
@@ -35,8 +40,12 @@ def standard_pawn(start_cell: Cell, chess: Chess):
     valid_moves.extend(pawn_can_capture(start_cell, chess, color))
     return valid_moves
 
+<<<<<<< HEAD
 def standard_rook(start_cell: Cell, chess: Chess):
     valid_moves = []
+=======
+def standard_rook(start_cell: Cell, chess: ChessGame):
+>>>>>>> 71343055bbf584ed46b1d961ca3bfd3e3d921e8c
     for i in range(chess._config.get_board_lines()):
         if i == start_cell.position.line:
             continue

@@ -26,10 +26,11 @@ def game():
                 row[index] = f'assets/{cell}.png'
             else:
                 row[index] = 'assets/blank.png'
-
-    print(state)
-
-    return render_template('game.html', initial_state=state)
+    logs = ["[23:58:11]: Player moves pawn from H2 to H3",
+            "[23:58:14]: Computer moves horse from G8 to F6",
+            "[23:58:11]: Player moves pawn from H2 to H3"]
+    is_first_moving = True
+    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving)
 
 ##
 # API
