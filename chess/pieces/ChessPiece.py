@@ -16,10 +16,11 @@ class ChessPiece(metaclass=ABCMeta):
                "wQueen":    "queen-white",
                "bQueen":    "queen-black"}
 
-    def __init__(self, name, color, get_valid_moves=None):
+    def __init__(self, name, color, initial_position, get_valid_moves=None):
         self._name = name
         self._alias = ChessPiece.symbols[color + name]
         self._color = color
+        self._initial_position = initial_position
         self._get_valid_moves = get_valid_moves
 
     @property
@@ -35,6 +36,10 @@ class ChessPiece(metaclass=ABCMeta):
         return self._color
 
     @property
+    def initial_position(self):
+        return self._initial_position
+
+    @property
     def get_valid_moves(self):
         return self._get_valid_moves
 
@@ -43,4 +48,4 @@ class ChessPiece(metaclass=ABCMeta):
         self._get_valid_moves = func
 
     def __repr__(self):
-        return f"name: {self.name}, alias: {self.alias}, color: {self.color}, get_valid_moves: {self.get_valid_moves}"
+        return f"name: {self.name}, alias: {self.alias}, color: {self.color}, initial_position: {self.initial_position}, get_valid_moves: {self.get_valid_moves}"

@@ -2,6 +2,7 @@ import json
 
 from chess.rules.chess_rules import rules_func_dict
 from chess.pieces.ChessPieceFactory import ChessPieceFactory
+from chess.board.Position import Position
 
 
 class Config:
@@ -41,7 +42,8 @@ class Config:
 
             try:
                 for position in pieces[piece_type]["white"]:
-                    pieces_dict[tuple(position)] = chess_piece("w", valid_moves_func)
+                    position_tup = tuple(position)
+                    pieces_dict[position_tup] = chess_piece("w", Position(position_tup[0], position_tup[1]), valid_moves_func)
             except:
                 print(f"White piece not found for {piece_type}")
 
@@ -65,7 +67,8 @@ class Config:
 
             try:
                 for position in pieces[piece_type]["black"]:
-                    pieces_dict[tuple(position)] = chess_piece("b", valid_moves_func)
+                    position_tup = tuple(position)
+                    pieces_dict[position_tup] = chess_piece("b", Position(position_tup[0], position_tup[1]), valid_moves_func)
             except Exception:
                 print(f"Black piece not found for {piece_type}")
         print(pieces_dict)
