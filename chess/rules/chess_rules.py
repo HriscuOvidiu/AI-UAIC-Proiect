@@ -17,7 +17,6 @@ def different_color(cell1, cell2):
 
 
 def pawn_can_move(cell, chess, color, double = False):
-    print(0 <= cell.position.line + color <= chess._configuration.get_board_lines())
     if 0 <= cell.position.line + color <= chess._configuration.get_board_lines() - 1:
         if double == True:
             color *= 2     

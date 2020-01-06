@@ -40,11 +40,11 @@ class ChessGame:
     def get_valid_positions(self, line, column):
         cell = self.current_state.board[line][column]
 
-        #try:
-        chess_piece = cell.chess_piece
-        return chess_piece.get_valid_moves(cell, self)
-        #except:
-        #    print("No ChessPiece found on current cell!")
+        try:
+            chess_piece = cell.chess_piece
+            return chess_piece.get_valid_moves(cell, self)
+        except:
+           print("No ChessPiece found on current cell!")
 
     # TODO: RETURN REWARD
     def move(self, start_line, start_column, end_line, end_column):
