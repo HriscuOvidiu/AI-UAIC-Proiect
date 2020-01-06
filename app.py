@@ -25,10 +25,6 @@ def game():
 
     chess_game = main.get_chess_game(config)
 
-    # TEST valid positions
-    print(chess_game.get_valid_positions(0, 3))
-    # TEST
-
     state = chess_game.render()
 
     for row in state:
@@ -50,11 +46,11 @@ def game():
 
 @app.route('/api/availableMoves', methods=['GET', 'POST'])
 def availableMoves():
+    global chess_game
+    print(request.get_json())
     request_row = request.get_json()['row']
     request_column = request.get_json()['column']
-    print(request_row, request_column)
-    rows = [2, 3, 4]
-    columns = [2, 3, 4]
+    rows, columns = main.positions_to_frontend(chess_game, int(request_row), int(request_column))
     moves = {"rows": rows, "columns": columns}
     return json.dumps(moves)
 
