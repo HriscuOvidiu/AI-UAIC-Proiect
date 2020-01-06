@@ -1,6 +1,7 @@
+import json
+
 from chess.game.ChessGame import ChessGame
 from chess.game.Config import Config
-import json
 
 
 rules_dict = {
@@ -35,3 +36,12 @@ def get_chess_game(setup_dict):
     chess = ChessGame(chess_config)
 
     return chess
+
+def positions_to_frontend(game, line, column):
+    positions = game.get_valid_positions(line, column)
+    if len(positions):
+        positions_l = [[position.line, position.column] for position in positions]
+
+        return zip(*positions_l)
+    return [], []
+

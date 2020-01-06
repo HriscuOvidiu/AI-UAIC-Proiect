@@ -47,8 +47,16 @@ class ChessGame:
         #    print("No ChessPiece found on current cell!")
 
     # TODO: RETURN REWARD
-    def move(self, start_cell, end_cell):
-        pass
+    def move(self, start_line, start_column, end_line, end_column):
+        reward = 0
+
+        start_cell = self.current_state.board[start_line][start_column]
+        end_cell = self.current_state.board[end_line][end_column]
+
+        end_cell.chess_piece = start_cell.chess_piece
+        start_cell.chess_piece = None
+
+        return reward
 
     def has_finished(self):
         return self.current_state.is_final_state()

@@ -1,10 +1,3 @@
-function showAvailableMoves(position) {
-    request('/api/availableMoves', 'POST', { position: position })
-        .done((data) => {
-            render(data);
-        });
-};
-
 var validMovesShowing = false;
 var currentlyAvailableCells = []
 var currentlySelectedPiece;
@@ -22,6 +15,11 @@ async function getValidMoves(row, column) {
         cells.push([value, columns[index]]);
     })
     return cells;
+}
+
+async function sendMoveRequest(initialRow, initialColumn, targetRow, targetColumn) {
+    request('/api/move', 'POST', { 'initialRow': initialRow, 'initialColumn': initialColumn, 'targetRow': targetRow, 'targetColumn': targetColumn });
+    console.log("Moved")
 }
 
 function getPlayerColor() {
@@ -90,15 +88,17 @@ async function userPressed(row, column) {
     }
     else {
         var moving = false;
+        var targetID;
         currentlyAvailableCells.forEach((value, index, array) => {
             if (`#cell${row}${column}` == value) {
+                targetID = value
                 moving = true
             }
         })
 
         if (moving == true) {
             //TO-DO: implement dynamically moving a piece
-            console.log('Moving');
+            sendMoveRequest(row, column, targetID[5], targetID[6])
         }
 
         else {
