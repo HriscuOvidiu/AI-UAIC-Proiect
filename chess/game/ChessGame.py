@@ -53,8 +53,8 @@ class ChessGame:
         start_cell = self.current_state.board[start_line][start_column]
         end_cell = self.current_state.board[end_line][end_column]
 
-        end_cell.chess_piece = start_cell.chess_piece
-        start_cell.chess_piece = None
+        end_cell._chess_piece = start_cell._chess_piece
+        start_cell._chess_piece = None
 
         return reward
 
