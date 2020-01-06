@@ -18,18 +18,15 @@ chess_game = None
 def index():
     return render_template('index.html')
 
+
 @app.route('/game', methods=['GET', 'POST'])
 def game():
     global chess_game
-    
+
     chess_game = main.get_chess_game(config)
 
-    # TEST valid positions
-    print(chess_game.get_valid_positions(6, 6))
-    # TEST
-
     state = chess_game.render()
-    
+
     for row in state:
         for index, cell in enumerate(row):
             if cell != "":
@@ -46,13 +43,17 @@ def game():
 # API
 ##
 
+
 @app.route('/api/availableMoves', methods=['GET', 'POST'])
 def availableMoves():
-    print(request.get_json())
-    rows = [2, 3, 4]
-    columns = [2, 3, 4]
+    global chess_game
+
+    request_row = request.get_json()['row']
+    request_column = request.get_json()['column']
+    rows, columns = main.positions_to_frontend(chess_game, int(request_row), int(request_column))
     moves = {"rows": rows, "columns": columns}
     return json.dumps(moves)
+
 
 @app.route('/api/sendConfiguration', methods=['GET', 'POST'])
 def sendConfiguration():
@@ -60,9 +61,11 @@ def sendConfiguration():
     config = request.get_json()
     return ""
 
+
 @app.route('/api/move', methods=['POST'])
 def move():
     pass
+
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', debug=True)
