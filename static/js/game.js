@@ -1,9 +1,9 @@
 var validMovesShowing = false;
 var currentlyAvailableCells = []
 var currentlySelectedPiece;
-// const sound = 'chess_piece_sound.wav';
+const sound = 'chess_piece_sound.wav';
 
-const sound = 'Horse-nay.mp3'
+// const sound = 'Horse-nay.mp3'
 const chessPieceSound = new Audio('static/assets/' + sound);
 async function getValidMoves(row, column) {
     var rows, columns;
@@ -77,7 +77,7 @@ async function userPressed(row, column) {
         if (doesOwnPiece(row, column)) {
             validMoves = await getValidMoves(row, column);
             currentlySelectedPiece = `#cell${row}${column}`;
-            validMoves.push([row, column])
+            validMoves.push([row, column]);
             validMoves.forEach(element => {
                 let row = element[0];
                 let column = element[1];
@@ -87,30 +87,26 @@ async function userPressed(row, column) {
             currentlyAvailableCells.pop();
             validMoves.pop();
             validMovesShowing = true;
-
         }
-
-    }
-    else {
+    } else {
         var moving = false;
         var targetID;
+
         currentlyAvailableCells.forEach((value) => {
             if (`#cell${row}${column}` == value) {
                 targetID = value
                 moving = true
             }
-        })
+        });
 
         if (moving == true) {
             //TO-DO: implement dynamically moving a piece
             sendMoveRequest(currentlySelectedPiece[5], currentlySelectedPiece[6], targetID[5], targetID[6])
-        }
-
-        else {
+        } else {
             currentlyAvailableCells.forEach((value) => {
                 makeCellUnavailable(value);
-            })
-            currentlyAvailableCells = []
+            });
+            currentlyAvailableCells = [];
             $(currentlySelectedPiece).removeClass("available-cell").addClass("cell");
             currentlySelectedPiece = "";
             validMovesShowing = false;
