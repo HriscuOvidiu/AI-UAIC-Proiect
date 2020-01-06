@@ -1,7 +1,10 @@
 var validMovesShowing = false;
 var currentlyAvailableCells = []
 var currentlySelectedPiece;
+// const sound = 'chess_piece_sound.wav';
 
+const sound = 'Horse-nay.mp3'
+const chessPieceSound = new Audio('static/assets/' + sound);
 async function getValidMoves(row, column) {
     var rows, columns;
     var cells = []
@@ -21,6 +24,7 @@ function sendMoveRequest(initialRow, initialColumn, targetRow, targetColumn) {
     request('/api/move', 'POST', { 'initialRow': initialRow, 'initialColumn': initialColumn, 'targetRow': targetRow, 'targetColumn': targetColumn })
         .done((view) => {
             render(view);
+            chessPieceSound.play();
         });
 }
 
