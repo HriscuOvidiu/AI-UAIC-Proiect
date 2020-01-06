@@ -9,6 +9,22 @@ CORS(app)
 config = None
 chess_game = None
 
+def get_game_state(chess_game):
+    chess_game = main.get_chess_game(config)
+    state = chess_game.render()
+
+    for row in state:
+        for index, cell in enumerate(row):
+            if cell != "":
+                row[index] = f'assets/{cell}.png'
+            else:
+                row[index] = 'assets/blank.png'
+    logs = ["[23:58:11]: Player moves pawn from H2 to H3",
+            "[23:58:14]: Computer moves horse from G8 to F6",
+            "[23:58:11]: Player moves pawn from H2 to H3"]
+
+    return state, logs
+
 ##
 # Front-end routes
 ##
@@ -23,23 +39,7 @@ def index():
 def game():
     global chess_game
 
-    chess_game = main.get_chess_game(config)
-
-    # TEST valid positions
-    print(chess_game.get_valid_positions(0, 3))
-    # TEST
-
-    state = chess_game.render()
-
-    for row in state:
-        for index, cell in enumerate(row):
-            if cell != "":
-                row[index] = f'assets/{cell}.png'
-            else:
-                row[index] = 'assets/blank.png'
-    logs = ["[23:58:11]: Player moves pawn from H2 to H3",
-            "[23:58:14]: Computer moves horse from G8 to F6",
-            "[23:58:11]: Player moves pawn from H2 to H3"]
+    (state, logs) = get_game_state(chess_game)
     is_first_moving = True
     return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving)
 
@@ -68,8 +68,19 @@ def sendConfiguration():
 
 @app.route('/api/move', methods=['POST'])
 def move():
-    pass
+    global chess_game
 
+    (state, logs) = get_game_state(chess_game)
+    is_first_moving = True
+    
+    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving)
+
+@app.after_request
+def set_response_headers(response):
+    response.headers['Cache-Control'] = 'no-cache'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', debug=True)

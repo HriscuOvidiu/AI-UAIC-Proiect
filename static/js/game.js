@@ -17,9 +17,11 @@ async function getValidMoves(row, column) {
     return cells;
 }
 
-async function sendMoveRequest(initialRow, initialColumn, targetRow, targetColumn) {
-    request('/api/move', 'POST', { 'initialRow': initialRow, 'initialColumn': initialColumn, 'targetRow': targetRow, 'targetColumn': targetColumn });
-    console.log("Moved")
+function sendMoveRequest(initialRow, initialColumn, targetRow, targetColumn) {
+    request('/api/move', 'POST', { 'initialRow': initialRow, 'initialColumn': initialColumn, 'targetRow': targetRow, 'targetColumn': targetColumn })
+        .done((view) => {
+            render(view);
+        });
 }
 
 function getPlayerColor() {
@@ -114,7 +116,7 @@ async function userPressed(row, column) {
 
 }
 
-$(document).ready(() => {
+$(document).on('render', () => {
     if (isPlayerTurn()) {
         $('.cell').each(function () {
             $(this).click(() => {
@@ -126,4 +128,8 @@ $(document).ready(() => {
             })
         });
     }
+});
+
+$(document).ready(() => {
+    document.dispatchEvent(renderEvent);
 });
