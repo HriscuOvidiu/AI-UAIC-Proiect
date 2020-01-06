@@ -47,7 +47,7 @@ def game():
 @app.route('/api/availableMoves', methods=['GET', 'POST'])
 def availableMoves():
     global chess_game
-    print(request.get_json())
+
     request_row = request.get_json()['row']
     request_column = request.get_json()['column']
     rows, columns = main.positions_to_frontend(chess_game, int(request_row), int(request_column))

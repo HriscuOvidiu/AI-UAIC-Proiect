@@ -17,5 +17,10 @@ class Position:
             return Position(self.line + other.line, self.column + other.column)
         raise TypeError
 
+    def __eq__(self, other):
+        if isinstance(other, Position):
+            return other.line == self.line and other.column == self.column
+        return False
+
     def __repr__(self):
         return f"{self.__class__.__name__}(line: {self.line}, column: {self.column})"
