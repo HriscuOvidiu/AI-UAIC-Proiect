@@ -10,7 +10,6 @@ config = None
 chess_game = None
 
 def get_game_state(chess_game):
-    chess_game = main.get_chess_game(config)
     state = chess_game.render()
 
     for row in state:
@@ -37,6 +36,8 @@ def index():
 
 @app.route('/game', methods=['GET', 'POST'])
 def game():
+    global chess_game
+    
     chess_game = main.get_chess_game(config)
 
     (state, logs) = get_game_state(chess_game)
@@ -70,6 +71,10 @@ def sendConfiguration():
 @app.route('/api/move', methods=['POST'])
 def move():
     global chess_game
+
+    body = request.get_json()
+    print(body)
+    chess_game.move(int(body['initialRow']), int(body['initialColumn']), int(body['targetRow']), int(body['targetColumn']))
 
     (state, logs) = get_game_state(chess_game)
     is_first_moving = True

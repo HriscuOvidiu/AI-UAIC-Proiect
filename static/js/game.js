@@ -11,7 +11,7 @@ async function getValidMoves(row, column) {
     rows = jdata.rows;
     columns = jdata.columns;
 
-    rows.forEach((value, index, array) => {
+    rows.forEach((value, index) => {
         cells.push([value, columns[index]]);
     })
     return cells;
@@ -68,7 +68,6 @@ function isPlayerTurn() {
     return true;
 }
 
-
 async function userPressed(row, column) {
     if (validMovesShowing == false) {
         if (doesOwnPiece(row, column)) {
@@ -91,7 +90,7 @@ async function userPressed(row, column) {
     else {
         var moving = false;
         var targetID;
-        currentlyAvailableCells.forEach((value, index, array) => {
+        currentlyAvailableCells.forEach((value) => {
             if (`#cell${row}${column}` == value) {
                 targetID = value
                 moving = true
@@ -100,11 +99,11 @@ async function userPressed(row, column) {
 
         if (moving == true) {
             //TO-DO: implement dynamically moving a piece
-            sendMoveRequest(row, column, targetID[5], targetID[6])
+            sendMoveRequest(currentlySelectedPiece[5], currentlySelectedPiece[6], targetID[5], targetID[6])
         }
 
         else {
-            currentlyAvailableCells.forEach((value, index, array) => {
+            currentlyAvailableCells.forEach((value) => {
                 makeCellUnavailable(value);
             })
             currentlyAvailableCells = []
@@ -128,6 +127,8 @@ $(document).on('render', () => {
             })
         });
     }
+    
+    validMovesShowing = false;
 });
 
 $(document).ready(() => {
