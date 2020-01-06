@@ -12,13 +12,6 @@ class Cell:
     def chess_piece(self):
         return self._chess_piece
 
-    @chess_piece.setter
-    def chess_piece(self, other):
-        from chess.pieces.ChessPiece import ChessPiece
-        if isinstance(other, ChessPiece):
-            self.chess_piece = other
-
-
     def _is_empty(self):
         return True if self._chess_piece is None else False
 
