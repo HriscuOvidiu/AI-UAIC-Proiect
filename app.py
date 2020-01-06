@@ -37,9 +37,10 @@ def index():
 
 @app.route('/game', methods=['GET', 'POST'])
 def game():
-    global chess_game
+    chess_game = main.get_chess_game(config)
 
     (state, logs) = get_game_state(chess_game)
+
     is_first_moving = True
     return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving)
 
@@ -50,11 +51,11 @@ def game():
 
 @app.route('/api/availableMoves', methods=['GET', 'POST'])
 def availableMoves():
+    global chess_game
+
     request_row = request.get_json()['row']
     request_column = request.get_json()['column']
-    print(request_row, request_column)
-    rows = [2, 3, 4]
-    columns = [2, 3, 4]
+    rows, columns = main.positions_to_frontend(chess_game, int(request_row), int(request_column))
     moves = {"rows": rows, "columns": columns}
     return json.dumps(moves)
 
