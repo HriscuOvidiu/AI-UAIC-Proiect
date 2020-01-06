@@ -26,7 +26,7 @@ def pawn_can_move(cell, chess, color, double = False):
 
 
 def pawn_capture_empty(cell, chess, color, direction):
-    if 0 <= cell.position.line + color < chess._configuration.get_board_lines() and 0 <= cell.position.column + direction < chess._configuration.get_board_columns():
+    if 0 <= cell.position.line + color <= chess._configuration.get_board_lines() and 0 <= cell.position.column + direction <= chess._configuration.get_board_columns():
         return chess.current_state.board[cell.position.line + color][cell.position.column + direction]._is_empty()
     return True
 
