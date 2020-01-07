@@ -59,6 +59,7 @@ def availableMoves():
     request_column = request.get_json()['column']
     rows, columns = main.positions_to_frontend(
         chess_game, int(request_row), int(request_column))
+
     moves = {"rows": rows, "columns": columns}
     return json.dumps(moves)
 
@@ -73,7 +74,6 @@ def sendConfiguration():
 @app.route('/api/move', methods=['POST'])
 def move():
     global chess_game
-    print("a")
     body = request.get_json()
     print(body)
     chess_game.move(int(body['initialRow']), int(body['initialColumn']), int(

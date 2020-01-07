@@ -12,6 +12,14 @@ class Cell:
     def chess_piece(self):
         return self._chess_piece
 
+    @chess_piece.setter
+    def chess_piece(self, cp):
+        self._chess_piece = cp
+
+    @chess_piece.getter
+    def chess_piece(self):
+        return self._chess_piece
+
     def _is_empty(self):
         return True if self._chess_piece is None else False
 
