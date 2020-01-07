@@ -84,7 +84,7 @@ async function userPressed(row, column) {
                 let id = `#cell${row}${column}`;
                 makeCellAvailable(id);
             });
-            console.log(currentlyAvailableCells)
+            // console.log(currentlyAvailableCells)
             currentlyAvailableCells.pop();
             validMoves.pop();
             validMovesShowing = true;
