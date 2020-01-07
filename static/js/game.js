@@ -3,7 +3,6 @@ var currentlyAvailableCells = []
 var currentlySelectedPiece;
 const sound = 'chess_piece_sound.wav';
 
-// const sound = 'Horse-nay.mp3'
 const chessPieceSound = new Audio('static/assets/' + sound);
 async function getValidMoves(row, column) {
     var rows, columns;
@@ -21,6 +20,7 @@ async function getValidMoves(row, column) {
 }
 
 function sendMoveRequest(initialRow, initialColumn, targetRow, targetColumn) {
+    console.log(initialRow, initialColumn, targetRow, targetColumn)
     request('/api/move', 'POST', { 'initialRow': initialRow, 'initialColumn': initialColumn, 'targetRow': targetRow, 'targetColumn': targetColumn })
         .done((view) => {
             render(view);
@@ -111,6 +111,7 @@ async function userPressed(row, column) {
             currentlySelectedPiece = "";
             validMovesShowing = false;
         }
+        currentlyAvailableCells = []
     }
 
 }
@@ -127,7 +128,7 @@ $(document).on('render', () => {
             })
         });
     }
-    
+
     validMovesShowing = false;
 });
 

@@ -9,6 +9,7 @@ CORS(app)
 config = None
 chess_game = None
 
+
 def get_game_state(chess_game):
     state = chess_game.render()
 
@@ -37,7 +38,7 @@ def index():
 @app.route('/game', methods=['GET', 'POST'])
 def game():
     global chess_game
-    
+
     chess_game = main.get_chess_game(config)
 
     (state, logs) = get_game_state(chess_game)
@@ -56,7 +57,8 @@ def availableMoves():
 
     request_row = request.get_json()['row']
     request_column = request.get_json()['column']
-    rows, columns = main.positions_to_frontend(chess_game, int(request_row), int(request_column))
+    rows, columns = main.positions_to_frontend(
+        chess_game, int(request_row), int(request_column))
     moves = {"rows": rows, "columns": columns}
     return json.dumps(moves)
 
@@ -71,15 +73,17 @@ def sendConfiguration():
 @app.route('/api/move', methods=['POST'])
 def move():
     global chess_game
-
+    print("a")
     body = request.get_json()
     print(body)
-    chess_game.move(int(body['initialRow']), int(body['initialColumn']), int(body['targetRow']), int(body['targetColumn']))
+    chess_game.move(int(body['initialRow']), int(body['initialColumn']), int(
+        body['targetRow']), int(body['targetColumn']))
 
     (state, logs) = get_game_state(chess_game)
     is_first_moving = True
-    
+
     return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving)
+
 
 @app.after_request
 def set_response_headers(response):
@@ -87,6 +91,7 @@ def set_response_headers(response):
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
     return response
+
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', debug=True)
