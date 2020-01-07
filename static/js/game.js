@@ -20,7 +20,6 @@ async function getValidMoves(row, column) {
 }
 
 function sendMoveRequest(initialRow, initialColumn, targetRow, targetColumn) {
-    console.log(initialRow, initialColumn, targetRow, targetColumn)
     request('/api/move', 'POST', { 'initialRow': initialRow, 'initialColumn': initialColumn, 'targetRow': targetRow, 'targetColumn': targetColumn })
         .done((view) => {
             render(view);
@@ -29,6 +28,7 @@ function sendMoveRequest(initialRow, initialColumn, targetRow, targetColumn) {
 }
 
 function getPlayerColor() {
+    // $('player-one-display')
     return $('.player-color').first().html().toLowerCase().slice(0, -1);
 }
 
@@ -84,6 +84,7 @@ async function userPressed(row, column) {
                 let id = `#cell${row}${column}`;
                 makeCellAvailable(id);
             });
+            console.log(currentlyAvailableCells)
             currentlyAvailableCells.pop();
             validMoves.pop();
             validMovesShowing = true;

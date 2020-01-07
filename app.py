@@ -9,6 +9,8 @@ CORS(app)
 config = None
 chess_game = None
 
+is_first_moving = True
+
 
 def get_game_state(chess_game):
     state = chess_game.render()
@@ -43,7 +45,6 @@ def game():
 
     (state, logs) = get_game_state(chess_game)
 
-    is_first_moving = True
     return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving)
 
 ##
@@ -74,13 +75,14 @@ def sendConfiguration():
 @app.route('/api/move', methods=['POST'])
 def move():
     global chess_game
+    global is_first_moving
+
     body = request.get_json()
-    print(body)
+
     chess_game.move(int(body['initialRow']), int(body['initialColumn']), int(
         body['targetRow']), int(body['targetColumn']))
 
     (state, logs) = get_game_state(chess_game)
-    is_first_moving = True
 
     return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving)
 
