@@ -18,7 +18,7 @@ def different_color(cell1, cell2):
 
 def pawn_can_move(cell, chess, color, double = False):
     if 0 <= cell.position.line + color <= chess._configuration.get_board_lines() - 1:
-        if double == True:
+        if double == True and chess.current_state.board[cell.position.line + color][cell.position.column]._is_empty():
             color *= 2     
         if chess.current_state.board[cell.position.line + color][cell.position.column]._is_empty():
             return True
@@ -26,7 +26,7 @@ def pawn_can_move(cell, chess, color, double = False):
 
 
 def pawn_capture_empty(cell, chess, color, direction):
-    if 0 <= cell.position.line + color < chess._configuration.get_board_lines() and 0 <= cell.position.column + direction < chess._configuration.get_board_columns():
+    if 0 <= cell.position.line + color <= chess._configuration.get_board_lines() - 1 and 0 <= cell.position.column + direction <= chess._configuration.get_board_columns() - 1:
         return chess.current_state.board[cell.position.line + color][cell.position.column + direction]._is_empty()
     return True
 
@@ -35,6 +35,7 @@ def pawn_can_capture(cell, chess, color):
     if pawn_capture_empty(cell, chess, color, 1) is False:
         if different_color(cell, chess.current_state.board[cell.position.line + color][cell.position.column + 1]):
             capture_list.append(chess.current_state.board[cell.position.line + color][cell.position.column + 1].position)
+            
     if pawn_capture_empty(cell, chess, color, -1) is False:
         if different_color(cell, chess.current_state.board[cell.position.line + color][cell.position.column - 1]):
             capture_list.append(chess.current_state.board[cell.position.line + color][cell.position.column - 1].position)
