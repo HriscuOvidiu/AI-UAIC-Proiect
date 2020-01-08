@@ -9,9 +9,6 @@ CORS(app)
 config = None
 chess_game = None
 
-is_first_moving = True
-
-
 def get_game_state(chess_game):
     state = chess_game.render()
 
@@ -21,9 +18,7 @@ def get_game_state(chess_game):
                 row[index] = f'assets/{cell}.png'
             else:
                 row[index] = 'assets/blank.png'
-    logs = ["[23:58:11]: Player moves pawn from H2 to H3",
-            "[23:58:14]: Computer moves horse from G8 to F6",
-            "[23:58:11]: Player moves pawn from H2 to H3"]
+    logs = chess_game.logs
 
     return state, logs
 
@@ -42,6 +37,7 @@ def game():
     global chess_game
 
     chess_game = main.get_chess_game(config)
+    is_first_moving = chess_game.is_current_player_white()
 
     (state, logs) = get_game_state(chess_game)
 
@@ -75,13 +71,13 @@ def sendConfiguration():
 @app.route('/api/move', methods=['POST'])
 def move():
     global chess_game
-    global is_first_moving
 
     body = request.get_json()
 
     chess_game.move(int(body['initialRow']), int(body['initialColumn']), int(
         body['targetRow']), int(body['targetColumn']))
 
+    is_first_moving = chess_game.is_current_player_white()
     (state, logs) = get_game_state(chess_game)
 
     return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving)
