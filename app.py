@@ -47,6 +47,11 @@ def game():
 
     return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving)
 
+
+@app.route('/over')
+def game_over():
+    return render_template('game-over.html', winning_player='Player', winning_color='Black')
+
 ##
 # API
 ##
