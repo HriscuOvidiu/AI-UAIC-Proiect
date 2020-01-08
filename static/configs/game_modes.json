@@ -1,0 +1,5 @@
+[
+    "./static/configs/standard_chess_cfg.json", 
+    "./static/configs/weak_chess_cfg.json",
+    "./static/configs/endgame_chess_cfg.json"
+]

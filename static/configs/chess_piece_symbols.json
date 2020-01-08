@@ -1,0 +1,14 @@
+{
+    "wPawn":     "pawn-white",
+    "bPawn":     "pawn-black",
+    "wRook":     "rook-white",
+    "bRook":     "rook-black",
+    "wKnight":   "knight-white",
+    "bKnight":   "knight-black",
+    "wBishop":   "bishop-white",
+    "bBishop":   "bishop-black",
+    "wKing":     "king-white",
+    "bKing":     "king-black",
+    "wQueen":    "queen-white",
+    "bQueen":    "queen-black"
+}

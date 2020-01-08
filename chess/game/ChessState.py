@@ -1,3 +1,6 @@
+import json
+
+
 class ChessState:
 
     def __init__(self, starting_player, chess_board):
@@ -35,18 +38,10 @@ class ChessState:
         score = 0
         board = self.board.board
         to_move = 1 if not self.is_current_player_white() else -1
-        symbols = {"wPawn": -100,
-                   "bPawn": 100,
-                   "wRook": -500,
-                   "bRook": 500,
-                   "wKnight": -320,
-                   "bKnight": 320,
-                   "wBishop": -330,
-                   "bBishop": 330,
-                   "wKing": -20000,
-                   "bKing": 20000,
-                   "wQueen": -900,
-                   "bQueen": 900}
+
+        with open('./static/configs/chess_piece_evals.json') as f:
+            symbols = json.load(f)
+
         for line in board:
             for i in line:
                 score += symbols[i]

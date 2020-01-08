@@ -12,6 +12,5 @@
       "valid_moves": "standard_king"
     }
   },
-  "capturing_condition": "standard_capturing",
   "game_over": "standard_game_over"
 }

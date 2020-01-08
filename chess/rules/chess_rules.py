@@ -153,9 +153,6 @@ def standard_knight(start_cell: Cell, chess: ChessGame):
 
     return valid_moves
 
-def standard_capturing():
-    pass
-
 
 def standard_game_over(board):
     pass

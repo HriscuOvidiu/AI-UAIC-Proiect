@@ -34,11 +34,14 @@ class ChessGame:
     def current_state(self):
         return self._current_state
 
+    def is_current_player_white(self):
+        return self.current_state.is_current_player_white()
+
     def reset_game(self):
         self._current_state = self._init_state
 
     def get_valid_positions(self, line, column):
-        cell = self.current_state.board[line][column]
+        cell = self._current_state.board[line][column]
 
         try:
             chess_piece = cell.chess_piece

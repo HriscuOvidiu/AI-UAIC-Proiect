@@ -74,10 +74,6 @@ class Config:
         print(pieces_dict)
         return pieces_dict
 
-    def get_capturing_condition(self):
-        func_name = self.config_dict['capturing_condition']
-        return rules_func_dict[func_name]
-
     def get_end_condition(self):
         func_name = self.config_dict['game_over']
         return rules_func_dict[func_name]
