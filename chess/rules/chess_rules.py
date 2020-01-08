@@ -73,39 +73,22 @@ def standard_rook(start_cell: Cell, chess: ChessGame):
                     blocked = 1
 
     return valid_moves
-
-def can_move_column(cell, chess, direction):
-    if 0 <= cell.position.column + direction <= chess._configuration.get_board_columns():
-        if chess.current_state.board[cell.position.line][cell.position.column + direction]._is_empty():
-                return True
-    return False
-
-def get_king_moves(start_cell, chess):
-    king_moves = []
-
-    if pawn_can_move(start_cell, chess, 1):
-        add_move_by_location(king_moves, chess, start_cell.position.line + 1, start_cell.position.column)
-    if pawn_can_move(start_cell, chess, -1):
-        add_move_by_location(king_moves, chess, start_cell.position.line - 1, start_cell.position.column)
-    if can_move_column(start_cell, chess, 1):
-        add_move_by_location(king_moves, chess, start_cell.position.line, start_cell.position.column + 1)
-    if can_move_column(start_cell, chess, -1):
-        add_move_by_location(king_moves, chess, start_cell.position.line, start_cell.position.column - 1)
-
-    return king_moves
-
-def get_king_captures(start_cell, chess):
-    king_captures = []
-    king_captures.extend(pawn_can_capture(start_cell, chess, 1))
-    king_captures.extend(pawn_can_capture(start_cell, chess, -1))
-    return king_captures
     
 
-def standard_king(start_cell: Cell, chess: ChessGame):
+def standard_king(start_cell: Cell, chess: ChessGame, checkmate = False):
     valid_moves = []
-
-    valid_moves.extend(get_king_moves(start_cell, chess))
-    valid_moves.extend(get_king_captures(start_cell, chess))
+    directions = [[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1],[1,0],[1,1]]
+    for direction in directions:
+        i = start_cell.position.line
+        j = start_cell.position.column
+        i += direction[0]
+        j += direction[1]
+        if 0 <= i <= 7 and 0 <= j <= 7:
+            if chess.current_state.board[i][j]._is_empty():
+                add_move_by_location(valid_moves, chess, i, j)
+            elif different_color(start_cell, chess.current_state.board[i][j]) and not checkmate:
+                add_move_by_location(valid_moves, chess, i, j)
+            
 
     return valid_moves
 
