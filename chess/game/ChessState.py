@@ -1,3 +1,7 @@
+import json
+from chess.players.Player import Player
+
+
 class ChessState:
 
     def __init__(self, starting_player, chess_board):
@@ -11,6 +15,17 @@ class ChessState:
     @property
     def board(self):
         return self._board
+
+    @current_player.setter
+    def current_player(self, cp):
+        if isinstance(cp, Player) or cp is None:
+            self._current_player = cp
+        else:
+            raise AttributeError("[current_player] Invalid type of <cp>")
+
+    @current_player.getter
+    def current_player(self):
+        return self._current_player
 
     def is_valid(self):
         pass
@@ -35,18 +50,10 @@ class ChessState:
         score = 0
         board = self.board.board
         to_move = 1 if not self.is_current_player_white() else -1
-        symbols = {"wPawn": -100,
-                   "bPawn": 100,
-                   "wRook": -500,
-                   "bRook": 500,
-                   "wKnight": -320,
-                   "bKnight": 320,
-                   "wBishop": -330,
-                   "bBishop": 330,
-                   "wKing": -20000,
-                   "bKing": 20000,
-                   "wQueen": -900,
-                   "bQueen": 900}
+
+        with open('./static/configs/chess_piece_evals.json') as f:
+            symbols = json.load(f)
+
         for line in board:
             for i in line:
                 score += symbols[i]

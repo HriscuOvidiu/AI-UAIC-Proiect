@@ -1,24 +1,14 @@
 from abc import ABCMeta
+import json
 
 
 class ChessPiece(metaclass=ABCMeta):
 
-    symbols = {"wPawn":     "pawn-white",
-               "bPawn":     "pawn-black",
-               "wRook":     "rook-white",
-               "bRook":     "rook-black",
-               "wKnight":   "knight-white",
-               "bKnight":   "knight-black",
-               "wBishop":   "bishop-white",
-               "bBishop":   "bishop-black",
-               "wKing":     "king-white",
-               "bKing":     "king-black",
-               "wQueen":    "queen-white",
-               "bQueen":    "queen-black"}
-
     def __init__(self, name, color, initial_position, get_valid_moves=None):
+        with open('./static/configs/chess_piece_symbols.json') as f:
+            symbols = json.load(f)
         self._name = name
-        self._alias = ChessPiece.symbols[color + name]
+        self._alias = symbols[color + name]
         self._color = color
         self._initial_position = initial_position
         self._get_valid_moves = get_valid_moves

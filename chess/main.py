@@ -4,11 +4,8 @@ from chess.game.ChessGame import ChessGame
 from chess.game.Config import Config
 
 
-rules_dict = {
-                0: "./static/configs/standard_chess_cfg.json", 
-                1: "./static/configs/weak_chess_cfg.json",
-                2: "./static/configs/endgame_chess_cfg.json"
-            }
+with open('./static/configs/game_modes.json') as f:
+    rules_dict = json.load(f)
 
 game_type_dict = {
                     0: "pvc",

@@ -1,3 +1,6 @@
+from chess.pieces.ChessPiece import ChessPiece
+
+
 class Cell:
 
     def __init__(self, position, chess_piece=None):
@@ -14,7 +17,10 @@ class Cell:
 
     @chess_piece.setter
     def chess_piece(self, cp):
-        self._chess_piece = cp
+        if isinstance(cp, ChessPiece) or cp is None:
+            self._chess_piece = cp
+        else:
+            raise AttributeError("[chess_piece] Invalid type for <cp>")
 
     @chess_piece.getter
     def chess_piece(self):

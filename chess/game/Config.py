@@ -71,12 +71,7 @@ class Config:
                     pieces_dict[position_tup] = chess_piece("b", Position(position_tup[0], position_tup[1]), valid_moves_func)
             except Exception:
                 print(f"Black piece not found for {piece_type}")
-        print(pieces_dict)
         return pieces_dict
-
-    def get_capturing_condition(self):
-        func_name = self.config_dict['capturing_condition']
-        return rules_func_dict[func_name]
 
     def get_end_condition(self):
         func_name = self.config_dict['game_over']

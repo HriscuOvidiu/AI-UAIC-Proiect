@@ -13,6 +13,7 @@ class ChessGame:
         self._black = BlackPlayer(None)
         self._init_state = ChessState(self._white, ChessBoard(self._configuration))
         self._current_state = self._init_state
+        self._logs = []
 
     @property
     def configuration(self):
@@ -34,11 +35,33 @@ class ChessGame:
     def current_state(self):
         return self._current_state
 
+    @property
+    def logs(self):
+        return self._logs
+
+    def add_log(self, start_line, start_column, end_line, end_column):
+        player_list = ["Black", "White"]
+        letter_list = ["A", "B", "C", "D", "E", "F", "G", "H"]
+
+        log = player_list[int(self.is_current_player_white())]
+        log += f" moved piece from {letter_list[start_line]}{start_column} to {end_line}{end_column}"
+
+        self._logs.append(log)
+
+    def is_current_player_white(self):
+        return self.current_state.is_current_player_white()
+
+    def change_current_player(self):
+        if self.is_current_player_white():
+            self._current_state.current_player = self._black;
+        else:
+            self._current_state.current_player = self._white;
+
     def reset_game(self):
         self._current_state = self._init_state
 
     def get_valid_positions(self, line, column):
-        cell = self.current_state.board[line][column]
+        cell = self._current_state.board[line][column]
 
         try:
             chess_piece = cell.chess_piece
@@ -55,6 +78,9 @@ class ChessGame:
 
         end_cell.chess_piece = start_cell.chess_piece
         start_cell.chess_piece = None
+
+        self.add_log(start_line, start_column, end_line, end_column)
+        self.change_current_player()
 
         return reward
 
