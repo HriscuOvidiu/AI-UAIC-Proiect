@@ -28,8 +28,14 @@ function sendMoveRequest(initialRow, initialColumn, targetRow, targetColumn) {
 }
 
 function getPlayerColor() {
-    // $('player-one-display')
-    return $('.player-color').first().html().toLowerCase().slice(0, -1);
+    if ($('.player-one-display').first().hasClass('player-one-moves')) {
+        console.log("x")
+        return $('.player-one-color').first().html().toLowerCase().slice(0, -1);
+    }
+    else {
+        return $('.player-two-color').first().html().toLowerCase().slice(0, -1);
+    }
+
 }
 
 function getCellImageName(row, column) {
@@ -44,6 +50,7 @@ function doesOwnPiece(row, column) {
     let playerColor = getPlayerColor()
     let imageName = getCellImageName(row, column)
     let imageColor = imageName.split('-')[1];
+    console.log(playerColor, imageColor)
     if (imageColor == playerColor) {
         return true;
     }
@@ -60,19 +67,9 @@ function makeCellUnavailable(id) {
     $(id).removeClass("available-cell").addClass("cell");
 }
 
-function isPlayerTurn() {
-    if (!$('.player-one-display').first().hasClass('player-one-moves')) {
-        return false;
-    }
-
-    if ($('.player-text').first().html() != 'Player') {
-        return false;
-    }
-
-    return true;
-}
 
 async function userPressed(row, column) {
+
     if (validMovesShowing == false) {
         if (doesOwnPiece(row, column)) {
             validMoves = await getValidMoves(row, column);
@@ -84,7 +81,6 @@ async function userPressed(row, column) {
                 let id = `#cell${row}${column}`;
                 makeCellAvailable(id);
             });
-            // console.log(currentlyAvailableCells)
             currentlyAvailableCells.pop();
             validMoves.pop();
             validMovesShowing = true;
@@ -101,7 +97,6 @@ async function userPressed(row, column) {
         });
 
         if (moving == true) {
-            //TO-DO: implement dynamically moving a piece
             sendMoveRequest(currentlySelectedPiece[5], currentlySelectedPiece[6], targetID[5], targetID[6])
         } else {
             currentlyAvailableCells.forEach((value) => {
@@ -118,17 +113,15 @@ async function userPressed(row, column) {
 }
 
 $(document).on('render', () => {
-    if (isPlayerTurn()) {
-        $('.cell').each(function () {
-            $(this).click(() => {
-                var cellId = $(this).attr('id');
-                cellNumber = cellId.substr(cellId.length - 1);
-                cellId = cellId.slice(0, -1);
-                rowNumber = cellId.substr(cellId.length - 1);
-                userPressed(rowNumber, cellNumber);
-            })
-        });
-    }
+    $('.cell').each(function () {
+        $(this).click(() => {
+            var cellId = $(this).attr('id');
+            cellNumber = cellId.substr(cellId.length - 1);
+            cellId = cellId.slice(0, -1);
+            rowNumber = cellId.substr(cellId.length - 1);
+            userPressed(rowNumber, cellNumber);
+        })
+    });
 
     validMovesShowing = false;
 });

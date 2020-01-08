@@ -44,7 +44,6 @@ def game():
     chess_game = main.get_chess_game(config)
 
     (state, logs) = get_game_state(chess_game)
-
     return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving)
 
 
@@ -88,7 +87,7 @@ def move():
         body['targetRow']), int(body['targetColumn']))
 
     (state, logs) = get_game_state(chess_game)
-
+    is_first_moving = not is_first_moving
     return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving)
 
 
