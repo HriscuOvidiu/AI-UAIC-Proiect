@@ -9,8 +9,8 @@ class ChessGame:
 
     def __init__(self, configuration):
         self._configuration = configuration
-        self._white = WhitePlayer(None)
-        self._black = BlackPlayer(None)
+        self._white = WhitePlayer()
+        self._black = BlackPlayer()
         self._init_state = ChessState(self._white, ChessBoard(self._configuration))
         self._current_state = self._init_state
         self._logs = []
