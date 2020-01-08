@@ -1,4 +1,5 @@
 import json
+from chess.players.Player import Player
 
 
 class ChessState:
@@ -14,6 +15,17 @@ class ChessState:
     @property
     def board(self):
         return self._board
+
+    @current_player.setter
+    def current_player(self, cp):
+        if isinstance(cp, Player) or cp is None:
+            self._current_player = cp
+        else:
+            raise AttributeError("[current_player] Invalid type of <cp>")
+
+    @current_player.getter
+    def current_player(self):
+        return self._current_player
 
     def is_valid(self):
         pass
