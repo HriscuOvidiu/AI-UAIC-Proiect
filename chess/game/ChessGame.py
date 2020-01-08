@@ -44,7 +44,7 @@ class ChessGame:
         letter_list = ["A", "B", "C", "D", "E", "F", "G", "H"]
 
         log = player_list[int(self.is_current_player_white())]
-        log += f" moved piece from {letter_list[start_line]}{start_column} to {end_line}{end_column}"
+        log += f" moved piece from {letter_list[start_column]}{8 - start_line} to {letter_list[end_column]}{8 - end_line}"
 
         self._logs.append(log)
 
