@@ -7,17 +7,22 @@ from chess.players.WhitePlayer import WhitePlayer
 
 class ChessGame:
 
-    def __init__(self, configuration):
+    def __init__(self, configuration, game_mode):
         self._configuration = configuration
+        self._game_mode = game_mode
         self._white = WhitePlayer()
         self._black = BlackPlayer()
-        self._init_state = ChessState(self._white, ChessBoard(self._configuration), None)
+        self._init_state = ChessState(self._white, ChessBoard(self._configuration))
         self._current_state = self._init_state
         self._logs = []
 
     @property
     def configuration(self):
         return self._configuration
+
+    @property
+    def game_mode(self):
+        return self._game_mode
 
     @property
     def white(self):
@@ -87,7 +92,7 @@ class ChessGame:
         return reward
 
     def has_finished(self):
-        return self.current_state.is_final_state()
+        return self.configuration.get_end_condition()(self.current_state.current_player.color, self)
 
     def render(self):
         return self.current_state.get_rendered_board()
@@ -97,7 +102,7 @@ class ChessGame:
         self._current_state = value
 
     def minimax(self, state, depth):
-        if not depth or state.is_final_state():
+        if not depth or self.has_finished() == 2:
             return state
         max_eval = -float("inf")
         max_state = None
@@ -110,7 +115,7 @@ class ChessGame:
         return max_state
 
     def minimax_pruning(self, state, depth, alpha, beta):
-        if not depth or state.is_final_state():
+        if not depth or self.has_finished() == 2:
             return state
         max_eval = -float("inf")
         max_state = None

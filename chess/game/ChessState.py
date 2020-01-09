@@ -4,10 +4,9 @@ from chess.players.Player import Player
 
 class ChessState:
 
-    def __init__(self, starting_player, chess_board, is_final_state):
+    def __init__(self, starting_player, chess_board):
         self._current_player = starting_player
         self._board = chess_board
-        self.is_final_state_func = is_final_state
 
     @property
     def current_player(self):
@@ -30,9 +29,6 @@ class ChessState:
 
     def is_valid(self):
         pass
-
-    def is_final_state(self):
-        return self.is_final_state_func()
 
     def get_rendered_board(self):
         return self.board.get_rendered_board()

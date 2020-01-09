@@ -75,7 +75,8 @@ def sendConfiguration():
 @app.route('/api/move', methods=['POST'])
 def move():
     global chess_game
-
+    print(chess_game.has_finished())
+    
     body = request.get_json()
 
     chess_game.move(int(body['initialRow']), int(body['initialColumn']), int(

@@ -138,8 +138,8 @@ def standard_knight(start_cell: Cell, chess: ChessGame):
     return valid_moves
 
 
-def get_king_pos(self, player):
-    for line in self.current_state.board:
+def get_king_pos(game, player):
+    for line in game.current_state.board:
         for cell in line:
             piece = str(cell.chess_piece) if not cell.is_empty() else ''
             # print(piece, player + 'King')
@@ -149,7 +149,7 @@ def get_king_pos(self, player):
 
 def standard_game_over(player, game):
     # TODO: check mate refinement - eg. move a white piece to save the king
-    king_cell = game.get_king_pos(player)
+    king_cell = get_king_pos(game, player)
     check_pos = []
     for line in game.current_state.board:
         for cell in line:
@@ -170,5 +170,6 @@ rules_func_dict = { "standard_pawn": standard_pawn,
                     "standard_king": standard_king,
                     "standard_bishop": standard_bishop,
                     "standard_queen": standard_queen,
-                    "standard_knight": standard_knight}
+                    "standard_knight": standard_knight,
+                    "standard_game_over": standard_game_over}
 
