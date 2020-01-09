@@ -1,6 +1,7 @@
 from chess.board.Cell import Cell
 from chess.game.ChessGame import ChessGame
 
+#TODO: Chess board + config instead of ChessGame
 
 def on_starting_position(cell):
     return cell.position == cell.chess_piece.initial_position
@@ -18,16 +19,16 @@ def different_color(cell1, cell2):
 
 def pawn_can_move(cell, chess, color, double = False):
     if 0 <= cell.position.line + color <= chess._configuration.get_board_lines() - 1:
-        if double == True and chess.current_state.board[cell.position.line + color][cell.position.column]._is_empty():
+        if double == True and chess.current_state.board[cell.position.line + color][cell.position.column].is_empty():
             color *= 2     
-        if chess.current_state.board[cell.position.line + color][cell.position.column]._is_empty():
+        if chess.current_state.board[cell.position.line + color][cell.position.column].is_empty():
             return True
     return False
 
 
 def pawn_capture_empty(cell, chess, color, direction):
     if 0 <= cell.position.line + color <= chess._configuration.get_board_lines() - 1 and 0 <= cell.position.column + direction <= chess._configuration.get_board_columns() - 1:
-        return chess.current_state.board[cell.position.line + color][cell.position.column + direction]._is_empty()
+        return chess.current_state.board[cell.position.line + color][cell.position.column + direction].is_empty()
     return True
 
 def pawn_can_capture(cell, chess, color):
@@ -64,7 +65,7 @@ def standard_rook(start_cell: Cell, chess: ChessGame):
             i += direction[0]
             j += direction[1]
             if 0 <= i <= 7 and 0 <= j <= 7 and blocked == 0:
-                if chess.current_state.board[i][j]._is_empty():
+                if chess.current_state.board[i][j].is_empty():
                     add_move_by_location(valid_moves, chess, i, j)
                 elif different_color(start_cell, chess.current_state.board[i][j]):
                     add_move_by_location(valid_moves, chess, i, j)
@@ -84,7 +85,7 @@ def standard_king(start_cell: Cell, chess: ChessGame, checkmate = False):
         i += direction[0]
         j += direction[1]
         if 0 <= i <= 7 and 0 <= j <= 7:
-            if chess.current_state.board[i][j]._is_empty():
+            if chess.current_state.board[i][j].is_empty():
                 add_move_by_location(valid_moves, chess, i, j)
             elif different_color(start_cell, chess.current_state.board[i][j]) and not checkmate:
                 add_move_by_location(valid_moves, chess, i, j)
@@ -103,7 +104,7 @@ def standard_bishop(start_cell: Cell, chess: ChessGame):
             i += direction[0]
             j += direction[1]
             if 0 <= i <= 7 and 0 <= j <= 7 and blocked == 0:
-                if chess.current_state.board[i][j]._is_empty():
+                if chess.current_state.board[i][j].is_empty():
                     add_move_by_location(valid_moves, chess, i, j)
                 elif different_color(start_cell, chess.current_state.board[i][j]):
                     add_move_by_location(valid_moves, chess, i, j)
@@ -128,7 +129,7 @@ def standard_knight(start_cell: Cell, chess: ChessGame):
         i += direction[0]
         j += direction[1]
         if 0 <= i <= 7 and 0 <= j <= 7:
-            if chess.current_state.board[i][j]._is_empty():
+            if chess.current_state.board[i][j].is_empty():
                 add_move_by_location(valid_moves, chess, i, j)
             elif different_color(start_cell, chess.current_state.board[i][j]):
                 add_move_by_location(valid_moves, chess, i, j)
@@ -137,8 +138,30 @@ def standard_knight(start_cell: Cell, chess: ChessGame):
     return valid_moves
 
 
-def standard_game_over(board):
-    pass
+def get_king_pos(self, player):
+    for line in self.current_state.board:
+        for cell in line:
+            piece = str(cell.chess_piece) if not cell.is_empty() else ''
+            # print(piece, player + 'King')
+            if piece == player + 'King':
+                return cell
+
+
+def standard_game_over(player, game):
+    # TODO: check mate refinement - eg. move a white piece to save the king
+    king_cell = game.get_king_pos(player)
+    check_pos = []
+    for line in game.current_state.board:
+        for cell in line:
+            piece = cell.chess_piece if not cell.is_empty() else ''
+            if piece and not str(piece).startswith(player):
+                check_pos += piece.get_valid_moves(cell, game)
+    if king_cell.position in check_pos and \
+            all(elem in check_pos for elem in king_cell.chess_piece.get_valid_moves(king_cell, game)):
+        return 2
+    if king_cell.position in check_pos:
+        return 1
+    return 0
 
 
 # TODO: complete

@@ -11,7 +11,7 @@ class ChessGame:
         self._configuration = configuration
         self._white = WhitePlayer()
         self._black = BlackPlayer()
-        self._init_state = ChessState(self._white, ChessBoard(self._configuration))
+        self._init_state = ChessState(self._white, ChessBoard(self._configuration), None)
         self._current_state = self._init_state
         self._logs = []
 
@@ -40,8 +40,9 @@ class ChessGame:
         return self._logs
 
     def add_log(self, start_line, start_column, end_line, end_column):
+        from string import ascii_uppercase
         player_list = ["Black", "White"]
-        letter_list = ["A", "B", "C", "D", "E", "F", "G", "H"]
+        letter_list = ascii_uppercase[:8]
 
         log = player_list[int(self.is_current_player_white())]
         log += f" moved piece from {letter_list[start_column]}{8 - start_line} to {letter_list[end_column]}{8 - end_line}"
@@ -53,9 +54,9 @@ class ChessGame:
 
     def change_current_player(self):
         if self.is_current_player_white():
-            self._current_state.current_player = self._black;
+            self._current_state.current_player = self._black
         else:
-            self._current_state.current_player = self._white;
+            self._current_state.current_player = self._white
 
     def reset_game(self):
         self._current_state = self._init_state
@@ -66,8 +67,9 @@ class ChessGame:
         try:
             chess_piece = cell.chess_piece
             return chess_piece.get_valid_moves(cell, self)
-        except:
-           print("No ChessPiece found on current cell!")
+        except Exception as e:
+            print("No ChessPiece found on current cell!")
+            print(e)
 
     # TODO: RETURN REWARD
     def move(self, start_line, start_column, end_line, end_column):

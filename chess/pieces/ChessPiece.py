@@ -39,3 +39,6 @@ class ChessPiece(metaclass=ABCMeta):
 
     def __repr__(self):
         return f"name: {self.name}, alias: {self.alias}, color: {self.color}, initial_position: {self.initial_position}, get_valid_moves: {self.get_valid_moves}"
+
+    def __str__(self):
+        return self.color + self.name

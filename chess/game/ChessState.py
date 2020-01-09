@@ -4,9 +4,10 @@ from chess.players.Player import Player
 
 class ChessState:
 
-    def __init__(self, starting_player, chess_board):
+    def __init__(self, starting_player, chess_board, is_final_state):
         self._current_player = starting_player
         self._board = chess_board
+        self.is_final_state_func = is_final_state
 
     @property
     def current_player(self):
@@ -31,13 +32,20 @@ class ChessState:
         pass
 
     def is_final_state(self):
-        pass
+        return self.is_final_state_func()
 
     def get_rendered_board(self):
         return self.board.get_rendered_board()
 
     def get_next_moves(self):
-        pass
+        next_moves = []
+        for line in self.board:
+            for cell in line:
+                piece = cell.chess_piece if not cell.is_empty() else ''
+                if str(piece).startswith(self.current_player.color):
+                    # TODO: All the valid moves to the list
+                    pass
+        return next_moves
 
     def is_current_player_white(self):
         from chess.players.WhitePlayer import WhitePlayer
