@@ -126,7 +126,7 @@ class ChessGame:
             return state
         max_eval = -float("inf")
         max_state = None
-        for possible_move in state.get_next_moves():
+        for possible_move in self.get_next_moves():
             next_move = self.minimax(possible_move, depth)
             move_eval = next_move.get_eval()
             if move_eval > max_eval:
