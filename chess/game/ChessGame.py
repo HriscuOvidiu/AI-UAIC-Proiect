@@ -95,11 +95,31 @@ class ChessGame:
         return self.configuration.get_end_condition()(self.current_state.current_player.color, self)
 
     def render(self):
+        print(self.get_next_moves())
         return self.current_state.get_rendered_board()
 
     @current_state.setter
     def current_state(self, value):
         self._current_state = value
+
+    def get_next_moves(self):
+        next_moves = []
+        for line in self.current_state.board:
+            for cell in line:
+                piece = cell.chess_piece if not cell.is_empty() else ''
+                if str(piece).startswith(self.current_state.current_player.color):
+                    piece_moves = piece.get_valid_moves(cell, self)
+                    for position in piece_moves:
+                        from copy import deepcopy
+                        new_board = deepcopy(self.current_state.board)
+                        start_cell = new_board[cell.position.line][cell.position.column]
+                        end_cell = new_board[position.line][position.column]
+                        end_cell.chess_piece = start_cell.chess_piece
+                        start_cell.chess_piece = None
+                        state = ChessState(self._black, new_board) if self.is_current_player_white() \
+                            else ChessState(self._white, new_board)
+                        next_moves.append(state)
+        return next_moves
 
     def minimax(self, state, depth):
         if not depth or self.has_finished() == 2:
@@ -119,7 +139,7 @@ class ChessGame:
             return state
         max_eval = -float("inf")
         max_state = None
-        for possible_move in state.get_next_moves():
+        for possible_move in self.get_next_moves():
             next_move = self.minimax_pruning(possible_move, depth, -beta, -alpha)
             move_eval = next_move.get_eval()
             alpha = max(alpha, max_eval)

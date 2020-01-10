@@ -30,7 +30,7 @@ def get_setup(setup_dict):
 def get_chess_game(setup_dict):
     setup = get_setup(setup_dict)
     chess_config = Config(setup[0])
-    chess = ChessGame(chess_config)
+    chess = ChessGame(chess_config, None)
 
     return chess
 

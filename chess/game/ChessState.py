@@ -33,16 +33,6 @@ class ChessState:
     def get_rendered_board(self):
         return self.board.get_rendered_board()
 
-    def get_next_moves(self):
-        next_moves = []
-        for line in self.board:
-            for cell in line:
-                piece = cell.chess_piece if not cell.is_empty() else ''
-                if str(piece).startswith(self.current_player.color):
-                    # TODO: All the valid moves to the list
-                    pass
-        return next_moves
-
     def is_current_player_white(self):
         from chess.players.WhitePlayer import WhitePlayer
         return isinstance(self.current_player, WhitePlayer)
@@ -60,5 +50,9 @@ class ChessState:
 
         for line in board:
             for i in line:
-                score += symbols[i]
+                if not i.is_empty():
+                    score += symbols[str(i.chess_piece)]
         return score * to_move
+
+    def __repr__(self):
+        return f'{self.__class__.__name__}({self.current_player}, {self.board.get_rendered_board()})'
