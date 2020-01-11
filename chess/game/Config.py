@@ -11,6 +11,7 @@ class Config:
         try:
             with open(config_file_path) as config_file:
                 self._config_dict = json.load(config_file)
+                self._valid_moves_dict = {}
         except IOError:
             print("[ERROR]: Config file unable to open!")
 
@@ -31,11 +32,11 @@ class Config:
         for piece_type in pieces:
             chess_piece = ChessPieceFactory.get_type(piece_type)
 
-            # TODO: moves !!!
             piece_valid_moves = pieces[piece_type]["valid_moves"]
 
             try:
                 valid_moves_func = rules_func_dict[piece_valid_moves]
+                self._valid_moves_dict[chess_piece] = valid_moves_func
             except:
                 valid_moves_func = None
                 print(f"No available 'valid_move_func' for {piece_type}")
@@ -56,11 +57,11 @@ class Config:
         for piece_type in pieces:
             chess_piece = ChessPieceFactory.get_type(piece_type)
 
-            # TODO: moves !!!
             piece_valid_moves = pieces[piece_type]["valid_moves"]
 
             try:
                 valid_moves_func = rules_func_dict[piece_valid_moves]
+                self._valid_moves_dict[chess_piece] = valid_moves_func
             except:
                 valid_moves_func = None
                 print(f"No available 'valid_move_func' for {piece_type}")

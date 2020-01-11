@@ -95,11 +95,38 @@ class ChessGame:
         end_cell.chess_piece = chess_piece_to_move
         start_cell.chess_piece = None
 
-    def move(self, start_line, start_column, end_line, end_column):
+    def move(self, start_line, start_column, end_line, end_column, promotion_piece_type='queen'):
+        # If PROMOTION
+        if self.is_current_player_white():
+            if end_line == 0:
+                self.move_piece(start_line, start_column, end_line, end_column)
+                self.promotion(end_line, end_column, 'w', promotion_piece_type)
+                self.change_current_player()
+                return
+        else:
+            if end_line == 7:
+                self.move_piece(start_line, start_column, end_line, end_column)
+                self.promotion(end_line, end_column, 'b', promotion_piece_type)
+                self.change_current_player()
+                return
+
+        # If not the same position is selected
         if not (start_line == end_line and start_column == end_column):
             self.move_piece(start_line, start_column, end_line, end_column)
             self.add_log(start_line, start_column, end_line, end_column)
             self.change_current_player()
+
+    # TODO: Check
+    def promotion(self, pawn_line, pawn_column, chess_piece_color='w', chess_piece_type_str='queen'):
+        from chess.pieces.ChessPieceFactory import ChessPieceFactory
+        from chess.board.Position import Position
+        chess_piece_type = ChessPieceFactory.get_type(chess_piece_type_str)
+        new_chess_piece = chess_piece_type(chess_piece_color, Position(pawn_line, pawn_column), self._configuration._valid_moves_dict[chess_piece_type])
+        pawn_cell = self.current_state.board[pawn_line][pawn_column]
+
+        pawn_cell.chess_piece = new_chess_piece
+
+        print(self.current_state.board[pawn_line][pawn_column])
 
     def has_finished(self):
         return self.configuration.get_end_condition()(self.current_state.current_player.color, self)
@@ -114,8 +141,14 @@ class ChessGame:
                 piece = cell.chess_piece if not cell.is_empty() else ''
                 if str(piece).startswith(self.current_state.current_player.color):
                     piece_moves = piece.get_valid_moves(cell, self)
+
+                    # TODO: Check if OK
+                    from chess.main import get_valid_positions_check
+                    from copy import deepcopy
+                    piece_moves = get_valid_positions_check(deepcopy(self), cell.position.line, cell.position.column, piece_moves)
+                    #
+
                     for position in piece_moves:
-                        from copy import deepcopy
                         new_board = deepcopy(self.current_state.board)
                         start_cell = new_board[cell.position.line][cell.position.column]
                         end_cell = new_board[position.line][position.column]

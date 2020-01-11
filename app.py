@@ -105,7 +105,7 @@ def move():
     is_first_moving = chess_game.is_current_player_white()
     (state, logs) = get_game_state(chess_game)
     is_finished = chess_game.has_finished()
-    print(is_finished)
+
     if is_finished != 2:
         return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human)
     else:
