@@ -2,6 +2,7 @@ import json
 
 from chess.game.ChessGame import ChessGame
 from chess.game.Config import Config
+from copy import deepcopy
 
 
 with open('./static/configs/game_modes.json') as f:
@@ -34,8 +35,29 @@ def get_chess_game(setup_dict):
 
     return chess
 
+def get_valid_positions_check(chess: ChessGame, start_line, start_column, end_position_list):
+    if chess.has_finished() == 0:
+        return end_position_list
+    
+    positions = []
+
+    aux_state = deepcopy(chess.current_state)
+    
+    for end_position in end_position_list:
+        chess.move_piece(start_line, start_column, end_position.line, end_position.column)
+        if chess.has_finished() == 0:
+            positions.append(end_position)
+        chess.current_state = aux_state
+
+    return positions
+
 def positions_to_frontend(game, line, column):
     positions = game.get_valid_positions(line, column)
+    
+    # TODO: Check if OK
+    positions = get_valid_positions_check(deepcopy(game), line, column, positions)
+    #
+    
     if len(positions):
         positions_l = [[position.line, position.column] for position in positions]
 

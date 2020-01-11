@@ -1,4 +1,5 @@
 from chess.pieces.ChessPiece import ChessPiece
+from chess.board.Position import Position
 
 
 class Cell:
@@ -8,6 +9,17 @@ class Cell:
         self._chess_piece = chess_piece
 
     @property
+    def position(self):
+        return self._position
+
+    @position.setter
+    def position(self, p):
+        if isinstance(p, Position) or p is None:
+            self._position = p
+        else:
+            raise AttributeError("[position] Invalid type for <p>")
+
+    @position.getter
     def position(self):
         return self._position
 

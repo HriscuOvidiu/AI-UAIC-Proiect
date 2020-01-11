@@ -2,20 +2,18 @@ from chess.board.Cell import Cell
 from chess.game.ChessGame import ChessGame
 
 #TODO: Chess board + config instead of ChessGame
+    
 
 def on_starting_position(cell):
     return cell.position == cell.chess_piece.initial_position
 
-
 def add_move_by_location(move_list, chess, line, column):
     move_list.append(chess.current_state.board[line][column].position)
-
 
 def different_color(cell1, cell2):
     if cell1.chess_piece == None or cell2.chess_piece == None:
         return True
     return cell1.chess_piece.color != cell2.chess_piece.color
-
 
 def pawn_can_move(cell, chess, color, double = False):
     if 0 <= cell.position.line + color <= chess._configuration.get_board_lines() - 1:
@@ -24,7 +22,6 @@ def pawn_can_move(cell, chess, color, double = False):
         if chess.current_state.board[cell.position.line + color][cell.position.column].is_empty():
             return True
     return False
-
 
 def pawn_capture_empty(cell, chess, color, direction):
     if 0 <= cell.position.line + color <= chess._configuration.get_board_lines() - 1 and 0 <= cell.position.column + direction <= chess._configuration.get_board_columns() - 1:
@@ -51,6 +48,7 @@ def standard_pawn(start_cell: Cell, chess: ChessGame):
     if pawn_can_move(start_cell, chess, color):
         add_move_by_location(valid_moves, chess, start_cell.position.line + color, start_cell.position.column)
     valid_moves += pawn_can_capture(start_cell, chess, color)
+
     return valid_moves
 
 
@@ -72,7 +70,6 @@ def standard_rook(start_cell: Cell, chess: ChessGame):
                     blocked = 1
                 else:
                     blocked = 1
-
     return valid_moves
     
 

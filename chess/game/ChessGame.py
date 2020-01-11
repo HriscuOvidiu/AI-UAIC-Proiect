@@ -40,6 +40,17 @@ class ChessGame:
     def current_state(self):
         return self._current_state
 
+    @current_state.setter
+    def current_state(self, cs):
+        if isinstance(cs, ChessState) or cs is None:
+            self._current_state = cs
+        else:
+            raise AttributeError("[current_state] Invalid type of <cs>")
+
+    @current_state.getter
+    def current_state(self):
+        return self._current_state
+
     @property
     def logs(self):
         return self._logs
@@ -73,34 +84,27 @@ class ChessGame:
             chess_piece = cell.chess_piece
             return chess_piece.get_valid_moves(cell, self)
         except Exception as e:
-            print("No ChessPiece found on current cell!")
             print(e)
 
-    # TODO: RETURN REWARD
-    def move(self, start_line, start_column, end_line, end_column):
-        reward = 0
-
+    def move_piece(self, start_line, start_column, end_line, end_column):
         start_cell = self.current_state.board[start_line][start_column]
         end_cell = self.current_state.board[end_line][end_column]
 
-        end_cell.chess_piece = start_cell.chess_piece
+        chess_piece_to_move = start_cell.chess_piece
+        end_cell.chess_piece = chess_piece_to_move
         start_cell.chess_piece = None
 
-        self.add_log(start_line, start_column, end_line, end_column)
-        self.change_current_player()
-
-        return reward
+    def move(self, start_line, start_column, end_line, end_column):
+        if not (start_line == end_line and start_column == end_column):
+            self.move_piece(start_line, start_column, end_line, end_column)
+            self.add_log(start_line, start_column, end_line, end_column)
+            self.change_current_player()
 
     def has_finished(self):
         return self.configuration.get_end_condition()(self.current_state.current_player.color, self)
 
     def render(self):
-        print(self.get_next_moves())
         return self.current_state.get_rendered_board()
-
-    @current_state.setter
-    def current_state(self, value):
-        self._current_state = value
 
     def get_next_moves(self):
         next_moves = []
