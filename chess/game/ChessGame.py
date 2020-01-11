@@ -56,13 +56,12 @@ class ChessGame:
     def logs(self):
         return self._logs
 
-    def add_log(self, start_line, start_column, end_line, end_column):
+    def add_log(self, start_line, start_column, end_line, end_column, player_color):
         from string import ascii_uppercase
-        player_list = ["Black", "White"]
         letter_list = ascii_uppercase[:8]
 
-        log = player_list[int(self.is_current_player_white())]
-        log += f" moved piece from {letter_list[start_column]}{8 - start_line} to {letter_list[end_column]}{8 - end_line}"
+        log = f"{player_color} moved {self.current_state.board[end_line][end_column].chess_piece.name} from " \
+              f"{letter_list[start_column]}{8 - start_line} to {letter_list[end_column]}{8 - end_line}"
 
         self._logs.append(log)
 
@@ -98,13 +97,13 @@ class ChessGame:
     def move(self, start_line, start_column, end_line, end_column, promotion_piece_type='queen'):
         # If PROMOTION
         if self.is_current_player_white():
-            if end_line == 0:
+            if end_line == 0 and self.current_state.board[start_line][start_column].chess_piece.name == 'Pawn':
                 self.move_piece(start_line, start_column, end_line, end_column)
                 self.promotion(end_line, end_column, 'w', promotion_piece_type)
                 self.change_current_player()
                 return
         else:
-            if end_line == 7:
+            if end_line == 7 and self.current_state.board[start_line][start_column].chess_piece.name == 'Pawn':
                 self.move_piece(start_line, start_column, end_line, end_column)
                 self.promotion(end_line, end_column, 'b', promotion_piece_type)
                 self.change_current_player()
@@ -113,7 +112,7 @@ class ChessGame:
         # If not the same position is selected
         if not (start_line == end_line and start_column == end_column):
             self.move_piece(start_line, start_column, end_line, end_column)
-            self.add_log(start_line, start_column, end_line, end_column)
+            self.add_log(start_line, start_column, end_line, end_column, 'White' if self.current_state.is_current_player_white() else 'Black')
             self.change_current_player()
 
     # TODO: Check
@@ -156,40 +155,42 @@ class ChessGame:
                         start_cell.chess_piece = None
                         state = ChessState(self._black, new_board) if self.is_current_player_white() \
                             else ChessState(self._white, new_board)
-                        next_moves.append(state)
+                        next_moves.append((state, start_cell, end_cell))
         return next_moves
 
-    def minimax(self, state, depth):
+    def minimax(self, state, depth, maximizing):
         if not depth or self.has_finished() == 2:
-            return state
+            return state, -state.get_eval()
         max_eval = -float("inf")
         max_state = None
         for possible_move in self.get_next_moves():
-            next_move = self.minimax(possible_move, depth - 1)
-            move_eval = next_move.get_eval()
+            next_move, move_eval = self.minimax(possible_move, depth - 1, -maximizing)
             if move_eval > max_eval:
                 max_eval = move_eval
                 max_state = possible_move
-        return max_state
+        return max_state, -max_eval
 
-    def minimax_pruning(self, state, depth, alpha, beta):
+    def minimax_pruning(self, state, depth, alpha, beta, maximizing):
         if not depth or self.has_finished() == 2:
-            return state
+            return state, -state[0].get_eval(maximizing)
         max_eval = -float("inf")
         max_state = None
         for possible_move in self.get_next_moves():
-            next_move = self.minimax_pruning(
-                possible_move, depth - 1, -beta, -alpha)
-            move_eval = next_move.get_eval()
+            move_eval = self.minimax_pruning(possible_move, depth - 1, -beta, -alpha, -maximizing)[1]
             alpha = max(alpha, max_eval)
             if move_eval > max_eval:
                 max_eval = move_eval
                 max_state = possible_move
             if alpha >= beta:
                 break
-        return max_state
+        return max_state, -max_eval
 
     def minimax_root(self, depth):
-        self.current_state = self.minimax_pruning(
-            self.current_state, depth, -float("inf"), float("inf"))
+        next_move, score = self.minimax_pruning((self.current_state, None, None), depth, -float("inf"), float("inf"), 1)
+        if self.has_finished() == 2:
+            return -1
+        self.current_state = next_move[0]
+        self.add_log(next_move[1].position.line, next_move[1].position.column, next_move[2].position.line,
+                     next_move[2].position.column, 'Black' if self.current_state.is_current_player_white() else 'White')
+        print(f'{self.current_state.current_player}:{score}')
         # self.current_state = self.minimax(self.current_state, depth)
