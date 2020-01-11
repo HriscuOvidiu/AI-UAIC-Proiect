@@ -90,11 +90,11 @@ p{
     flex-direction: row;
 }
 
-.row:nth-child(odd)>.cell:nth-child(odd) {background: #2C3539}
-.row:nth-child(odd)>.cell:nth-child(even) {background: #6B6B5D}
+.row:nth-child(even)>.cell:nth-child(odd) {background: #2C3539}
+.row:nth-child(even)>.cell:nth-child(even) {background: #6B6B5D}
 
-.row:nth-child(even)>.cell:nth-child(even) {background: #2C3539}
-.row:nth-child(even)>.cell:nth-child(odd) {background: #6B6B5D}
+.row:nth-child(odd)>.cell:nth-child(even) {background: #2C3539}
+.row:nth-child(odd)>.cell:nth-child(odd) {background: #6B6B5D}
 
 .cell{
     margin:0;
