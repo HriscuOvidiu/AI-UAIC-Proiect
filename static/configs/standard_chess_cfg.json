@@ -22,13 +22,13 @@
       "valid_moves": "standard_bishop"
     },
     "king": {
-      "white": [[7, 3]],
-      "black": [[0, 3]],
+      "white": [[7, 4]],
+      "black": [[0, 4]],
       "valid_moves": "standard_king"
     },
     "queen": {
-      "white": [[7, 4]],
-      "black": [[0, 4]],
+      "white": [[7, 3]],
+      "black": [[0, 3]],
       "valid_moves": "standard_queen"
     }
   },
