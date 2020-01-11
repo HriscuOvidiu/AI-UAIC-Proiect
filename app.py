@@ -46,12 +46,12 @@ def game():
     is_first_moving = chess_game.is_current_player_white()
 
     (state, logs) = get_game_state(chess_game)
-    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving,is_first_human = is_first_human, is_second_human = is_second_human)
+    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human)
 
 
-@app.route('/over')
-def game_over():
-    return render_template('game-over.html', winning_player='Player', winning_color='Black')
+# @app.route('/over')
+# def game_over():
+#     return render_template('game-over.html', winning_player='Player', winning_color='Black')
 
 ##
 # API
@@ -96,7 +96,6 @@ def move():
     global is_first_moving
 
     body = request.get_json()
-    print(is_first_moving, is_first_human)
     if is_first_moving and not is_first_human or not is_first_moving and not is_second_human:
         chess_game.minimax_root(depth=2)
     else:
@@ -105,7 +104,12 @@ def move():
 
     is_first_moving = chess_game.is_current_player_white()
     (state, logs) = get_game_state(chess_game)
-    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving,is_first_human = is_first_human, is_second_human = is_second_human)
+    is_finished = chess_game.has_finished()
+    print(is_finished)
+    if is_finished != 2:
+        return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human)
+    else:
+        return render_template('game-over.html', winning_player='Player', winning_color='Black')
 
 
 @app.after_request
