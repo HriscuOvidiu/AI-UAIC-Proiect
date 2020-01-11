@@ -9,6 +9,11 @@ CORS(app)
 config = None
 chess_game = None
 
+is_first_human = False
+is_second_human = False
+is_first_moving = True
+
+
 def get_game_state(chess_game):
     state = chess_game.render()
 
@@ -35,6 +40,7 @@ def index():
 @app.route('/game', methods=['GET', 'POST'])
 def game():
     global chess_game
+    global is_first_moving
 
     chess_game = main.get_chess_game(config)
     is_first_moving = chess_game.is_current_player_white()
@@ -68,19 +74,34 @@ def availableMoves():
 @app.route('/api/sendConfiguration', methods=['GET', 'POST'])
 def sendConfiguration():
     global config
+    global is_first_human
+    global is_second_human
+
     config = request.get_json()
+    if config['game-type'] == 0:
+        is_first_human = False
+        is_second_human = False
+    elif config['game-type'] == 1:
+        is_first_human = True
+        is_second_human = False
+    elif config['game-type'] == 2:
+        is_first_human = True
+        is_second_human = True
     return ""
 
 
 @app.route('/api/move', methods=['POST'])
 def move():
     global chess_game
-    print(chess_game.has_finished())
-    
-    body = request.get_json()
+    global is_first_moving
 
-    chess_game.move(int(body['initialRow']), int(body['initialColumn']), int(
-        body['targetRow']), int(body['targetColumn']))
+    body = request.get_json()
+    print(is_first_moving, is_first_human)
+    if is_first_moving and not is_first_human or not is_first_moving and not is_second_human:
+        chess_game.minimax_root(depth=2)
+    else:
+        chess_game.move(int(body['initialRow']), int(body['initialColumn']), int(
+            body['targetRow']), int(body['targetColumn']))
 
     is_first_moving = chess_game.is_current_player_white()
     (state, logs) = get_game_state(chess_game)
