@@ -66,23 +66,26 @@ function makeCellUnavailable(id) {
     $(id).removeClass("available-cell").addClass("cell");
 }
 
+async function showValidMoves(row, column) {
+    validMoves = await getValidMoves(row, column);
+    currentlySelectedPiece = `#cell${row}${column}`;
+    validMoves.push([row, column]);
+    validMoves.forEach(element => {
+        let row = element[0];
+        let column = element[1];
+        let id = `#cell${row}${column}`;
+        makeCellAvailable(id);
+    });
+    currentlyAvailableCells.pop();
+    validMoves.pop();
+    validMovesShowing = true;
+}
 
 async function userPressed(row, column) {
 
     if (validMovesShowing == false) {
         if (doesOwnPiece(row, column)) {
-            validMoves = await getValidMoves(row, column);
-            currentlySelectedPiece = `#cell${row}${column}`;
-            validMoves.push([row, column]);
-            validMoves.forEach(element => {
-                let row = element[0];
-                let column = element[1];
-                let id = `#cell${row}${column}`;
-                makeCellAvailable(id);
-            });
-            currentlyAvailableCells.pop();
-            validMoves.pop();
-            validMovesShowing = true;
+            showValidMoves(row, column)
         }
     } else {
         var moving = false;

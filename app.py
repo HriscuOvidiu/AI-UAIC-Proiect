@@ -46,7 +46,7 @@ def game():
     is_first_moving = chess_game.is_current_player_white()
 
     (state, logs) = get_game_state(chess_game)
-    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving)
+    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving,is_first_human = is_first_human, is_second_human = is_second_human)
 
 
 @app.route('/over')
@@ -105,7 +105,7 @@ def move():
 
     is_first_moving = chess_game.is_current_player_white()
     (state, logs) = get_game_state(chess_game)
-    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving)
+    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving,is_first_human = is_first_human, is_second_human = is_second_human)
 
 
 @app.after_request
