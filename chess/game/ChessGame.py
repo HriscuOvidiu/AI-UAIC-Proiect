@@ -12,7 +12,8 @@ class ChessGame:
         self._game_mode = game_mode
         self._white = WhitePlayer()
         self._black = BlackPlayer()
-        self._init_state = ChessState(self._white, ChessBoard(self._configuration))
+        self._init_state = ChessState(
+            self._white, ChessBoard(self._configuration))
         self._current_state = self._init_state
         self._logs = []
 
@@ -131,7 +132,7 @@ class ChessGame:
         max_eval = -float("inf")
         max_state = None
         for possible_move in self.get_next_moves():
-            next_move = self.minimax(possible_move, depth)
+            next_move = self.minimax(possible_move, depth - 1)
             move_eval = next_move.get_eval()
             if move_eval > max_eval:
                 max_eval = move_eval
@@ -144,7 +145,8 @@ class ChessGame:
         max_eval = -float("inf")
         max_state = None
         for possible_move in self.get_next_moves():
-            next_move = self.minimax_pruning(possible_move, depth, -beta, -alpha)
+            next_move = self.minimax_pruning(
+                possible_move, depth - 1, -beta, -alpha)
             move_eval = next_move.get_eval()
             alpha = max(alpha, max_eval)
             if move_eval > max_eval:
@@ -155,4 +157,6 @@ class ChessGame:
         return max_state
 
     def minimax_root(self, depth):
-        self.current_state = self.minimax_pruning(self.current_state, depth, -float("inf"), float("inf"))
+        self.current_state = self.minimax_pruning(
+            self.current_state, depth, -float("inf"), float("inf"))
+        # self.current_state = self.minimax(self.current_state, depth)

@@ -29,7 +29,6 @@ function sendMoveRequest(initialRow, initialColumn, targetRow, targetColumn) {
 
 function getPlayerColor() {
     if ($('.player-one-display').first().hasClass('player-one-moves')) {
-        console.log("x")
         return $('.player-one-color').first().html().toLowerCase().slice(0, -1);
     }
     else {
@@ -67,23 +66,26 @@ function makeCellUnavailable(id) {
     $(id).removeClass("available-cell").addClass("cell");
 }
 
+async function showValidMoves(row, column) {
+    validMoves = await getValidMoves(row, column);
+    currentlySelectedPiece = `#cell${row}${column}`;
+    validMoves.push([row, column]);
+    validMoves.forEach(element => {
+        let row = element[0];
+        let column = element[1];
+        let id = `#cell${row}${column}`;
+        makeCellAvailable(id);
+    });
+    currentlyAvailableCells.pop();
+    validMoves.pop();
+    validMovesShowing = true;
+}
 
 async function userPressed(row, column) {
 
     if (validMovesShowing == false) {
         if (doesOwnPiece(row, column)) {
-            validMoves = await getValidMoves(row, column);
-            currentlySelectedPiece = `#cell${row}${column}`;
-            validMoves.push([row, column]);
-            validMoves.forEach(element => {
-                let row = element[0];
-                let column = element[1];
-                let id = `#cell${row}${column}`;
-                makeCellAvailable(id);
-            });
-            currentlyAvailableCells.pop();
-            validMoves.pop();
-            validMovesShowing = true;
+            showValidMoves(row, column)
         }
     } else {
         var moving = false;
@@ -112,19 +114,38 @@ async function userPressed(row, column) {
 
 }
 
-$(document).on('render', () => {
-    $('.cell').each(function () {
-        $(this).click(() => {
-            var cellId = $(this).attr('id');
-            cellNumber = cellId.substr(cellId.length - 1);
-            cellId = cellId.slice(0, -1);
-            rowNumber = cellId.substr(cellId.length - 1);
-            userPressed(rowNumber, cellNumber);
-        })
-    });
+function isPlayerHuman() {
+    if ($('.player-one-display').first().hasClass('player-one-moves')) {
+        console.log($('.player-one-text').first().text())
+        return $('.player-one-text').first().text() == 'Player'
+    }
+    else {
+        return $('.player-two-text').first().text() == 'Player'
+    }
 
-    validMovesShowing = false;
+}
+
+$(document).on('render', () => {
+    if (isPlayerHuman()) {
+        $('.cell').each(function () {
+            $(this).click(() => {
+
+                var cellId = $(this).attr('id');
+                cellNumber = cellId.substr(cellId.length - 1);
+                cellId = cellId.slice(0, -1);
+                rowNumber = cellId.substr(cellId.length - 1);
+                userPressed(rowNumber, cellNumber);
+            })
+        });
+
+        validMovesShowing = false;
+    }
+    else {
+        // Sending mock move so back-end processes computer move
+        sendMoveRequest(0, 0, 0, 0)
+    }
 });
+
 
 $(document).ready(() => {
     document.dispatchEvent(renderEvent);

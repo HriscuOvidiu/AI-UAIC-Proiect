@@ -43,7 +43,7 @@ class ChessState:
 
         score = 0
         board = self.board.board
-        to_move = 1 if not self.is_current_player_white() else -1
+        to_move = -1 if not self.is_current_player_white() else 1
 
         with open('./static/configs/chess_piece_evals.json') as f:
             symbols = json.load(f)
