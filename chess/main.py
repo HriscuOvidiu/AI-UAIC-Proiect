@@ -10,7 +10,8 @@ with open('./static/configs/game_modes.json') as f:
 
 game_type_dict = {
                     0: "pvc",
-                    1: "cvc"
+                    1: "cvc",
+                    2: "pvp"
                 }
 
 ai_modes_dict = {
