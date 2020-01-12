@@ -141,8 +141,12 @@ $(document).on('render', () => {
         validMovesShowing = false;
     }
     else {
-        // Sending mock move so back-end processes computer move
-        sendMoveRequest(0, 0, 0, 0)
+        // If over screen is not showing
+        if ($(".won").first().html() != 'Won') {
+            // Sending mock move so back-end processes computer move
+            sendMoveRequest(0, 0, 0, 0)
+        }
+
     }
 });
 

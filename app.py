@@ -111,7 +111,7 @@ def move():
         return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human)
     else:
         sleep(2)
-        return redirect(url_for('over'))
+        return render_template('game-over.html', winning_player="Player", winning_color="Black")
 
 
 @app.after_request
