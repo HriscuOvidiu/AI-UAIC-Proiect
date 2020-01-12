@@ -144,7 +144,7 @@ class ChessGame:
         from copy import deepcopy
         next_moves = []
         temp_state = deepcopy(self.current_state)
-        for line in self.current_state.board:
+        for line in temp_state.board:
             for cell in line:
                 piece = cell.chess_piece if not cell.is_empty() else ''
                 if str(piece).startswith(self.current_state.current_player.color):
@@ -156,7 +156,7 @@ class ChessGame:
 
                     for position in piece_moves:
                         self.move(cell.position.line, cell.position.column, position.line, position.column, no_log=True)
-                        state = self.current_state
+                        state = deepcopy(self.current_state)
                         next_moves.append((state, cell, self.current_state.board[position.line][position.column]))
                         self.current_state = deepcopy(temp_state)
         return next_moves
@@ -174,12 +174,19 @@ class ChessGame:
         return max_state, max_eval
 
     def minimax_pruning(self, state, depth, alpha, beta, maximizing):
+        from copy import deepcopy
         if not depth or self.has_finished() == 2:
-            return state, state[0].get_eval(maximizing)
+            return state, self.current_state.get_eval(maximizing)
         max_eval = -float("inf")
         max_state = None
-        for possible_move in self.get_next_moves():
+        aux_state = deepcopy(self.current_state)
+        next_moves = self.get_next_moves()
+        # for i in self.get_next_moves():
+        #     print(i[0])
+        for possible_move in next_moves:
+            self.current_state = deepcopy(possible_move[0])
             move_eval = -self.minimax_pruning(possible_move, depth - 1, -beta, -alpha, -maximizing)[1]
+            self.current_state = deepcopy(aux_state)
             if move_eval > max_eval:
                 max_eval = move_eval
                 max_state = possible_move
@@ -189,6 +196,9 @@ class ChessGame:
         return max_state, max_eval
 
     def minimax_root(self, depth):
+        # for i in self.get_next_moves():
+        #     print(i[0])
+        #     print(i[0].get_eval(1))
         next_move, score = self.minimax_pruning((self.current_state, None, None), depth, -float("inf"), float("inf"), 1)
         # self.current_state = self.minimax(self.current_state, depth, 1)
         if self.has_finished() == 2:
@@ -196,4 +206,4 @@ class ChessGame:
         self.current_state = next_move[0]
         self.add_log(next_move[1].position.line, next_move[1].position.column, next_move[2].position.line,
                      next_move[2].position.column, 'Black' if self.current_state.is_current_player_white() else 'White')
-        print(f'{self.current_state.current_player}:{score}')
+        # print(f'{self.current_state.current_player}:{score}')
