@@ -27,6 +27,13 @@ function sendMoveRequest(initialRow, initialColumn, targetRow, targetColumn) {
         });
 }
 
+function sendPromotionRequest(pieceName) {
+    request('/api/promote', 'POST', { 'pieceName': pieceName })
+        .done((view) => {
+            render(view);
+        });
+}
+
 function getPlayerColor() {
     if ($('.player-one-display').first().hasClass('player-one-moves')) {
         return $('.player-one-color').first().html().toLowerCase().slice(0, -1);
@@ -49,7 +56,6 @@ function doesOwnPiece(row, column) {
     let playerColor = getPlayerColor()
     let imageName = getCellImageName(row, column)
     let imageColor = imageName.split('-')[1];
-    console.log(playerColor, imageColor)
     if (imageColor == playerColor) {
         return true;
     }
@@ -116,7 +122,6 @@ async function userPressed(row, column) {
 
 function isPlayerHuman() {
     if ($('.player-one-display').first().hasClass('player-one-moves')) {
-        console.log($('.player-one-text').first().text())
         return $('.player-one-text').first().text() == 'Player'
     }
     else {
@@ -137,7 +142,16 @@ $(document).on('render', () => {
                 userPressed(rowNumber, cellNumber);
             })
         });
-
+        if ($('#popup').html() != undefined) {
+            $('.pop-up-piece-container').each(function () {
+                $(this).click(() => {
+                    var currentPieceID = $(this).attr('id')
+                    var allIDWords = currentPieceID.split("-")
+                    var pieceName = allIDWords[allIDWords.length - 1]
+                    sendPromotionRequest(pieceName)
+                })
+            })
+        }
         validMovesShowing = false;
     }
     else {
@@ -152,7 +166,4 @@ $(document).on('render', () => {
 
 $(document).ready(() => {
     document.dispatchEvent(renderEvent);
-
-    const popup = new Popup('#popup');
-    // setInterval(() => { popup.toggle() }, 1000);
 });
