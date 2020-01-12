@@ -79,26 +79,26 @@
                 <div class="pop-up-piece-list">
                         <div class="pop-up-piece-container" , id="pop-up-rook">
                                 <div class="pop-up-rook"><img class="chess-piece-image"
-                                                src="{{url_for("static", filename="assets/rook-"+ ("white" if is_first_moving else "black") +".png")}}">
+                                                src="{{url_for("static", filename=("assets/rook-"+ "white" if is_first_moving else "black") +".png")}}">
                                 </div>
                                 <div class="pop-up-piece-title">Rook</div>
                         </div>
 
                         <div class="pop-up-piece-container" , id="pop-up-bishop">
                                 <div class="pop-up-bishop"><img class="chess-piece-image"
-                                                src="{{url_for("static", filename="assets/bishop-"+ ("white" if is_first_moving else "black") +".png")}}">
+                                                src="{{url_for("static", filename=("assets/bishop-"+ "white" if is_first_moving else "black") +".png")}}">
                                 </div>
                                 <div class="pop-up-piece-title">Bishop</div>
                         </div>
                         <div class="pop-up-piece-container" , id="pop-up-knight">
                                 <div class="pop-up-knight"><img class="chess-piece-image"
-                                                src="{{url_for("static", filename="assets/knight-"+ ("white" if is_first_moving else "black") +".png")}}">
+                                                src="{{url_for("static", filename=("assets/knight-"+ "white" if is_first_moving else "black") +".png")}}">
                                 </div>
                                 <div class="pop-up-piece-title">Knight</div>
                         </div>
                         <div class="pop-up-piece-container" , id="pop-up-queen">
                                 <div class="pop-up-queen"><img class="chess-piece-image"
-                                                src="{{url_for("static", filename="assets/queen-"+ ("white" if is_first_moving else "black") +".png")}}">
+                                                src="{{url_for("static", filename=("assets/queen-"+ "white" if is_first_moving else "black") +".png")}}">
                                 </div>
                                 <div class="pop-up-piece-title">Queen</div>
                         </div>

@@ -42,8 +42,8 @@ class ChessState:
 
         score = 0
         board = self.board.board
-        if (self.is_current_player_white() and maximizing == -1) or \
-                (not self.is_current_player_white() and maximizing == 1):
+        if (self.is_current_player_white() and maximizing == 1) or \
+                (not self.is_current_player_white() and maximizing == -1):
             max_player = 'w'
         else:
             max_player = 'b'

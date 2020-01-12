@@ -45,12 +45,20 @@ def get_move_by(start_cell, chess, directions, iterative=False, can_capture=True
 
     return valid_moves
 
+def pawn_can_move(cell, chess, color, double = False):
+    if 0 <= cell.position.line + color <= chess._configuration.get_board_lines() - 1:
+        if double == True and chess.current_state.board[cell.position.line + color][cell.position.column].is_empty():
+            color *= 2     
+        if chess.current_state.board[cell.position.line + color][cell.position.column].is_empty():
+            return True
+    return False
+
 def standard_pawn(start_cell: Cell, chess: ChessGame):
     valid_moves = []   
     color = 1 if start_cell.chess_piece.color == "b" else -1
     directions_move = [[color,0]]
     directions_capture = [[color,-1],[color,1]]
-    if on_starting_position(start_cell):
+    if on_starting_position(start_cell) and pawn_can_move(start_cell, chess, color, True):
         directions_move.append([color*2,0])
     valid_moves.extend(get_move_by(start_cell, chess, directions_move, False, False, True))
     valid_moves.extend(get_move_by(start_cell, chess, directions_capture, False, True, False))
