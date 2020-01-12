@@ -37,22 +37,31 @@ class ChessState:
         from chess.players.WhitePlayer import WhitePlayer
         return isinstance(self.current_player, WhitePlayer)
 
-    def get_eval(self):
-        # TODO SQUARE SPECIFIC VALUE TABLES
+    def get_eval(self, maximizing):
         # https://www.chessprogramming.org/Simplified_Evaluation_Function
 
         score = 0
         board = self.board.board
-        to_move = -1 if not self.is_current_player_white() else 1
+        if (self.is_current_player_white() and maximizing == -1) or \
+                (not self.is_current_player_white() and maximizing == 1):
+            max_player = 'w'
+        else:
+            max_player = 'b'
 
         with open('./static/configs/chess_piece_evals.json') as f:
             symbols = json.load(f)
+        with open('./static/configs/chess_piece_square_tables.json') as f:
+            square_tables = json.load(f)
 
         for line in board:
             for i in line:
                 if not i.is_empty():
-                    score += symbols[str(i.chess_piece)]
-        return score * to_move
+                    table = square_tables[str(i.chess_piece)]
+                    score += symbols[str(i.chess_piece)[1:]] + table[i.position.line][i.position.column] \
+                        if i.chess_piece.color == max_player else -1 * (symbols[str(i.chess_piece)[1:]] +
+                                                                        table[i.position.line][i.position.column])
+
+        return score * maximizing
 
     def __repr__(self):
         return f'{self.__class__.__name__}({self.current_player}, {self.board.get_rendered_board()})'

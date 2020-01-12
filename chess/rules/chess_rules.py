@@ -2,20 +2,18 @@ from chess.board.Cell import Cell
 from chess.game.ChessGame import ChessGame
 
 #TODO: Chess board + config instead of ChessGame
+    
 
 def on_starting_position(cell):
     return cell.position == cell.chess_piece.initial_position
 
-
 def add_move_by_location(move_list, chess, line, column):
     move_list.append(chess.current_state.board[line][column].position)
-
 
 def different_color(cell1, cell2):
     if cell1.chess_piece == None or cell2.chess_piece == None:
         return True
     return cell1.chess_piece.color != cell2.chess_piece.color
-
 
 def pawn_can_move(cell, chess, color, double = False):
     if 0 <= cell.position.line + color <= chess._configuration.get_board_lines() - 1:
@@ -24,7 +22,6 @@ def pawn_can_move(cell, chess, color, double = False):
         if chess.current_state.board[cell.position.line + color][cell.position.column].is_empty():
             return True
     return False
-
 
 def pawn_capture_empty(cell, chess, color, direction):
     if 0 <= cell.position.line + color <= chess._configuration.get_board_lines() - 1 and 0 <= cell.position.column + direction <= chess._configuration.get_board_columns() - 1:
@@ -51,6 +48,7 @@ def standard_pawn(start_cell: Cell, chess: ChessGame):
     if pawn_can_move(start_cell, chess, color):
         add_move_by_location(valid_moves, chess, start_cell.position.line + color, start_cell.position.column)
     valid_moves += pawn_can_capture(start_cell, chess, color)
+
     return valid_moves
 
 
@@ -72,7 +70,6 @@ def standard_rook(start_cell: Cell, chess: ChessGame):
                     blocked = 1
                 else:
                     blocked = 1
-
     return valid_moves
     
 
@@ -138,7 +135,7 @@ def standard_knight(start_cell: Cell, chess: ChessGame):
     return valid_moves
 
 
-def get_king_pos(game, player):
+def get_king_pos(game: ChessGame, player: str):
     for line in game.current_state.board:
         for cell in line:
             piece = str(cell.chess_piece) if not cell.is_empty() else ''
@@ -147,8 +144,7 @@ def get_king_pos(game, player):
                 return cell
 
 
-def standard_game_over(player, game):
-    # TODO: check mate refinement - eg. move a white piece to save the king
+def is_in_check(game: ChessGame, player: str):
     king_cell = get_king_pos(game, player)
     check_pos = []
     for line in game.current_state.board:
@@ -156,11 +152,27 @@ def standard_game_over(player, game):
             piece = cell.chess_piece if not cell.is_empty() else ''
             if piece and not str(piece).startswith(player):
                 check_pos += piece.get_valid_moves(cell, game)
-    if king_cell.position in check_pos and \
-            all(elem in check_pos for elem in king_cell.chess_piece.get_valid_moves(king_cell, game)):
-        return 2
     if king_cell.position in check_pos:
-        return 1
+        return True
+    return False
+
+
+def standard_game_over(player: str, game: ChessGame):
+    if is_in_check(game, player):
+        from copy import deepcopy
+        aux_state = deepcopy(game.current_state)
+        for line in game.current_state.board:
+            for cell in line:
+                piece = cell.chess_piece if not cell.is_empty() else ''
+                if piece and str(piece).startswith(player):
+                    move_list = piece.get_valid_moves(cell, game)
+                    for i in move_list:
+                        game.move_piece(cell.position.line, cell.position.column, i.line, i.column)
+                        if not is_in_check(game, player):
+                            game.current_state = deepcopy(aux_state)
+                            return 1
+                        game.current_state = deepcopy(aux_state)
+        return 2
     return 0
 
 

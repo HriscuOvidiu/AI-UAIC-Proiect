@@ -1,14 +1,8 @@
 {
-    "wPawn": -100,
-    "bPawn": 100,
-    "wRook": -500,
-    "bRook": 500,
-    "wKnight": -320,
-    "bKnight": 320,
-    "wBishop": -330,
-    "bBishop": 330,
-    "wKing": -20000,
-    "bKing": 20000,
-    "wQueen": -900,
-    "bQueen": 900
+    "Pawn": 100,
+    "Rook": 500,
+    "Knight": 320,
+    "Bishop": 330,
+    "Queen": 900,
+    "King": 20000
 }
