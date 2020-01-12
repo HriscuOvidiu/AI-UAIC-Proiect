@@ -1,4 +1,3 @@
-from chess.board.Cell import Cell
 from chess.board.ChessBoard import ChessBoard
 from chess.game.ChessState import ChessState
 from chess.players.BlackPlayer import BlackPlayer
@@ -95,20 +94,7 @@ class ChessGame:
         end_cell.chess_piece = chess_piece_to_move
         start_cell.chess_piece = None
 
-    def move(self, start_line, start_column, end_line, end_column, no_log=False, promotion_piece_type='queen'):
-        # # If PROMOTION
-        # if self.is_current_player_white():
-        #     if end_line == 0 and self.current_state.board[start_line][start_column].chess_piece.name == 'Pawn':
-        #         self.move_piece(start_line, start_column, end_line, end_column)
-        #         self.promotion(end_line, end_column, 'w', promotion_piece_type)
-        #         return
-        # else:
-        #     if end_line == 7 and self.current_state.board[start_line][start_column].chess_piece.name == 'Pawn':
-        #         self.move_piece(start_line, start_column, end_line, end_column)
-        #         self.promotion(end_line, end_column, 'b', promotion_piece_type)
-        #         return
-
-        # If not the same position is selected
+    def move(self, start_line, start_column, end_line, end_column, no_log=False):
         if not (start_line == end_line and start_column == end_column):
             self.move_piece(start_line, start_column, end_line, end_column)
             if not no_log:
@@ -152,13 +138,20 @@ class ChessGame:
 
                     # TODO: Check if OK
                     piece_moves = get_valid_positions_check(deepcopy(self), cell.position.line, cell.position.column, piece_moves)
-                    #
 
                     for position in piece_moves:
                         self.move(cell.position.line, cell.position.column, position.line, position.column, no_log=True)
-                        state = deepcopy(self.current_state)
-                        next_moves.append((state, cell, self.current_state.board[position.line][position.column]))
-                        self.current_state = deepcopy(temp_state)
+                        if self.is_promoting(position.line, position.column):
+                            promotion_pieces = ['rook', 'bishop', 'knight', 'queen']
+                            for i in promotion_pieces:
+                                self.promotion(position.line, position.column, self.current_state.current_player.color, i)
+                                state = deepcopy(self.current_state)
+                                next_moves.append((state, cell, self.current_state.board[position.line][position.column]))
+                                self.current_state = deepcopy(temp_state)
+                        else:
+                            state = deepcopy(self.current_state)
+                            next_moves.append((state, cell, self.current_state.board[position.line][position.column]))
+                            self.current_state = deepcopy(temp_state)
         return next_moves
 
     def minimax(self, state, depth, maximizing):
@@ -181,8 +174,6 @@ class ChessGame:
         max_state = None
         aux_state = deepcopy(self.current_state)
         next_moves = self.get_next_moves()
-        # for i in self.get_next_moves():
-        #     print(i[0])
         for possible_move in next_moves:
             self.current_state = deepcopy(possible_move[0])
             move_eval = -self.minimax_pruning(possible_move, depth - 1, -beta, -alpha, -maximizing)[1]
@@ -196,9 +187,6 @@ class ChessGame:
         return max_state, max_eval
 
     def minimax_root(self, depth):
-        # for i in self.get_next_moves():
-        #     print(i[0])
-        #     print(i[0].get_eval(1))
         next_move, score = self.minimax_pruning((self.current_state, None, None), depth, -float("inf"), float("inf"), 1)
         # self.current_state = self.minimax(self.current_state, depth, 1)
         if self.has_finished() == 2:
@@ -206,4 +194,3 @@ class ChessGame:
         self.current_state = next_move[0]
         self.add_log(next_move[1].position.line, next_move[1].position.column, next_move[2].position.line,
                      next_move[2].position.column, 'Black' if self.current_state.is_current_player_white() else 'White')
-        # print(f'{self.current_state.current_player}:{score}')

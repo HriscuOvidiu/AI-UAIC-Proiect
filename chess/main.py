@@ -54,7 +54,7 @@ def get_valid_positions_check(chess: ChessGame, start_line, start_column, end_po
 
 def positions_to_frontend(game, line, column):
     positions = game.get_valid_positions(line, column)
-    
+    # print(game.get_next_moves())
     if positions:
         # TODO: Check if OK
         positions = get_valid_positions_check(deepcopy(game), line, column, positions)
