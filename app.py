@@ -47,7 +47,7 @@ def game():
     is_first_moving = chess_game.is_current_player_white()
 
     (state, logs) = get_game_state(chess_game)
-    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human)
+    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human, who_is_promoting=None)
 
 
 @app.route('/over')
@@ -108,10 +108,16 @@ def move():
     is_finished = chess_game.has_finished()
 
     if is_finished != 2:
-        return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human)
+        return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human, who_is_promoting=None)
     else:
         sleep(2)
         return render_template('game-over.html', winning_player="Player", winning_color="Black")
+
+
+@app.route('/api/promote', methods=['POST'])
+def promote():
+    body = request.get_json()
+    print(body['pieceName'])
 
 
 @app.after_request

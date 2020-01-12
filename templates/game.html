@@ -71,11 +71,40 @@
                 </div>
         </div>
 </div>
-
-<!-- <div id="popup">
+{% if who_is_promoting != None %}
+<div id="popup">
         <div class="overlay"></div>
-        <div class="content">
-                <h1>Hello</h1>
+        <div class="pop-up-container noselect">
+                <div class="pop-up-title">Choose a piece to replace the pawn: </div>
+                <div class="pop-up-piece-list">
+                        <div class="pop-up-piece-container" , id="pop-up-rook">
+                                <div class="pop-up-rook"><img class="chess-piece-image"
+                                                src="{{url_for("static", filename="assets/rook-"+ who_is_promoting +".png")}}">
+                                </div>
+                                <div class="pop-up-piece-title">Rook</div>
+                        </div>
+
+                        <div class="pop-up-piece-container" , id="pop-up-bishop">
+                                <div class="pop-up-bishop"><img class="chess-piece-image"
+                                                src="{{url_for("static", filename="assets/bishop-"+ who_is_promoting +".png")}}">
+                                </div>
+                                <div class="pop-up-piece-title">Bishop</div>
+                        </div>
+                        <div class="pop-up-piece-container" , id="pop-up-knight">
+                                <div class="pop-up-knight"><img class="chess-piece-image"
+                                                src="{{url_for("static", filename="assets/knight-"+ who_is_promoting +".png")}}">
+                                </div>
+                                <div class="pop-up-piece-title">Knight</div>
+                        </div>
+                        <div class="pop-up-piece-container" , id="pop-up-queen">
+                                <div class="pop-up-queen"><img class="chess-piece-image"
+                                                src="{{url_for("static", filename="assets/queen-"+ who_is_promoting +".png")}}">
+                                </div>
+                                <div class="pop-up-piece-title">Queen</div>
+                        </div>
+
+                </div>
         </div>
-</div> -->
+</div>
+{%endif%}
 {% endblock %}
