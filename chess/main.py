@@ -24,7 +24,7 @@ ai_modes_dict = {
 def get_setup(setup_dict):
     rule = rules_dict[setup_dict['rule']]
     game_type = game_type_dict[setup_dict['game-type']]
-    white_player = ai_modes_dict[setup_dict['ai-type2']]
+    white_player = ai_modes_dict[setup_dict['second-ai-type']]
     black_player = ai_modes_dict[setup_dict['ai-type']]
 
     return rule, game_type, white_player, black_player
@@ -54,7 +54,7 @@ def get_valid_positions_check(chess: ChessGame, start_line, start_column, end_po
 
 def positions_to_frontend(game, line, column):
     positions = game.get_valid_positions(line, column)
-    
+    # print(game.get_next_moves())
     if positions:
         # TODO: Check if OK
         positions = get_valid_positions_check(deepcopy(game), line, column, positions)

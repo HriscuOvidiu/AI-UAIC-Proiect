@@ -83,6 +83,8 @@ def sendConfiguration():
     global is_second_human
 
     config = request.get_json()
+
+    print(config)
     if config['game-type'] == 0:
         is_first_human = False
         is_second_human = False
