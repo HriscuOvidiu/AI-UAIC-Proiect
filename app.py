@@ -14,6 +14,11 @@ is_first_human = False
 is_second_human = False
 is_first_moving = True
 
+#######################
+target_row = None
+target_column = None
+#######################
+
 
 def get_game_state(chess_game):
     state = chess_game.render()
@@ -47,7 +52,7 @@ def game():
     is_first_moving = chess_game.is_current_player_white()
 
     (state, logs) = get_game_state(chess_game)
-    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human)
+    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human, is_promoting=False)
 
 
 @app.route('/over')
@@ -65,8 +70,7 @@ def availableMoves():
 
     request_row = request.get_json()['row']
     request_column = request.get_json()['column']
-    rows, columns = main.positions_to_frontend(
-        chess_game, int(request_row), int(request_column))
+    rows, columns = main.positions_to_frontend(chess_game, int(request_row), int(request_column))
 
     moves = {"rows": rows, "columns": columns}
     return json.dumps(moves)
@@ -96,22 +100,54 @@ def move():
     global chess_game
     global is_first_moving
 
+    global target_row
+    global target_column
+
     body = request.get_json()
     if is_first_moving and not is_first_human or not is_first_moving and not is_second_human:
         chess_game.minimax_root(depth=2)
     else:
-        chess_game.move(int(body['initialRow']), int(body['initialColumn']), int(
-            body['targetRow']), int(body['targetColumn']))
+        target_row = int(body['targetRow'])
+        target_column = int(body['targetColumn'])
+        chess_game.move(int(body['initialRow']), int(body['initialColumn']), target_row, target_column)
 
-    is_first_moving = chess_game.is_current_player_white()
+    is_promoting = chess_game.is_promoting(target_row, target_column)
+
     (state, logs) = get_game_state(chess_game)
+    
+    print(f"IS PROMOTING: {is_promoting}")
+    if not is_promoting:
+        # Change player here if is not promoting
+        chess_game.change_current_player()
+    
+    is_first_moving = chess_game.is_current_player_white()
+
     is_finished = chess_game.has_finished()
 
     if is_finished != 2:
-        return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human)
+        return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human, is_promoting=is_promoting)
     else:
         sleep(2)
         return render_template('game-over.html', winning_player="Player", winning_color="Black")
+
+
+@app.route('/api/promote', methods=['POST'])
+def promote():
+    global chess_game
+    global is_first_human
+    global is_second_human
+    global is_first_moving
+
+    body = request.get_json()
+    print(body['pieceName'])
+
+    chess_game.promotion(target_row, target_column, chess_piece_color='w' if is_first_moving else 'b', chess_piece_type_str=body['pieceName'])
+    chess_game.change_current_player()
+    is_first_moving = chess_game.is_current_player_white()
+
+    (state, logs) = get_game_state(chess_game)
+
+    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human, is_promoting=False)
 
 
 @app.after_request

@@ -48,7 +48,7 @@ def get_valid_positions_check(chess: ChessGame, start_line, start_column, end_po
         chess.move_piece(start_line, start_column, end_position.line, end_position.column)
         if chess.has_finished() == 0:
             positions.append(end_position)
-        chess.current_state = aux_state
+        chess.current_state = deepcopy(aux_state)
 
     return positions
 
