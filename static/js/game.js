@@ -146,7 +146,9 @@ $(document).on('render', () => {
     }
 });
 
-
 $(document).ready(() => {
     document.dispatchEvent(renderEvent);
+
+    const popup = new Popup('#popup');
+    // setInterval(() => { popup.toggle() }, 1000);
 });

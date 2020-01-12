@@ -4,6 +4,7 @@
 <title>Chess.ai</title>
 <link rel="stylesheet" href="{{url_for('static', filename='css/game.css')}}">
 <script src="{{url_for('static', filename='js/game.js')}}"></script>
+<script src="{{url_for('static', filename='js/popup.js')}}"></script>
 {% endblock %}
 
 {% block body %}
@@ -68,6 +69,13 @@
                                 <p class="helper">h</p>
                         </div>
                 </div>
+        </div>
+</div>
+
+<div id="popup">
+        <div class="overlay"></div>
+        <div class="content">
+                <h1>Hello</h1>
         </div>
 </div>
 {% endblock %}
