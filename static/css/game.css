@@ -150,8 +150,8 @@ p{
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding-bottom: 10px;
-    overflow: none;
+    padding: 5px;
+    overflow: hidden;
 }
 
 .log-row{
