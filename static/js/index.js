@@ -37,6 +37,7 @@ const idMapping = {
 
     'cvc': 0,
     'pvc': 1,
+    'pvp': 2,
 
     'minimax': 0,
     'reinforcement': 1
