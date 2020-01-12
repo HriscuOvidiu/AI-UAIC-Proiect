@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for, redirect
 from flask_cors import CORS
 from chess import main
+from time import sleep
 import json
 
 app = Flask(__name__)
@@ -49,9 +50,9 @@ def game():
     return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human)
 
 
-# @app.route('/over')
-# def game_over():
-#     return render_template('game-over.html', winning_player='Player', winning_color='Black')
+@app.route('/over')
+def game_over():
+    return render_template('game-over.html', winning_player='Player', winning_color='Black')
 
 ##
 # API
@@ -109,7 +110,8 @@ def move():
     if is_finished != 2:
         return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human)
     else:
-        return render_template('game-over.html', winning_player='Player', winning_color='Black')
+        sleep(2)
+        return redirect(url_for('over'))
 
 
 @app.after_request
