@@ -1,4 +1,3 @@
-from chess.board.Cell import Cell
 from chess.board.ChessBoard import ChessBoard
 from chess.game.ChessState import ChessState
 from chess.players.BlackPlayer import BlackPlayer

@@ -112,14 +112,13 @@ def move():
         chess_game.move(int(body['initialRow']), int(body['initialColumn']), target_row, target_column)
 
     is_promoting = chess_game.is_promoting(target_row, target_column)
-
-    (state, logs) = get_game_state(chess_game)
     
     print(f"IS PROMOTING: {is_promoting}")
     if not is_promoting:
         # Change player here if is not promoting
         chess_game.change_current_player()
-    
+
+    (state, logs) = get_game_state(chess_game)
     is_first_moving = chess_game.is_current_player_white()
 
     is_finished = chess_game.has_finished()
