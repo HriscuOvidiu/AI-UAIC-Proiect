@@ -126,7 +126,7 @@ def promote():
     is_first_moving = chess_game.is_current_player_white()
     (state, logs) = get_game_state(chess_game)
 
-    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human, who_is_promoting=None)
+    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human, is_promoting=False)
 
 
 @app.after_request
