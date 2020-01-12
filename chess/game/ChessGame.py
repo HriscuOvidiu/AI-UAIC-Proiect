@@ -3,6 +3,7 @@ from chess.board.ChessBoard import ChessBoard
 from chess.game.ChessState import ChessState
 from chess.players.BlackPlayer import BlackPlayer
 from chess.players.WhitePlayer import WhitePlayer
+from chess.pieces.Pawn import Pawn
 
 
 class ChessGame:
@@ -95,26 +96,32 @@ class ChessGame:
         start_cell.chess_piece = None
 
     def move(self, start_line, start_column, end_line, end_column, no_log=False, promotion_piece_type='queen'):
-        # If PROMOTION
-        if self.is_current_player_white():
-            if end_line == 0 and self.current_state.board[start_line][start_column].chess_piece.name == 'Pawn':
-                self.move_piece(start_line, start_column, end_line, end_column)
-                self.promotion(end_line, end_column, 'w', promotion_piece_type)
-                self.change_current_player()
-                return
-        else:
-            if end_line == 7 and self.current_state.board[start_line][start_column].chess_piece.name == 'Pawn':
-                self.move_piece(start_line, start_column, end_line, end_column)
-                self.promotion(end_line, end_column, 'b', promotion_piece_type)
-                self.change_current_player()
-                return
+        # # If PROMOTION
+        # if self.is_current_player_white():
+        #     if end_line == 0 and self.current_state.board[start_line][start_column].chess_piece.name == 'Pawn':
+        #         self.move_piece(start_line, start_column, end_line, end_column)
+        #         self.promotion(end_line, end_column, 'w', promotion_piece_type)
+        #         return
+        # else:
+        #     if end_line == 7 and self.current_state.board[start_line][start_column].chess_piece.name == 'Pawn':
+        #         self.move_piece(start_line, start_column, end_line, end_column)
+        #         self.promotion(end_line, end_column, 'b', promotion_piece_type)
+        #         return
 
         # If not the same position is selected
         if not (start_line == end_line and start_column == end_column):
             self.move_piece(start_line, start_column, end_line, end_column)
             if not no_log:
                 self.add_log(start_line, start_column, end_line, end_column, 'White' if self.current_state.is_current_player_white() else 'Black')
-            self.change_current_player()
+
+    def is_promoting(self, current_line, current_column):
+        if isinstance(self.current_state.board[current_line][current_column].chess_piece, Pawn):
+            is_white_promoting = self.is_current_player_white() and current_line == 0
+            is_black_promoting = not self.is_current_player_white() and current_line == self.configuration.get_board_lines() - 1
+
+            return is_white_promoting or is_black_promoting
+
+        return False
 
     # TODO: Check
     def promotion(self, pawn_line, pawn_column, chess_piece_color='w', chess_piece_type_str='queen'):
