@@ -22,7 +22,6 @@ function runGame() {
     Object.keys(info).forEach((key) => {
         postObj[key] = idMapping[info[key]];
     });
-    postObj['ai-type2'] = -1;
 
     request('/api/sendConfiguration', 'POST', postObj)
         .done(() => {
@@ -44,7 +43,7 @@ const idMapping = {
 };
 
 const info = {};
-const tags = ['rule', 'game-type', 'ai-type'];
+const tags = ['rule', 'game-type', 'ai-type', 'second-ai-type'];
 
 $(document).ready(() => {
     tags.forEach((t) => {

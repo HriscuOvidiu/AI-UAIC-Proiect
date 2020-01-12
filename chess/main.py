@@ -24,7 +24,7 @@ ai_modes_dict = {
 def get_setup(setup_dict):
     rule = rules_dict[setup_dict['rule']]
     game_type = game_type_dict[setup_dict['game-type']]
-    white_player = ai_modes_dict[setup_dict['ai-type2']]
+    white_player = ai_modes_dict[setup_dict['second-ai-type']]
     black_player = ai_modes_dict[setup_dict['ai-type']]
 
     return rule, game_type, white_player, black_player
