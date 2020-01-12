@@ -141,6 +141,7 @@ class ChessGame:
 
                     for position in piece_moves:
                         self.move(cell.position.line, cell.position.column, position.line, position.column, no_log=True)
+                        self.change_current_player()
                         if self.is_promoting(position.line, position.column):
                             promotion_pieces = ['rook', 'bishop', 'knight', 'queen']
                             for i in promotion_pieces:
