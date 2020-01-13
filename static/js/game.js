@@ -4,6 +4,7 @@ var currentlySelectedPiece;
 const sound = 'chess_piece_sound.wav';
 
 const chessPieceSound = new Audio('static/assets/' + sound);
+
 async function getValidMoves(row, column) {
     var rows, columns;
     var cells = []
@@ -15,7 +16,8 @@ async function getValidMoves(row, column) {
 
     rows.forEach((value, index) => {
         cells.push([value, columns[index]]);
-    })
+    });
+
     return cells;
 }
 
