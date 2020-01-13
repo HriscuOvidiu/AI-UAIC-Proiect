@@ -24,7 +24,7 @@ function addInitialState(tag) {
             e.preventDefault();
 
             const strategies = $('.strategy');
-            const ai = $(`.choice.${tag}`);
+            const ai = $(`.choice.ai-type`);
 
             strategies.css('display', 'none');
             cleanAiStrategies();
