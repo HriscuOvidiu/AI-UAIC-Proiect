@@ -106,6 +106,7 @@ def move():
     global target_column
 
     body = request.get_json()
+    is_promoting = False
     if is_first_moving and not is_first_human or not is_first_moving and not is_second_human:
         chess_game.minimax_root(depth=2)
     else:
@@ -113,12 +114,12 @@ def move():
         target_column = int(body['targetColumn'])
         chess_game.move(int(body['initialRow']), int(body['initialColumn']), target_row, target_column)
 
-    is_promoting = chess_game.is_promoting(target_row, target_column)
-    
-    print(f"IS PROMOTING: {is_promoting}")
-    if not is_promoting:
-        # Change player here if is not promoting
-        chess_game.change_current_player()
+        is_promoting = chess_game.is_promoting(target_row, target_column)
+        
+        print(f"IS PROMOTING: {is_promoting}")
+        if not is_promoting:
+            # Change player here if is not promoting
+            chess_game.change_current_player()
 
     (state, logs) = get_game_state(chess_game)
     is_first_moving = chess_game.is_current_player_white()
