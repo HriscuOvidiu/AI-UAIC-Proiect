@@ -70,7 +70,8 @@ def availableMoves():
 
     request_row = request.get_json()['row']
     request_column = request.get_json()['column']
-    rows, columns = main.positions_to_frontend(chess_game, int(request_row), int(request_column))
+    rows, columns = main.positions_to_frontend(
+        chess_game, int(request_row), int(request_column))
 
     moves = {"rows": rows, "columns": columns}
     return json.dumps(moves)
@@ -112,10 +113,11 @@ def move():
     else:
         target_row = int(body['targetRow'])
         target_column = int(body['targetColumn'])
-        chess_game.move(int(body['initialRow']), int(body['initialColumn']), target_row, target_column)
+        chess_game.move(int(body['initialRow']), int(
+            body['initialColumn']), target_row, target_column)
 
         is_promoting = chess_game.is_promoting(target_row, target_column)
-        
+
         print(f"IS PROMOTING: {is_promoting}")
         if not is_promoting:
             # Change player here if is not promoting
@@ -125,7 +127,6 @@ def move():
     is_first_moving = chess_game.is_current_player_white()
 
     is_finished = chess_game.has_finished()
-
     if is_finished != 2:
         return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human, is_promoting=is_promoting)
     else:
@@ -143,7 +144,8 @@ def promote():
     body = request.get_json()
     print(body['pieceName'])
 
-    chess_game.promotion(target_row, target_column, chess_piece_color='w' if is_first_moving else 'b', chess_piece_type_str=body['pieceName'])
+    chess_game.promotion(target_row, target_column,
+                         chess_piece_color='w' if is_first_moving else 'b', chess_piece_type_str=body['pieceName'])
     chess_game.change_current_player()
     is_first_moving = chess_game.is_current_player_white()
 
