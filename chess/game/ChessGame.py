@@ -135,6 +135,7 @@ class ChessGame:
                 piece = cell.chess_piece if not cell.is_empty() else ''
                 if str(piece).startswith(self.current_state.current_player.color):
                     piece_moves = piece.get_valid_moves(cell, self)
+                    piece_moves = get_valid_positions_check(self, cell.position.line, cell.position.column, piece_moves)
 
                     # TODO: Check if OK
                     piece_moves = get_valid_positions_check(deepcopy(self), cell.position.line, cell.position.column, piece_moves)
