@@ -37,9 +37,6 @@ def get_chess_game(setup_dict):
     return chess
 
 def get_valid_positions_check(chess: ChessGame, start_line, start_column, end_position_list):
-    if chess.has_finished() == 0:
-        return end_position_list
-    
     positions = []
 
     aux_state = deepcopy(chess.current_state)
