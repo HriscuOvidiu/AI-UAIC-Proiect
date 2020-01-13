@@ -91,6 +91,7 @@ class ChessGame:
         end_cell = self.current_state.board[end_line][end_column]
 
         chess_piece_to_move = start_cell.chess_piece
+        chess_piece_to_move.has_moved()
         end_cell.chess_piece = chess_piece_to_move
         start_cell.chess_piece = None
 
@@ -118,6 +119,9 @@ class ChessGame:
         pawn_cell = self.current_state.board[pawn_line][pawn_column]
 
         pawn_cell.chess_piece = new_chess_piece
+
+    def is_castling(self, start_line, start_column, end_line, end_column):
+        pass
 
     def has_finished(self):
         return self.configuration.get_end_condition()(self.current_state.current_player.color, self)

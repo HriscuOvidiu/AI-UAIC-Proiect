@@ -10,7 +10,10 @@ class ChessPiece(metaclass=ABCMeta):
         self._name = name
         self._alias = symbols[color + name]
         self._color = color
+        # TODO: Delete attr
         self._initial_position = initial_position
+        #
+        self._has_been_moved = False
         self._get_valid_moves = get_valid_moves
 
     @property
@@ -30,12 +33,19 @@ class ChessPiece(metaclass=ABCMeta):
         return self._initial_position
 
     @property
+    def has_been_moved(self):
+        return self._has_been_moved
+
+    @property
     def get_valid_moves(self):
         return self._get_valid_moves
 
     @get_valid_moves.setter
     def get_valid_moves(self, func):
         self._get_valid_moves = func
+
+    def has_moved(self):
+        self._has_been_moved = True
 
     def __repr__(self):
         return f"name: {self.name}, alias: {self.alias}, color: {self.color}, initial_position: {self.initial_position}, get_valid_moves: {self.get_valid_moves}"
