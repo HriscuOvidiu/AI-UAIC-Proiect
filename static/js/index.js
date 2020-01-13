@@ -24,7 +24,7 @@ function addInitialState(tag) {
             e.preventDefault();
 
             const strategies = $('.strategy');
-            const ai = $('.choice.ai-type');
+            const ai = $(`.choice.${tag}`);
 
             strategies.css('display', 'none');
             cleanAiStrategies();
@@ -68,7 +68,8 @@ const idMapping = {
     'pvp': 2,
 
     'minimax': 0,
-    'reinforcement': 1
+    'reinforcement': 1,
+    'alpha-beta': 2
 };
 
 const info = {};
