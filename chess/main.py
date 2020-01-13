@@ -17,8 +17,8 @@ game_type_dict = {
 ai_modes_dict = {
                     -1:     None,
                     0:      "minimax",
-                    1:      "alpha_beta_prunning",
-                    2:      "reinforcement_learning"
+                    1:      "reinforcement_learning",
+                    2:      "alpha_beta_pruning"
                 }
 
 def get_setup(setup_dict):

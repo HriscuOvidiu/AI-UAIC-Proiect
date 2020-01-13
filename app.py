@@ -17,6 +17,9 @@ is_first_moving = True
 #######################
 target_row = None
 target_column = None
+
+ai_type1 = None
+ai_type2 = None
 #######################
 
 
@@ -70,8 +73,7 @@ def availableMoves():
 
     request_row = request.get_json()['row']
     request_column = request.get_json()['column']
-    rows, columns = main.positions_to_frontend(
-        chess_game, int(request_row), int(request_column))
+    rows, columns = main.positions_to_frontend(chess_game, int(request_row), int(request_column))
 
     moves = {"rows": rows, "columns": columns}
     return json.dumps(moves)
@@ -83,9 +85,11 @@ def sendConfiguration():
     global is_first_human
     global is_second_human
 
+    global ai_type1
+    global ai_type2
+
     config = request.get_json()
 
-    print(config)
     if config['game-type'] == 0:
         is_first_human = False
         is_second_human = False
@@ -95,6 +99,10 @@ def sendConfiguration():
     elif config['game-type'] == 2:
         is_first_human = True
         is_second_human = True
+
+    ai_type1 = main.ai_modes_dict[int(config['ai-type'])]
+    ai_type2 = main.ai_modes_dict[int(config['second-ai-type'])]
+    
     return ""
 
 
@@ -106,19 +114,24 @@ def move():
     global target_row
     global target_column
 
+    global ai_type1
+    global ai_type2
+
     body = request.get_json()
     is_promoting = False
-    if is_first_moving and not is_first_human or not is_first_moving and not is_second_human:
-        chess_game.minimax_root(depth=2)
+    if is_first_moving and not is_first_human:
+        eval(f"chess_game.{ai_type1}_root()")
+        # chess_game.minimax_root(depth=2)
+    elif not is_first_moving and not is_second_human:
+        eval(f"chess_game.{ai_type2}_root()")
+        # chess_game.minimax_root(depth=2)
     else:
         target_row = int(body['targetRow'])
         target_column = int(body['targetColumn'])
-        chess_game.move(int(body['initialRow']), int(
-            body['initialColumn']), target_row, target_column)
+        chess_game.move(int(body['initialRow']), int(body['initialColumn']), target_row, target_column)
 
         is_promoting = chess_game.is_promoting(target_row, target_column)
 
-        print(f"IS PROMOTING: {is_promoting}")
         if not is_promoting:
             # Change player here if is not promoting
             chess_game.change_current_player()
@@ -142,7 +155,6 @@ def promote():
     global is_first_moving
 
     body = request.get_json()
-    print(body['pieceName'])
 
     chess_game.promotion(target_row, target_column,
                          chess_piece_color='w' if is_first_moving else 'b', chess_piece_type_str=body['pieceName'])

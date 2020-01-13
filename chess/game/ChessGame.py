@@ -193,13 +193,13 @@ class ChessGame:
                 break
         return max_state, max_eval
 
-    def minimax_root(self, depth):
+    def minimax_root(self, depth=2):
         next_move, score = self.minimax((self.current_state, None, None), depth, 1)
         self.current_state = next_move[0]
         self.add_log(next_move[1].position.line, next_move[1].position.column, next_move[2].position.line,
                      next_move[2].position.column, 'Black' if self.current_state.is_current_player_white() else 'White')
 
-    def alpha_beta_pruning_root(self, depth):
+    def alpha_beta_pruning_root(self, depth=3):
         next_move, score = self.minimax_pruning((self.current_state, None, None), depth, -float("inf"), float("inf"), 1)
         self.current_state = next_move[0]
         self.add_log(next_move[1].position.line, next_move[1].position.column, next_move[2].position.line,
