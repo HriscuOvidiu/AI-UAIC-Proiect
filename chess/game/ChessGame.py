@@ -140,7 +140,7 @@ class ChessGame:
                     return True
         return False
 
-    def castle(self, current_line, current_column, color):
+    def castle(self, current_line, current_column):
         from chess.pieces.ChessPieceFactory import ChessPieceFactory
         from chess.board.Position import Position
         valid_castle = []
