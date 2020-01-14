@@ -12,8 +12,7 @@ class ChessGame:
         self._game_mode = game_mode
         self._white = WhitePlayer()
         self._black = BlackPlayer()
-        self._init_state = ChessState(
-            self._white, ChessBoard(self._configuration))
+        self._init_state = ChessState(self._white, ChessBoard(self._configuration))
         self._current_state = self._init_state
         self._logs = []
 
@@ -92,6 +91,7 @@ class ChessGame:
 
         chess_piece_to_move = start_cell.chess_piece
         chess_piece_to_move.has_moved()
+
         end_cell.chess_piece = chess_piece_to_move
         start_cell.chess_piece = None
 
@@ -139,10 +139,9 @@ class ChessGame:
                 piece = cell.chess_piece if not cell.is_empty() else ''
                 if str(piece).startswith(self.current_state.current_player.color):
                     piece_moves = piece.get_valid_moves(cell, self)
-                    piece_moves = get_valid_positions_check(self, cell.position.line, cell.position.column, piece_moves)
 
                     # TODO: Check if OK
-                    piece_moves = get_valid_positions_check(deepcopy(self), cell.position.line, cell.position.column, piece_moves)
+                    piece_moves = get_valid_positions_check(self, cell.position.line, cell.position.column, piece_moves)
 
                     for position in piece_moves:
                         self.move(cell.position.line, cell.position.column, position.line, position.column, no_log=True)

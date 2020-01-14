@@ -54,7 +54,7 @@ def positions_to_frontend(game, line, column):
     # print(game.get_next_moves())
     if positions:
         # TODO: Check if OK
-        positions = get_valid_positions_check(deepcopy(game), line, column, positions)
+        positions = get_valid_positions_check(game, line, column, positions)
         #
         
         if len(positions):

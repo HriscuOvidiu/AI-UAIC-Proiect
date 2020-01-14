@@ -137,6 +137,7 @@ def move():
             chess_game.change_current_player()
 
     (state, logs) = get_game_state(chess_game)
+
     is_first_moving = chess_game.is_current_player_white()
 
     is_finished = chess_game.has_finished()
