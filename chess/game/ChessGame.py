@@ -120,7 +120,6 @@ class ChessGame:
 
         pawn_cell.chess_piece = new_chess_piece
 
-    
     def is_castling(self, current_line, current_column, end_line, end_column):
         if self.current_state.board[current_line][current_column].chess_piece.has_been_moved is False and current_line == end_line and ((end_column == current_column - 2) or (end_column == current_column + 2)):
             return True
@@ -140,7 +139,7 @@ class ChessGame:
     def render(self):
         return self.current_state.get_rendered_board()
 
-    def get_next_moves(self):
+    def get_next_moves(self, capture=False):
         from chess.main import get_valid_positions_check
         from copy import deepcopy
         next_moves = []
@@ -150,9 +149,10 @@ class ChessGame:
                 piece = cell.chess_piece if not cell.is_empty() else ''
                 if str(piece).startswith(self.current_state.current_player.color):
                     piece_moves = piece.get_valid_moves(cell, self)
-
-                    # TODO: Check if OK
                     piece_moves = get_valid_positions_check(self, cell.position.line, cell.position.column, piece_moves)
+
+                    if capture:
+                        piece_moves = list(filter(lambda x: not self.current_state.board[x.line][x.column].is_empty(), piece_moves))
 
                     for position in piece_moves:
                         self.move(cell.position.line, cell.position.column, position.line, position.column, no_log=True)
@@ -164,6 +164,11 @@ class ChessGame:
                                 state = deepcopy(self.current_state)
                                 next_moves.append((state, cell, self.current_state.board[position.line][position.column]))
                                 self.current_state = deepcopy(temp_state)
+                        elif self.is_castling(cell.position.line, cell.position.column, position.line, position.column):
+                            self.castle(cell.position.line, cell.position.column, position.line, position.column)
+                            state = deepcopy(self.current_state)
+                            next_moves.append((state, cell, self.current_state.board[position.line][position.column]))
+                            self.current_state = deepcopy(temp_state)
                         else:
                             state = deepcopy(self.current_state)
                             next_moves.append((state, cell, self.current_state.board[position.line][position.column]))
@@ -207,14 +212,75 @@ class ChessGame:
                 break
         return max_state, max_eval
 
-    def minimax_root(self, depth=2):
-        next_move, score = self.minimax((self.current_state, None, None), depth, 1)
+    def quiescence(self, alpha, beta, maximizing):
+        from copy import deepcopy
+        stand_pat = self.current_state.get_eval(maximizing)
+        if self.has_finished() == 2:
+            return self.current_state, stand_pat
+        if stand_pat >= beta:
+            return self.current_state, beta
+        if alpha < stand_pat:
+            alpha = stand_pat
+
+        captures = self.get_next_moves(capture=True)
+        aux_state = deepcopy(self.current_state)
+        max_state = None
+
+        for capture in captures:
+            self.current_state = deepcopy(capture[0])
+            move_eval = -self.quiescence(-beta, -alpha, -maximizing)[1]
+            self.current_state = deepcopy(aux_state)
+
+            if move_eval >= beta:
+                return deepcopy(capture), beta
+            if move_eval > alpha:
+                alpha = move_eval
+                max_state = deepcopy(capture)
+
+        return max_state, alpha
+
+    def pv_search(self, alpha, beta, depth, maximizing):
+        from copy import deepcopy
+        if not depth:
+            return self.quiescence(alpha, beta, maximizing)
+
+        max_state = None
+        b_search_pv = True
+        next_moves = self.get_next_moves()
+        aux_state = deepcopy(self.current_state)
+
+        for move in next_moves:
+            self.current_state = deepcopy(move[0])
+            if b_search_pv:
+                move_eval = -self.pv_search(-beta, -alpha, depth - 1, -maximizing)[1]
+            else:
+                move_eval = -self.pv_search(-alpha - 1, -alpha, depth - 1, -maximizing)[1]
+                if move_eval > alpha:
+                    move_eval = -self.pv_search(-beta, -alpha, depth - 1, -maximizing)[1]
+            self.current_state = deepcopy(aux_state)
+
+            if move_eval >= beta:
+                return deepcopy(move), beta
+            if move_eval >= alpha:
+                alpha = move_eval
+                max_state = deepcopy(move)
+            b_search_pv = True
+
+        return max_state, alpha
+
+    def update_state(self, next_move):
         self.current_state = next_move[0]
         self.add_log(next_move[1].position.line, next_move[1].position.column, next_move[2].position.line,
                      next_move[2].position.column, 'Black' if self.current_state.is_current_player_white() else 'White')
 
+    def pv_search_root(self, depth=2):
+        next_move, score = self.pv_search(-float("inf"), float("inf"), depth, 1)
+        self.update_state(next_move)
+
+    def minimax_root(self, depth=2):
+        next_move, score = self.minimax((self.current_state, None, None), depth, 1)
+        self.update_state(next_move)
+
     def alpha_beta_pruning_root(self, depth=3):
         next_move, score = self.minimax_pruning((self.current_state, None, None), depth, -float("inf"), float("inf"), 1)
-        self.current_state = next_move[0]
-        self.add_log(next_move[1].position.line, next_move[1].position.column, next_move[2].position.line,
-                     next_move[2].position.column, 'Black' if self.current_state.is_current_player_white() else 'White')
+        self.update_state(next_move)
