@@ -20,6 +20,8 @@ target_column = None
 
 ai_type1 = None
 ai_type2 = None
+
+game_type = None
 #######################
 
 
@@ -88,17 +90,20 @@ def sendConfiguration():
     global ai_type1
     global ai_type2
 
-    config = request.get_json()
+    global game_type
 
-    if config['game-type'] == 0:
-        is_first_human = False
-        is_second_human = False
-    elif config['game-type'] == 1:
-        is_first_human = True
-        is_second_human = False
-    elif config['game-type'] == 2:
+    config = request.get_json()
+    game_type = config['game-type']
+
+    if game_type == 0:
         is_first_human = True
         is_second_human = True
+    elif game_type == 1:
+        is_first_human = True
+        is_second_human = False
+    elif game_type == 2:
+        is_first_human = False
+        is_second_human = False
 
     ai_type1 = main.ai_modes_dict[int(config['ai-type'])]
     ai_type2 = main.ai_modes_dict[int(config['second-ai-type'])]
@@ -120,13 +125,8 @@ def move():
     body = request.get_json()
     is_promoting = False
     is_castling = False
-    if not is_first_moving and not is_second_human:
-        eval(f"chess_game.{ai_type1}_root()")
-        # chess_game.minimax_root(depth=2)
-    elif is_first_moving and not is_first_human:
-        eval(f"chess_game.{ai_type2}_root()")
-        # chess_game.minimax_root(depth=2)
-    else:
+
+    def move_player():
         target_row = int(body['targetRow'])
         target_column = int(body['targetColumn'])
         chess_game.move(int(body['initialRow']), int(body['initialColumn']), target_row, target_column)
@@ -143,6 +143,21 @@ def move():
         if not is_promoting:
             # Change player here if is not promoting
             chess_game.change_current_player()
+
+    if game_type == 0:
+        # pvp
+        move_player()
+    elif game_type == 1:
+        # pvc
+        if is_first_moving:
+            move_player()
+        else:
+            eval(f"chess_game.{ai_type1}_root()")
+    else:
+        if is_first_moving:
+            eval(f"chess_game.{ai_type1}_root()")
+        else:
+            eval(f"chess_game.{ai_type2}_root()")    
 
     (state, logs) = get_game_state(chess_game)
 

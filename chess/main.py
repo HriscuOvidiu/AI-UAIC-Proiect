@@ -9,9 +9,9 @@ with open('./static/configs/game_modes.json') as f:
     rules_dict = json.load(f)
 
 game_type_dict = {
-                    0: "pvc",
-                    1: "cvc",
-                    2: "pvp"
+                    0: "pvp",
+                    1: "pvc",
+                    2: "cvc"
                 }
 
 ai_modes_dict = {
