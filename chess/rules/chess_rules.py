@@ -83,7 +83,8 @@ def castle(current_line, current_column, chess):
                         blocked = 1
                 if blocked == 0:
                     valid_castle.append(Position(current_line,2))
-        if isinstance(chess.current_state.board[current_line][7].chess_piece, Rook) and chess.current_state.board[current_line][7].chess_piece.has_been_moved is False:
+            if isinstance(chess.current_state.board[current_line][7].chess_piece, Rook) and chess.current_state.board[current_line][7].chess_piece.has_been_moved is False:
+                blocked = 0
                 for j in range(current_column + 1, 7): #check
                     if chess.current_state.board[current_line][j].is_empty() is False:
                         blocked = 1
