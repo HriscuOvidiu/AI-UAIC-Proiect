@@ -72,7 +72,10 @@ def standard_rook(start_cell: Cell, chess: ChessGame):
 
 def standard_king(start_cell: Cell, chess: ChessGame, checkmate = False):
     directions = [[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1],[1,0],[1,1]]
-    return get_move_by(start_cell, chess, directions)
+    valid_moves = []
+    valid_moves.extend(get_move_by(start_cell, chess, directions))
+    valid_moves.extend(chess.castle(start_cell.position.line, start_cell.position.column))
+    return valid_moves
 
 def standard_bishop(start_cell: Cell, chess: ChessGame):
     directions = [[1,1],[-1,1],[-1,-1],[1,-1]]

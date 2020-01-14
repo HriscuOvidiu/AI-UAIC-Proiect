@@ -121,23 +121,9 @@ class ChessGame:
         pawn_cell.chess_piece = new_chess_piece
 
     
-    def is_castling(self, current_line, current_column):
-        from chess.pieces.ChessPieceFactory import ChessPieceFactory
-        from chess.board.Position import Position
-        if isinstance(self.current_state.board[current_line][current_column].chess_piece, King) and self.current_state.board[current_line][current_column].chess_piece.has_been_moved is False:
-            if isinstance(self.current_state.board[current_line][0].chess_piece, Rook) and self.current_state.board[current_line][0].chess_piece.has_been_moved is False:
-                blocked = 0
-                for j in range(1, current_column):
-                    if self.current_state.board[current_line][j].is_empty() is False:
-                        blocked = 1
-                if blocked == 0:
-                    return True
-            if isinstance(self.current_state.board[current_line][7].chess_piece, Rook) and self.current_state.board[current_line][7].chess_piece.has_been_moved is False:
-                for j in range(current_column + 1, 7): #check
-                    if self.current_state.board[current_line][j].is_empty() is False:
-                        blocked = 1
-                if blocked == 0:
-                    return True
+    def is_castling(self, current_line, current_column, end_line, end_column):
+        if self.current_state.board[current_line][current_column].chess_piece.has_been_moved is False and current_line == end_line and ((end_column == current_column - 2) or (end_column == current_column + 2)):
+            return True
         return False
 
     def castle(self, current_line, current_column):
