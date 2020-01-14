@@ -157,24 +157,27 @@ class ChessGame:
                         piece_moves = list(filter(lambda x: not self.current_state.board[x.line][x.column].is_empty(), piece_moves))
 
                     for position in piece_moves:
-                        self.move(cell.position.line, cell.position.column, position.line, position.column, no_log=True)
-                        self.change_current_player()
-                        if self.is_promoting(position.line, position.column):
-                            promotion_pieces = ['rook', 'bishop', 'knight', 'queen']
-                            for i in promotion_pieces:
-                                self.promotion(position.line, position.column, self.current_state.current_player.color, i)
-                                state = deepcopy(self.current_state)
-                                next_moves.append((state, cell, self.current_state.board[position.line][position.column]))
-                                self.current_state = deepcopy(temp_state)
-                        elif self.is_castling(cell.position.line, cell.position.column, position.line, position.column):
+                        # TODO: FIX
+                        if self.is_castling(cell.position.line, cell.position.column, position.line, position.column):
                             self.castle(cell.position.line, cell.position.column, position.line, position.column)
+                            self.move(cell.position.line, cell.position.column, position.line, position.column, no_log=True)
                             state = deepcopy(self.current_state)
                             next_moves.append((state, cell, self.current_state.board[position.line][position.column]))
                             self.current_state = deepcopy(temp_state)
                         else:
-                            state = deepcopy(self.current_state)
-                            next_moves.append((state, cell, self.current_state.board[position.line][position.column]))
-                            self.current_state = deepcopy(temp_state)
+                            self.move(cell.position.line, cell.position.column, position.line, position.column, no_log=True)
+                            self.change_current_player()
+                            if self.is_promoting(position.line, position.column):
+                                promotion_pieces = ['rook', 'bishop', 'knight', 'queen']
+                                for i in promotion_pieces:
+                                    self.promotion(position.line, position.column, self.current_state.current_player.color, i)
+                                    state = deepcopy(self.current_state)
+                                    next_moves.append((state, cell, self.current_state.board[position.line][position.column]))
+                                    self.current_state = deepcopy(temp_state)
+                            else:
+                                state = deepcopy(self.current_state)
+                                next_moves.append((state, cell, self.current_state.board[position.line][position.column]))
+                                self.current_state = deepcopy(temp_state)
         return next_moves
 
     def minimax(self, state, depth, maximizing):
@@ -283,6 +286,6 @@ class ChessGame:
         next_move, score = self.minimax((self.current_state, None, None), depth, 1)
         self.update_state(next_move)
 
-    def alpha_beta_pruning_root(self, depth=3):
+    def alpha_beta_pruning_root(self, depth=2):
         next_move, score = self.minimax_pruning((self.current_state, None, None), depth, -float("inf"), float("inf"), 1)
         self.update_state(next_move)
