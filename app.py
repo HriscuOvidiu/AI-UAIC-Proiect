@@ -132,14 +132,16 @@ def move():
 
         target_row = int(body['targetRow'])
         target_column = int(body['targetColumn'])
-        chess_game.move(initial_row, initial_column, target_row, target_column)
 
-        is_promoting = chess_game.is_promoting(target_row, target_column)
 
-        is_castling = chess_game.is_castling(initial_row, initial_column)
+        is_castling = chess_game.is_castling(initial_row, initial_column, target_row, target_column)
 
         if is_castling:
-            chess_game.castle(initial_row, initial_column)
+            chess_game.castle(initial_row, initial_column, target_row, target_column)
+        else:
+            chess_game.move(initial_row, initial_column, target_row, target_column)
+
+        is_promoting = chess_game.is_promoting(target_row, target_column)
 
         if not is_promoting:
             # Change player here if is not promoting

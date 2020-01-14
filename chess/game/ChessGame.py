@@ -126,25 +126,13 @@ class ChessGame:
             return True
         return False
 
-    def castle(self, current_line, current_column):
-        from chess.pieces.ChessPieceFactory import ChessPieceFactory
-        from chess.board.Position import Position
-        valid_castle = []
-        if isinstance(self.current_state.board[current_line][current_column].chess_piece, King) and self.current_state.board[current_line][current_column].chess_piece.has_been_moved is False:
-            if isinstance(self.current_state.board[current_line][0].chess_piece, Rook) and self.current_state.board[current_line][0].chess_piece.has_been_moved is False:
-                blocked = 0
-                for j in range(1, current_column):
-                    if self.current_state.board[current_line][j].is_empty() is False:
-                        blocked = 1
-                if blocked == 0:
-                    valid_castle.append(Position(current_line,2))
-        if isinstance(self.current_state.board[current_line][7].chess_piece, Rook) and self.current_state.board[current_line][7].chess_piece.has_been_moved is False:
-                for j in range(current_column + 1, 7): #check
-                    if self.current_state.board[current_line][j].is_empty() is False:
-                        blocked = 1
-                if blocked == 0:
-                    valid_castle.append(Position(current_line,6))
-        return valid_castle
+    def castle(self, current_line, current_column, end_line, end_column):
+        self.move(current_line, current_column, end_line, end_column)
+        # Pt tura din dreapta
+        if current_column < end_column:
+            self.move(current_line, self.configuration.get_board_columns() - 1, end_line, end_column - 1)
+        else:
+            self.move(current_line, 0, end_line, end_column + 1)
 
     def has_finished(self):
         return self.configuration.get_end_condition()(self.current_state.current_player.color, self)
