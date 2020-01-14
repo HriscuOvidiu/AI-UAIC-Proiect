@@ -136,10 +136,11 @@ def move():
 
         is_castling = chess_game.is_castling(initial_row, initial_column, target_row, target_column)
 
+        chess_game.move(initial_row, initial_column, target_row, target_column)
+
         if is_castling:
             chess_game.castle(initial_row, initial_column, target_row, target_column)
-        else:
-            chess_game.move(initial_row, initial_column, target_row, target_column)
+            
 
         is_promoting = chess_game.is_promoting(target_row, target_column)
 

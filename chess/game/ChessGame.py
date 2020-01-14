@@ -121,12 +121,14 @@ class ChessGame:
         pawn_cell.chess_piece = new_chess_piece
 
     def is_castling(self, current_line, current_column, end_line, end_column):
-        if self.current_state.board[current_line][current_column].chess_piece.has_been_moved is False and current_line == end_line and ((end_column == current_column - 2) or (end_column == current_column + 2)):
-            return True
+        from chess.pieces.King import King
+        if isinstance(self.current_state.board[current_line][current_column].chess_piece, King):
+            if self.current_state.board[current_line][current_column].chess_piece.has_been_moved is False and current_line == end_line and ((end_column == current_column - 2) or (end_column == current_column + 2)):
+                return True
         return False
 
     def castle(self, current_line, current_column, end_line, end_column):
-        self.move(current_line, current_column, end_line, end_column)
+        # self.move(current_line, current_column, end_line, end_column)
         # Pt tura din dreapta
         if current_column < end_column:
             self.move(current_line, self.configuration.get_board_columns() - 1, end_line, end_column - 1)
