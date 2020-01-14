@@ -69,12 +69,33 @@ def standard_rook(start_cell: Cell, chess: ChessGame):
     directions = [[1,0],[-1,0],[0,-1],[0,1]]
     return get_move_by(start_cell, chess, directions, True)
     
+def castle(current_line, current_column, chess):
+        from chess.pieces.ChessPieceFactory import ChessPieceFactory
+        from chess.board.Position import Position
+        from chess.pieces.King import King
+        from chess.pieces.Rook import Rook
+        valid_castle = []
+        if isinstance(chess.current_state.board[current_line][current_column].chess_piece, King) and chess.current_state.board[current_line][current_column].chess_piece.has_been_moved is False:
+            if isinstance(chess.current_state.board[current_line][0].chess_piece, Rook) and chess.current_state.board[current_line][0].chess_piece.has_been_moved is False:
+                blocked = 0
+                for j in range(1, current_column):
+                    if chess.current_state.board[current_line][j].is_empty() is False:
+                        blocked = 1
+                if blocked == 0:
+                    valid_castle.append(Position(current_line,2))
+        if isinstance(chess.current_state.board[current_line][7].chess_piece, Rook) and chess.current_state.board[current_line][7].chess_piece.has_been_moved is False:
+                for j in range(current_column + 1, 7): #check
+                    if chess.current_state.board[current_line][j].is_empty() is False:
+                        blocked = 1
+                if blocked == 0:
+                    valid_castle.append(Position(current_line,6))
+        return valid_castle
 
 def standard_king(start_cell: Cell, chess: ChessGame, checkmate = False):
     directions = [[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1],[1,0],[1,1]]
     valid_moves = []
     valid_moves.extend(get_move_by(start_cell, chess, directions))
-    valid_moves.extend(chess.castle(start_cell.position.line, start_cell.position.column))
+    valid_moves.extend(castle(start_cell.position.line, start_cell.position.column, chess))
     return valid_moves
 
 def standard_bishop(start_cell: Cell, chess: ChessGame):
