@@ -91,6 +91,7 @@ class ChessGame:
         end_cell = self.current_state.board[end_line][end_column]
 
         chess_piece_to_move = start_cell.chess_piece
+        chess_piece_to_move.has_moved()
         end_cell.chess_piece = chess_piece_to_move
         start_cell.chess_piece = None
 
@@ -118,6 +119,9 @@ class ChessGame:
         pawn_cell = self.current_state.board[pawn_line][pawn_column]
 
         pawn_cell.chess_piece = new_chess_piece
+
+    def is_castling(self, start_line, start_column, end_line, end_column):
+        pass
 
     def has_finished(self):
         return self.configuration.get_end_condition()(self.current_state.current_player.color, self)
@@ -193,13 +197,13 @@ class ChessGame:
                 break
         return max_state, max_eval
 
-    def minimax_root(self, depth):
+    def minimax_root(self, depth=2):
         next_move, score = self.minimax((self.current_state, None, None), depth, 1)
         self.current_state = next_move[0]
         self.add_log(next_move[1].position.line, next_move[1].position.column, next_move[2].position.line,
                      next_move[2].position.column, 'Black' if self.current_state.is_current_player_white() else 'White')
 
-    def alpha_beta_pruning_root(self, depth):
+    def alpha_beta_pruning_root(self, depth=3):
         next_move, score = self.minimax_pruning((self.current_state, None, None), depth, -float("inf"), float("inf"), 1)
         self.current_state = next_move[0]
         self.add_log(next_move[1].position.line, next_move[1].position.column, next_move[2].position.line,
