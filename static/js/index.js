@@ -63,9 +63,9 @@ const idMapping = {
     'weak': 1,
     'endgame': 2,
 
-    'cvc': 0,
+    'pvp': 0,
     'pvc': 1,
-    'pvp': 2,
+    'cvc': 2,
 
     'minimax': 0,
     'reinforcement': 1,
