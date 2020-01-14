@@ -122,12 +122,14 @@ class ChessGame:
 
     
     def is_castling(self, current_line, current_column, end_line, end_column):
-        if self.current_state.board[current_line][current_column].chess_piece.has_been_moved is False and current_line == end_line and ((end_column == current_column - 2) or (end_column == current_column + 2)):
-            return True
+        from chess.pieces.King import King
+        if isinstance(self.current_state.board[current_line][current_column].chess_piece, King):
+            if self.current_state.board[current_line][current_column].chess_piece.has_been_moved is False and current_line == end_line and ((end_column == current_column - 2) or (end_column == current_column + 2)):
+                return True
         return False
 
     def castle(self, current_line, current_column, end_line, end_column):
-        self.move(current_line, current_column, end_line, end_column)
+        # self.move(current_line, current_column, end_line, end_column)
         # Pt tura din dreapta
         if current_column < end_column:
             self.move(current_line, self.configuration.get_board_columns() - 1, end_line, end_column - 1)
@@ -207,13 +209,13 @@ class ChessGame:
                 break
         return max_state, max_eval
 
-    def minimax_root(self, depth=2):
+    def minimax_root(self, depth=1):
         next_move, score = self.minimax((self.current_state, None, None), depth, 1)
         self.current_state = next_move[0]
         self.add_log(next_move[1].position.line, next_move[1].position.column, next_move[2].position.line,
                      next_move[2].position.column, 'Black' if self.current_state.is_current_player_white() else 'White')
 
-    def alpha_beta_pruning_root(self, depth=3):
+    def alpha_beta_pruning_root(self, depth=2):
         next_move, score = self.minimax_pruning((self.current_state, None, None), depth, -float("inf"), float("inf"), 1)
         self.current_state = next_move[0]
         self.add_log(next_move[1].position.line, next_move[1].position.column, next_move[2].position.line,
