@@ -196,7 +196,7 @@ p{
 }
 .player-text{
     font-size: 24px;
-    font-weight: bold;
+    font-weight:lighter;
 }
 
 .player-one-moves{
@@ -273,4 +273,60 @@ p{
     flex-direction: column;
     align-items: center;
     cursor: pointer;
+}
+
+.game-over{
+    position: absolute;
+    z-index: 1;
+    
+    width: 980px;
+    height: 640px;
+
+    background-color:rgba(34, 34, 34, 0.8);
+
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.game-over-text{
+    font-size: 32px;
+    font-weight: bolder;
+    margin-bottom: 10px;
+}
+.game-over-button{
+    width:200px;
+    height: 50px;
+    background-color: rgba(1,184,96,1);
+    border-radius: 20px;
+    box-shadow: 8px 8px 10px rgba(0, 0, 0, 0.4), -4px -4px 6px rgba(1, 184, 96, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.player-one-won{
+    background: rgb(1,184,96);
+    background: linear-gradient(90deg, rgba(1,184,96,1) 0%, rgba(0,0,0,0) 100%);
+}
+.player-two-won{
+    background: rgb(1,184,96);
+    background: linear-gradient(270deg, rgba(1,184,96,1) 0%, rgba(0,0,0,0) 100%);
+}
+
+.player-one-lost{
+    background: rgb(186,5,5);
+    background: linear-gradient(90deg, rgba(186,5,5,1) 0%, rgba(0,0,0,0) 100%);
+}
+.player-two-lost{
+    background: rgb(186,5,5);
+    background: linear-gradient(270deg, rgba(186,5,5,1) 0%, rgba(0,0,0,0) 100%);
+}
+
+.won-lost-text{
+    font-variant: small-caps;
 }

@@ -5,6 +5,10 @@ const sound = 'chess_piece_sound.wav';
 
 const chessPieceSound = new Audio('static/assets/' + sound);
 
+function goHome() {
+    window.location.href = '/';
+};
+
 async function getValidMoves(row, column) {
     var rows, columns;
     var cells = []
@@ -158,7 +162,7 @@ $(document).on('render', () => {
     }
     else {
         // If over screen is not showing
-        if ($(".won").first().html() != 'Won') {
+        if ($(".game-over-text").first().html() != 'Game over') {
             // Sending mock move so back-end processes computer move
             sendMoveRequest(0, 0, 0, 0)
         }

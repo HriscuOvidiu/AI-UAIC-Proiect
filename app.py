@@ -52,7 +52,7 @@ def game():
     is_first_moving = chess_game.is_current_player_white()
 
     (state, logs) = get_game_state(chess_game)
-    return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human, is_promoting=False)
+    return render_template('game.html', initial_state=state, logs=logs, is_finished=False, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human, is_promoting=False)
 
 
 @app.route('/over')
@@ -127,11 +127,7 @@ def move():
     is_first_moving = chess_game.is_current_player_white()
 
     is_finished = chess_game.has_finished()
-    if is_finished != 2:
-        return render_template('game.html', initial_state=state, logs=logs, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human, is_promoting=is_promoting)
-    else:
-        sleep(2)
-        return render_template('game-over.html', winning_player="Player", winning_color="Black")
+    return render_template('game.html', initial_state=state, logs=logs, is_finished=True if is_finished == 2 else False, is_first_moving=is_first_moving, is_first_human=is_first_human, is_second_human=is_second_human, is_promoting=is_promoting)
 
 
 @app.route('/api/promote', methods=['POST'])

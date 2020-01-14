@@ -12,6 +12,22 @@
         <div class="title-container">
                 <p class="title">chess.ai</p>
         </div>
+        {% if is_finished%}
+        <div class="status-display">
+                <div class="player-one-display{{" player-one-lost" if is_first_moving else " player-one-won"}}">
+                        <p class="player-text player-one-text">{{"Player" if is_first_human else "Computer"}}
+                                {{"Lost" if is_first_moving else "Won"}}
+                        </p>
+                        <p class="player-color player-one-color">Whites</p>
+                </div>
+                <div class="player-two-display{{" player-two-won" if is_first_moving else " player-two-lost"}}">
+                        <p class="player-text player-two-text"> {{"Won" if is_first_moving else "Lost"}}
+                                {{"Player" if is_second_human else "Computer"}}
+                        </p>
+                        <p class="player-color player-two-color">Blacks</p>
+                </div>
+        </div>
+        {% else %}
         <div class="status-display">
                 <div class="player-one-display{{" player-one-moves" if is_first_moving else ""}}">
                         <p class="player-text player-one-text">{{"Player" if is_first_human else "Computer"}}</p>
@@ -22,6 +38,8 @@
                         <p class="player-color player-two-color">Blacks</p>
                 </div>
         </div>
+        {% endif %}
+
         <div class="guideline-container noselect">
                 <div class="left-guidelines">
                         <p class="helper">1</p>
@@ -35,6 +53,12 @@
                 </div>
                 <div class="right-container">
                         <div class="content-container">
+                                {% if is_finished%}
+                                <div class="game-over game-over-overlay noselect">
+                                        <div class="game-over-text">Game over</div>
+                                        <div class="game-over-button" onclick="goHome()">Try again</div>
+                                </div>
+                                {% endif %}
                                 <div class="board-container">
                                         {%for row in range(0,8)%}
                                         <div class="row" id="{{"row" + row|string}}">
