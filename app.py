@@ -119,10 +119,11 @@ def move():
 
     body = request.get_json()
     is_promoting = False
-    if is_first_moving and not is_first_human:
+    is_castling = False
+    if not is_first_moving and not is_second_human:
         eval(f"chess_game.{ai_type1}_root()")
         # chess_game.minimax_root(depth=2)
-    elif not is_first_moving and not is_second_human:
+    elif is_first_moving and not is_first_human:
         eval(f"chess_game.{ai_type2}_root()")
         # chess_game.minimax_root(depth=2)
     else:
@@ -131,6 +132,13 @@ def move():
         chess_game.move(int(body['initialRow']), int(body['initialColumn']), target_row, target_column)
 
         is_promoting = chess_game.is_promoting(target_row, target_column)
+        # TOOD
+        is_castling = None
+
+        if is_castling:
+            # TODO: Castle
+            chess_game.castle(target_row, target_column)
+            pass
 
         if not is_promoting:
             # Change player here if is not promoting

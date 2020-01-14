@@ -113,26 +113,25 @@ def is_in_check(game: ChessGame, player: str):
 def standard_game_over(player: str, game: ChessGame):
     from copy import deepcopy
 
-    gamecopy = deepcopy(game)
-    if is_in_check(gamecopy, player):
+    if is_in_check(game, player):
 
-        aux_state = deepcopy(gamecopy.current_state)
+        aux_state = deepcopy(game.current_state)
 
         for line in aux_state.board:
             for cell in line:
 
                 piece = cell.chess_piece if not cell.is_empty() else ''
                 if piece and str(piece).startswith(player):
-                    move_list = piece.get_valid_moves(cell, gamecopy)
+                    move_list = piece.get_valid_moves(cell, game)
 
                     for i in move_list:
-                        gamecopy.move_piece(cell.position.line, cell.position.column, i.line, i.column)
-                        if not is_in_check(gamecopy, player):
+                        game.move_piece(cell.position.line, cell.position.column, i.line, i.column)
+                        if not is_in_check(game, player):
 
-                            gamecopy.current_state = deepcopy(aux_state)
+                            game.current_state = deepcopy(aux_state)
                             return 1
                         
-                        gamecopy.current_state = deepcopy(aux_state)
+                        game.current_state = deepcopy(aux_state)
         return 2
     return 0
 
