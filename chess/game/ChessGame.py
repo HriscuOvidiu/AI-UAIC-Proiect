@@ -120,12 +120,12 @@ class ChessGame:
                 return True
         return False
 
-    def castle(self, current_line, current_column, end_line, end_column, no_log=False):
-        # self.move(current_line, current_column, end_line, end_column)
-        # Pt tura din dreapta
+    def castle(self, current_line, current_column, end_line, end_column, no_log=False):      
         if current_column < end_column:
+            # Tura din dreapta
             self.move(current_line, self.configuration.get_board_columns() - 1, end_line, end_column - 1, no_log)
         else:
+            # Tura din stanga
             self.move(current_line, 0, end_line, end_column + 1, no_log)
 
     def has_finished(self):
