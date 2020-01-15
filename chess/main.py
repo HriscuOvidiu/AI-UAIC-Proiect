@@ -18,7 +18,8 @@ ai_modes_dict = {
                     -1:     None,
                     0:      "minimax",
                     1:      "reinforcement_learning",
-                    2:      "alpha_beta_pruning"
+                    2:      "alpha_beta_pruning",
+                    3:      "pv_search"     # TODO
                 }
 
 def get_setup(setup_dict):

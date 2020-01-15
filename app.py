@@ -116,9 +116,6 @@ def move():
     global chess_game
     global is_first_moving
 
-    global target_row
-    global target_column
-
     global ai_type1
     global ai_type2
 
@@ -127,6 +124,9 @@ def move():
     is_castling = False
 
     def move_player():
+        global chess_game
+        global target_row
+        global target_column
         initial_row = int(body['initialRow'])
         initial_column = int(body['initialColumn'])
 
@@ -148,20 +148,23 @@ def move():
             # Change player here if is not promoting
             chess_game.change_current_player()
 
+        return is_promoting
+
+
     if game_type == 0:
         # pvp
-        move_player()
+        is_promoting = move_player()
     elif game_type == 1:
         # pvc
         if is_first_moving:
-            move_player()
+            is_promoting = move_player()
         else:
             eval(f"chess_game.{ai_type1}_root()")
     else:
         if is_first_moving:
             eval(f"chess_game.{ai_type1}_root()")
         else:
-            eval(f"chess_game.{ai_type2}_root()")    
+            eval(f"chess_game.{ai_type2}_root()")
 
     (state, logs) = get_game_state(chess_game)
 

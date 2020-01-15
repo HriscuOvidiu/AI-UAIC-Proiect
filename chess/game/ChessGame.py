@@ -86,17 +86,10 @@ class ChessGame:
             print(e)
 
     def move_piece(self, start_line, start_column, end_line, end_column):
-        start_cell = self.current_state.board[start_line][start_column]
-        end_cell = self.current_state.board[end_line][end_column]
-
-        chess_piece_to_move = start_cell.chess_piece
-        chess_piece_to_move.has_moved()
-
-        end_cell.chess_piece = chess_piece_to_move
-        start_cell.chess_piece = None
+        self._current_state.make_transition(start_line, start_column, end_line, end_column)
 
     def move(self, start_line, start_column, end_line, end_column, no_log=False):
-        if not (start_line == end_line and start_column == end_column):
+        if self._current_state.is_valid(start_line, start_column, end_line, end_column):
             self.move_piece(start_line, start_column, end_line, end_column)
             if not no_log:
                 self.add_log(start_line, start_column, end_line, end_column, 'White' if self.current_state.is_current_player_white() else 'Black')
@@ -127,13 +120,13 @@ class ChessGame:
                 return True
         return False
 
-    def castle(self, current_line, current_column, end_line, end_column):
+    def castle(self, current_line, current_column, end_line, end_column, no_log=False):
         # self.move(current_line, current_column, end_line, end_column)
         # Pt tura din dreapta
         if current_column < end_column:
-            self.move(current_line, self.configuration.get_board_columns() - 1, end_line, end_column - 1)
+            self.move(current_line, self.configuration.get_board_columns() - 1, end_line, end_column - 1, no_log)
         else:
-            self.move(current_line, 0, end_line, end_column + 1)
+            self.move(current_line, 0, end_line, end_column + 1, no_log)
 
     def has_finished(self):
         return self.configuration.get_end_condition()(self.current_state.current_player.color, self)
@@ -159,8 +152,9 @@ class ChessGame:
                     for position in piece_moves:
                         # TODO: FIX
                         if self.is_castling(cell.position.line, cell.position.column, position.line, position.column):
-                            self.castle(cell.position.line, cell.position.column, position.line, position.column)
                             self.move(cell.position.line, cell.position.column, position.line, position.column, no_log=True)
+                            self.castle(cell.position.line, cell.position.column, position.line, position.column, no_log=True)
+                            
                             state = deepcopy(self.current_state)
                             next_moves.append((state, cell, self.current_state.board[position.line][position.column]))
                             self.current_state = deepcopy(temp_state)
@@ -220,8 +214,6 @@ class ChessGame:
     def quiescence(self, alpha, beta, maximizing):
         from copy import deepcopy
         stand_pat = self.current_state.get_eval(maximizing)
-        if self.has_finished() == 2:
-            return self.current_state, stand_pat
         if stand_pat >= beta:
             return self.current_state, beta
         if alpha < stand_pat:
@@ -237,7 +229,7 @@ class ChessGame:
             self.current_state = deepcopy(aux_state)
 
             if move_eval >= beta:
-                return deepcopy(capture), beta
+                return capture, beta
             if move_eval > alpha:
                 alpha = move_eval
                 max_state = deepcopy(capture)
@@ -265,20 +257,70 @@ class ChessGame:
             self.current_state = deepcopy(aux_state)
 
             if move_eval >= beta:
-                return deepcopy(move), beta
-            if move_eval >= alpha:
+                return move, beta
+            if move_eval > alpha:
                 alpha = move_eval
                 max_state = deepcopy(move)
-            b_search_pv = True
+                b_search_pv = False
 
         return max_state, alpha
+
+    def negascout(self, alpha, beta, depth, maximizing):
+        from copy import deepcopy
+        if self.has_finished() == 2:
+            return self.current_state, self.current_state.get_eval(maximizing)
+        if not depth:
+            return self.quiescence(alpha, beta, maximizing)
+
+        max_state = None
+        next_moves = self.get_next_moves()
+        aux_state = deepcopy(self.current_state)
+        b = beta
+        for move in next_moves:
+            self.current_state = deepcopy(move[0])
+            move_eval = -self.negascout(-b, -alpha, depth - 1, -maximizing)[1]
+            if alpha < move_eval < beta and next_moves.index(move) and next_moves.index(move) > 0:
+                move_eval = -self.negascout(-beta, -move_eval, depth - 1, -maximizing)[1]
+            self.current_state = deepcopy(aux_state)
+            if move_eval > alpha:
+                alpha = move_eval
+                max_state = deepcopy(move)
+            if alpha >= beta:
+                return move, alpha
+            b = alpha + 1
+        return max_state, alpha
+
+####
+    # TODO: takes too long
+    def nega_c_star(self, min_score, max_score, depth, maximizing):
+        from copy import deepcopy
+        score = min_score
+        max_state = None
+        while min_score != max_score:
+            alpha = (min_score + max_score) / 2
+            state, score = self.negascout(alpha, alpha + 1, depth, maximizing)
+            if score > alpha:
+                min_score = score
+            else:
+                max_score = score
+                max_state = deepcopy(state)
+        return max_state, max_score
+
+    def nega_c_star_root(self, depth=2):
+        next_move, score = self.nega_c_star(-float("inf"), float("inf"), depth, 1)
+        self.update_state(next_move)
+########
 
     def update_state(self, next_move):
         self.current_state = next_move[0]
         self.add_log(next_move[1].position.line, next_move[1].position.column, next_move[2].position.line,
                      next_move[2].position.column, 'Black' if self.current_state.is_current_player_white() else 'White')
 
-    def pv_search_root(self, depth=2):
+    def negascout_root(self, depth=1):
+        next_move, score = self.negascout(-float("inf"), float("inf"), depth, 1)
+        self.update_state(next_move)
+
+    def pv_search_root(self, depth=1):
         next_move, score = self.pv_search(-float("inf"), float("inf"), depth, 1)
         self.update_state(next_move)
 

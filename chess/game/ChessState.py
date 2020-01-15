@@ -27,8 +27,18 @@ class ChessState:
     def current_player(self):
         return self._current_player
 
-    def is_valid(self):
-        pass
+    def is_valid(self, start_line, start_column, end_line, end_column):
+        return not (start_line == end_line and start_column == end_column)
+
+    def make_transition(self, start_line, start_column, end_line, end_column):
+        start_cell = self.board[start_line][start_column]
+        end_cell = self.board[end_line][end_column]
+
+        chess_piece_to_move = start_cell.chess_piece
+        chess_piece_to_move.has_moved()
+
+        end_cell.chess_piece = chess_piece_to_move
+        start_cell.chess_piece = None
 
     def get_rendered_board(self):
         return self.board.get_rendered_board()
