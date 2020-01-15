@@ -127,13 +127,13 @@ class ChessGame:
                 return True
         return False
 
-    def castle(self, current_line, current_column, end_line, end_column):
+    def castle(self, current_line, current_column, end_line, end_column, no_log=False):
         # self.move(current_line, current_column, end_line, end_column)
         # Pt tura din dreapta
         if current_column < end_column:
-            self.move(current_line, self.configuration.get_board_columns() - 1, end_line, end_column - 1)
+            self.move(current_line, self.configuration.get_board_columns() - 1, end_line, end_column - 1, no_log)
         else:
-            self.move(current_line, 0, end_line, end_column + 1)
+            self.move(current_line, 0, end_line, end_column + 1, no_log)
 
     def has_finished(self):
         return self.configuration.get_end_condition()(self.current_state.current_player.color, self)
@@ -159,8 +159,9 @@ class ChessGame:
                     for position in piece_moves:
                         # TODO: FIX
                         if self.is_castling(cell.position.line, cell.position.column, position.line, position.column):
-                            self.castle(cell.position.line, cell.position.column, position.line, position.column)
                             self.move(cell.position.line, cell.position.column, position.line, position.column, no_log=True)
+                            self.castle(cell.position.line, cell.position.column, position.line, position.column, no_log=True)
+                            
                             state = deepcopy(self.current_state)
                             next_moves.append((state, cell, self.current_state.board[position.line][position.column]))
                             self.current_state = deepcopy(temp_state)
