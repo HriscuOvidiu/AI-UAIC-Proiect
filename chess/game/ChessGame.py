@@ -239,8 +239,8 @@ class ChessGame:
     def pv_search(self, alpha, beta, depth, maximizing):
         from copy import deepcopy
         if not depth:
-            return self.quiescence(alpha, beta, maximizing)
-
+            # return self.quiescence(alpha, beta, maximizing)
+            return self.current_state, self.current_state.get_eval(maximizing)
         max_state = None
         b_search_pv = True
         next_moves = self.get_next_moves()
@@ -270,8 +270,8 @@ class ChessGame:
         if self.has_finished() == 2:
             return self.current_state, self.current_state.get_eval(maximizing)
         if not depth:
-            return self.quiescence(alpha, beta, maximizing)
-
+            # return self.quiescence(alpha, beta, maximizing)
+            return self.current_state, self.current_state.get_eval(maximizing)
         max_state = None
         next_moves = self.get_next_moves()
         aux_state = deepcopy(self.current_state)
