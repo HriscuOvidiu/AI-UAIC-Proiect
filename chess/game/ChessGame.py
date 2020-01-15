@@ -86,17 +86,10 @@ class ChessGame:
             print(e)
 
     def move_piece(self, start_line, start_column, end_line, end_column):
-        start_cell = self.current_state.board[start_line][start_column]
-        end_cell = self.current_state.board[end_line][end_column]
-
-        chess_piece_to_move = start_cell.chess_piece
-        chess_piece_to_move.has_moved()
-
-        end_cell.chess_piece = chess_piece_to_move
-        start_cell.chess_piece = None
+        self._current_state.make_transition(start_line, start_column, end_line, end_column)
 
     def move(self, start_line, start_column, end_line, end_column, no_log=False):
-        if not (start_line == end_line and start_column == end_column):
+        if self._current_state.is_valid(start_line, start_column, end_line, end_column):
             self.move_piece(start_line, start_column, end_line, end_column)
             if not no_log:
                 self.add_log(start_line, start_column, end_line, end_column, 'White' if self.current_state.is_current_player_white() else 'Black')
