@@ -68,8 +68,9 @@ const idMapping = {
     'cvc': 2,
 
     'minimax': 0,
-    'reinforcement': 1,
-    'alpha-beta': 2
+    'alpha-beta': 1,
+    'pv-search': 2,
+    'negascout': 3
 };
 
 const info = {};
